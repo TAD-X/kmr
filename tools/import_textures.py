@@ -8,6 +8,7 @@ models/ -> entity/   (Techne model skins; used by the Blockbench rebuilds)
 Skips Thumbs.db and .psd files. Names are lower-cased; item textures are renamed to this port's item ids (RENAMES).
 Usage: python tools/import_textures.py
 """
+import re
 import shutil
 from pathlib import Path
 
@@ -43,6 +44,9 @@ def main():
             stem = f.stem.lower()
             if src_dir == "items":
                 stem = RENAMES.get(stem, stem)
+            elif src_dir == "blocks":
+                # datagen's crop models expect <block>_stage<N> (no underscore before N)
+                stem = re.sub(r"_stage_([0-9])$", lambda m: "_stage" + m.group(1), stem)
             shutil.copy2(f, out / (stem + f.suffix.lower()))
             copied += 1
     print(f"copied {copied}, skipped {skipped} -> {DST}")

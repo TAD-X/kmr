@@ -9,7 +9,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.item.KitchenToolItem;
@@ -49,12 +52,12 @@ public final class KitchenItems {
 	public static final Item BREAD_SLICE = simple("bread_slice");
 	public static final Item TOAST = food("toast", 2, 0.6F);
 
-	// Produce (the originals were seed-foods: 2 hunger, 0.3 saturation; planting arrives with crops in M2)
-	public static final Item TOMATO = food("tomato", 2, 0.3F);
-	public static final Item LETTUCE = food("lettuce", 2, 0.3F);
-	public static final Item STRAWBERRY = food("strawberry", 2, 0.3F);
-	public static final Item PEANUT = food("peanut", 2, 0.3F);
-	public static final Item PEANUTS_IN_SHELL = simple("peanuts_in_shell");
+	// Produce: seed-foods in the original (2 hunger, 0.3 saturation). The produce itself plants the crop.
+	public static final Item TOMATO = crop("tomato", KitchenBlocks.TOMATO_CROP);
+	public static final Item LETTUCE = crop("lettuce", KitchenBlocks.LETTUCE_CROP);
+	public static final Item STRAWBERRY = crop("strawberry", KitchenBlocks.STRAWBERRY_CROP);
+	public static final Item PEANUT = crop("peanut", KitchenBlocks.PEANUT_CROP);
+	public static final Item PEANUTS_IN_SHELL = register("peanuts_in_shell", Item::new, new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW));
 
 	// Slices
 	public static final Item TOMATO_SLICE = simple("tomato_slice");
@@ -81,6 +84,14 @@ public final class KitchenItems {
 		FoodProperties food = new FoodProperties.Builder()
 				.nutrition(nutrition).saturationModifier(saturationModifier).build();
 		return register(name, Item::new, new Item.Properties().food(food));
+	}
+
+	/** Seed-food: edible and plants {@code crop} on farmland, like the original's ItemSeedFood(2, 0.3F). */
+	private static Item crop(String name, Block crop) {
+		FoodProperties food = new FoodProperties.Builder().nutrition(2).saturationModifier(0.3F).build();
+		Item.Properties properties = new Item.Properties().food(food).useItemDescriptionPrefix()
+				.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM);
+		return register(name, props -> new BlockItem(crop, props), properties);
 	}
 
 	private static Item register(String name, Function<Item.Properties, Item> factory, Item.Properties properties) {

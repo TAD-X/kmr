@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "data": "kitchen:wild_tomato",
+        "weight": 1
+      },
+      {
+        "data": "kitchen:wild_lettuce",
+        "weight": 1
+      },
+      {
+        "data": "kitchen:wild_strawberry",
+        "weight": 1
+      },
+      {
+        "data": "kitchen:wild_peanut",
+        "weight": 1
+      }
+    ]
+  }
+}

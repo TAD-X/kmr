@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 import net.minecraft.core.HolderLookup;
 
+import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenItems;
 import net.kitchenreborn.registry.KitchenTabs;
 
@@ -55,5 +56,14 @@ public class KitchenLangProvider extends FabricLanguageProvider {
 		b.add(KitchenItems.STRAWBERRY_SLICES, "Strawberry Slices");
 		b.add(KitchenItems.SUGARED_STRAWBERRY_SLICES, "Sugared Strawberry Slices");
 		b.add(KitchenItems.APPLE_SLICE, "Apple Slices");
+
+		b.add(KitchenBlocks.TOMATO_CROP, "Tomato Plant");
+		b.add(KitchenBlocks.LETTUCE_CROP, "Lettuce Crop");
+		b.add(KitchenBlocks.STRAWBERRY_CROP, "Strawberry Crop");
+		b.add(KitchenBlocks.PEANUT_CROP, "Peanut Crop");
+		b.add(KitchenBlocks.WILD_TOMATO, "Wild Tomato");
+		b.add(KitchenBlocks.WILD_LETTUCE, "Wild Lettuce");
+		b.add(KitchenBlocks.WILD_STRAWBERRY, "Wild Strawberry");
+		b.add(KitchenBlocks.WILD_PEANUT, "Wild Peanut");
 	}
 }

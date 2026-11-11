@@ -1,4 +1,12 @@
 {
+  "block.kitchen.lettuce_crop": "Lettuce Crop",
+  "block.kitchen.peanut_crop": "Peanut Crop",
+  "block.kitchen.strawberry_crop": "Strawberry Crop",
+  "block.kitchen.tomato_crop": "Tomato Plant",
+  "block.kitchen.wild_lettuce": "Wild Lettuce",
+  "block.kitchen.wild_peanut": "Wild Peanut",
+  "block.kitchen.wild_strawberry": "Wild Strawberry",
+  "block.kitchen.wild_tomato": "Wild Tomato",
   "item.kitchen.apple_slice": "Apple Slices",
   "item.kitchen.bacon": "Cooked Bacon",
   "item.kitchen.bread_slice": "Slice of Bread",
