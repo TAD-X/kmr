@@ -42,9 +42,9 @@ public class KitchenLayerModelProvider implements DataProvider {
 		// Outside the GUI a sandwich is shown at exactly its cutting board size: every display scale is 1. First person
 		// and the item frame tilt the top towards the player so the layers can be seen.
 		JsonObject display = new JsonObject();
-		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 10.5F, 0}, 1.0F));
-		display.add("firstperson_righthand", transform(new float[] {-50, 45, 0}, new float[] {3, 5.0F, -8}, 1.0F));
-		display.add("firstperson_lefthand", transform(new float[] {-50, 225, 0}, new float[] {-3, 5.0F, -8}, 1.0F));
+		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 8.0F, 0}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-50, 10, -14}, new float[] {3, 5.0F, -8}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-50, 190, -14}, new float[] {-3, 5.0F, -8}, 1.0F));
 		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
 		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
 		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
