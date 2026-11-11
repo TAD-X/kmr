@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "kitchen:item/cheese_slice"
+  }
+}

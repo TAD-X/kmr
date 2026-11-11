@@ -15,18 +15,20 @@ Companion docs: `kitchen-mod-feature-summary.md` (full inventory of the original
 - **Data generation for everything static** (models, blockstates, item model definitions, recipes, loot tables, tags, lang). Hand-write only what datagen can't.
 - **Mod ID:** `kitchen` (matches original texture paths `assets/kitchen/...`). Display name: "The Kitchen Mod Reborn" (change freely).
 
-## 1. Versions (pin at M0, record in `gradle.properties`)
+## 1. Versions (pinned at M0 — commit 65d8781)
 
-| Thing | Known value | Action |
-|---|---|---|
-| Minecraft | 26.3 | — |
-| Fabric Loader | 0.19.5+ | take latest from fabricmc.net/develop |
-| Fabric Loom | 1.17 | per fabricmc.net 26.3 announcement |
-| Gradle | 9.6.0 | per same |
-| Fabric API | latest for 26.3 | fabricmc.net/develop |
-| Java | **check** | use whatever 26.3 requires (fabricmc.net/develop or the generated template); don't guess |
+| Thing | Pinned |
+|---|---|
+| Minecraft | 26.3 |
+| Java | 25 |
+| Fabric Loader | 0.20.1 |
+| Fabric Loom | 1.19-SNAPSHOT (resolved 1.19.4) |
+| Gradle | 9.8.2 |
+| Fabric API | 0.166.0+26.3 |
 
-Generate the project with the official template generator (fabricmc.net/develop/template) — split client/common sources ON, datagen ON, Kotlin OFF.
+Package: `net.kitchenreborn`. Bump versions deliberately (one commit, rebuild + datagen + server + client check), never in passing.
+
+**Gotchas found at M0:** run `build` and `runDatagen` as separate Gradle invocations (they conflict over `src/main/generated`). Vanilla hides empty creative tabs. No in-game mod list without Mod Menu (optional dev-only dep). 26.3 recipe datagen: `RecipeProvider`/`FabricRecipeProvider` take bootstrap contexts (recipes are a registry), `buildRecipes` is public.
 
 ## 2. Repo layout
 

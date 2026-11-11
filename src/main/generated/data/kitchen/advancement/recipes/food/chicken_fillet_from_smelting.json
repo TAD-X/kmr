@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_raw_chicken_fillet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kitchen:raw_chicken_fillet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kitchen:chicken_fillet_from_smelting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_raw_chicken_fillet"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kitchen:chicken_fillet_from_smelting"
+    ]
+  }
+}

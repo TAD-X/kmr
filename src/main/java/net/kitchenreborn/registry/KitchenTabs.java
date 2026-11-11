@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import net.kitchenreborn.Kitchen;
 
@@ -17,12 +16,10 @@ public final class KitchenTabs {
 	public static final ResourceKey<CreativeModeTab> KITCHEN_KEY =
 			ResourceKey.create(Registries.CREATIVE_MODE_TAB, Kitchen.id("kitchen"));
 
-	// Placeholder icon (bread) until M1 adds the knife.
 	public static final CreativeModeTab KITCHEN = FabricCreativeModeTab.builder()
-			.icon(() -> new ItemStack(Items.BREAD))
+			.icon(() -> new ItemStack(KitchenItems.KNIFE))
 			.title(Component.translatable("itemGroup.kitchen.kitchen"))
-			// Vanilla hides creative tabs with no items, so show a placeholder until M1 (remove then).
-			.displayItems((params, output) -> output.accept(Items.BREAD))
+			.displayItems((params, output) -> KitchenItems.ALL.forEach(output::accept))
 			.build();
 
 	public static void register() {

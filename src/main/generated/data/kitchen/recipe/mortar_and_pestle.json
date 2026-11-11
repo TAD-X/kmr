@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "kitchen:mortar",
+    "kitchen:pestle"
+  ],
+  "result": {
+    "id": "kitchen:mortar_and_pestle"
+  }
+}

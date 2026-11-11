@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "minecraft:glass",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    " I ",
+    "G G",
+    "GGG"
+  ],
+  "result": {
+    "id": "kitchen:jam_jar"
+  }
+}

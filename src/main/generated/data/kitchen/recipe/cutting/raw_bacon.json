@@ -1,0 +1,9 @@
+{
+  "type": "kitchen:cutting",
+  "ingredient": "minecraft:porkchop",
+  "result": {
+    "count": 3,
+    "id": "kitchen:raw_bacon"
+  },
+  "show_notification": false
+}

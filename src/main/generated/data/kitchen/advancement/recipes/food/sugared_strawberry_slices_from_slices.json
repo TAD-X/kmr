@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_strawberry_slices": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kitchen:strawberry_slices"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kitchen:sugared_strawberry_slices_from_slices"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_strawberry_slices"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kitchen:sugared_strawberry_slices_from_slices"
+    ]
+  }
+}

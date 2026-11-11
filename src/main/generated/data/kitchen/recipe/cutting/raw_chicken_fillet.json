@@ -1,0 +1,9 @@
+{
+  "type": "kitchen:cutting",
+  "ingredient": "minecraft:chicken",
+  "result": {
+    "count": 3,
+    "id": "kitchen:raw_chicken_fillet"
+  },
+  "show_notification": false
+}

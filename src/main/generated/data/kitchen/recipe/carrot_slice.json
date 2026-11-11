@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:carrot",
+    "kitchen:knife"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kitchen:carrot_slice"
+  }
+}

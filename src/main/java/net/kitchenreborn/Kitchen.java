@@ -7,6 +7,8 @@ import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.kitchenreborn.registry.KitchenItems;
+import net.kitchenreborn.registry.KitchenRecipes;
 import net.kitchenreborn.registry.KitchenTabs;
 
 public class Kitchen implements ModInitializer {
@@ -15,6 +17,8 @@ public class Kitchen implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		KitchenItems.register();
+		KitchenRecipes.register();
 		KitchenTabs.register();
 		LOGGER.info("The Kitchen Mod Reborn initialised");
 	}

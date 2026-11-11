@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kitchen:strawberry",
+    "minecraft:sugar",
+    "kitchen:knife"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kitchen:sugared_strawberry_slices"
+  }
+}

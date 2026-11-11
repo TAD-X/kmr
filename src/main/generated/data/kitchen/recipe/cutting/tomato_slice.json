@@ -1,0 +1,9 @@
+{
+  "type": "kitchen:cutting",
+  "ingredient": "kitchen:tomato",
+  "result": {
+    "count": 4,
+    "id": "kitchen:tomato_slice"
+  },
+  "show_notification": false
+}

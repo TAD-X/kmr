@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kitchen:strawberry_slices",
+    "minecraft:sugar"
+  ],
+  "result": {
+    "id": "kitchen:sugared_strawberry_slices"
+  }
+}

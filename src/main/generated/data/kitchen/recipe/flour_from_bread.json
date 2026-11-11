@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kitchen:mortar_and_pestle",
+    "minecraft:bread"
+  ],
+  "result": {
+    "count": 3,
+    "id": "kitchen:flour"
+  }
+}

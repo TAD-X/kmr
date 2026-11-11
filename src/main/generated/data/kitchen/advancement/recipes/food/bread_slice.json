@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_knife": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kitchen:knife"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kitchen:bread_slice"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_knife"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kitchen:bread_slice"
+    ]
+  }
+}

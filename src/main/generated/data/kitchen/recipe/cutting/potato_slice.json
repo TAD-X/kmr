@@ -1,0 +1,9 @@
+{
+  "type": "kitchen:cutting",
+  "ingredient": "minecraft:potato",
+  "result": {
+    "count": 3,
+    "id": "kitchen:potato_slice"
+  },
+  "show_notification": false
+}

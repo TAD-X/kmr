@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mortar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kitchen:mortar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kitchen:mortar_and_pestle"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mortar"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kitchen:mortar_and_pestle"
+    ]
+  }
+}
