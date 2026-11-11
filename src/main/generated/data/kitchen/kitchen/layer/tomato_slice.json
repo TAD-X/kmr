@@ -1,0 +1,9 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.5,
+  "item": "kitchen:tomato_slice",
+  "nutrition": 1,
+  "role": "filling"
+}

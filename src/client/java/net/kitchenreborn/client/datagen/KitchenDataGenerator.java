@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 
+import net.kitchenreborn.registry.KitchenRegistries;
 import net.kitchenreborn.world.KitchenWorldgen;
 
 public class KitchenDataGenerator implements DataGeneratorEntrypoint {
@@ -25,5 +26,7 @@ public class KitchenDataGenerator implements DataGeneratorEntrypoint {
 	public void buildRegistry(RegistrySetBuilder registryBuilder) {
 		registryBuilder.add(Registries.FEATURE, KitchenWorldgen::features);
 		registryBuilder.add(Registries.PLACED_FEATURE, KitchenWorldgen::placed);
+		registryBuilder.add(KitchenRegistries.FOOD_TYPE, KitchenFoodData::foodTypes);
+		registryBuilder.add(KitchenRegistries.LAYER, KitchenFoodData::layers);
 	}
 }

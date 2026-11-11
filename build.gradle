@@ -33,6 +33,17 @@ fabricApi {
 	}
 }
 
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "kitchen-test"
+		enableGameTests = true
+		enableClientGameTests = false
+		// The dev server EULA was already accepted by the project owner for this checkout (run/eula.txt).
+		eula = true
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"

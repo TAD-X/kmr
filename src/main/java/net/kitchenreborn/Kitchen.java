@@ -7,7 +7,11 @@ import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.registry.KitchenBlockEntities;
 import net.kitchenreborn.registry.KitchenBlocks;
+import net.kitchenreborn.registry.KitchenComponents;
+import net.kitchenreborn.registry.KitchenRegistries;
 import net.kitchenreborn.registry.KitchenItems;
 import net.kitchenreborn.registry.KitchenRecipes;
 import net.kitchenreborn.registry.KitchenTabs;
@@ -19,8 +23,12 @@ public class Kitchen implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		KitchenRegistries.register();
+		KitchenComponents.register();
 		KitchenBlocks.register();
 		KitchenItems.register();
+		KitchenBlockEntities.register();
+		BoardBlock.registerSneakFinish();
 		KitchenWorldgen.register();
 		KitchenRecipes.register();
 		KitchenTabs.register();

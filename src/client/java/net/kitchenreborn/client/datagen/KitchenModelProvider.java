@@ -1,16 +1,27 @@
 package net.kitchenreborn.client.datagen;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 
+import net.kitchenreborn.Kitchen;
+import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenItems;
 
@@ -21,6 +32,7 @@ public class KitchenModelProvider extends FabricModelProvider {
 
 	@Override
 	public void generateBlockStateModels(BlockModelGenerators generators) {
+		generateBoard(generators);
 		// Original stage mapping: age 0-1 -> stage 0, 2-3 -> 1, 4-6 -> 2, 7 -> 3.
 		for (Block crop : KitchenBlocks.CROPS) {
 			generators.createCropBlock(crop, CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -28,6 +40,54 @@ public class KitchenModelProvider extends FabricModelProvider {
 		for (Block wild : KitchenBlocks.WILD_PLANTS) {
 			generators.createCrossBlock(wild, BlockModelGenerators.PlantType.NOT_TINTED);
 		}
+	}
+
+	/**
+	 * The cutting board: a 14x2x10 pixel slab of oak planks (the original had no custom model, just oak planks
+	 * with these bounds). One model per orientation, selected by the block's axis.
+	 */
+	private void generateBoard(BlockModelGenerators generators) {
+		Identifier modelX = Kitchen.id("block/board_x");
+		Identifier modelZ = Kitchen.id("block/board_z");
+		generators.modelOutput.accept(modelX, boardModel(1, 3, 15, 13));
+		generators.modelOutput.accept(modelZ, boardModel(3, 1, 13, 15));
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.BOARD)
+				.with(PropertyDispatch.initial(BoardBlock.AXIS)
+						.select(Direction.Axis.X, BlockModelGenerators.plainVariant(modelX))
+						.select(Direction.Axis.Z, BlockModelGenerators.plainVariant(modelZ))));
+		generators.itemModelOutput.accept(KitchenItems.BOARD, ItemModelUtils.plainModel(modelX));
+	}
+
+	private static ModelInstance boardModel(int x1, int z1, int x2, int z2) {
+		return () -> {
+			JsonObject face = new JsonObject();
+			face.addProperty("texture", "#all");
+			JsonObject faces = new JsonObject();
+			for (String name : new String[] {"down", "up", "north", "south", "west", "east"}) {
+				faces.add(name, face.deepCopy());
+			}
+			JsonObject element = new JsonObject();
+			element.add("from", array(x1, 0, z1));
+			element.add("to", array(x2, 2, z2));
+			element.add("faces", faces);
+			JsonArray elements = new JsonArray();
+			elements.add(element);
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", "minecraft:block/oak_planks");
+			textures.addProperty("particle", "minecraft:block/oak_planks");
+			JsonObject model = new JsonObject();
+			model.add("textures", textures);
+			model.add("elements", elements);
+			return model;
+		};
+	}
+
+	private static JsonArray array(int... values) {
+		JsonArray array = new JsonArray();
+		for (int value : values) {
+			array.add(value);
+		}
+		return array;
 	}
 
 	@Override

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": "minecraft:oak_pressure_plate",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "pattern": [
+    "SPS"
+  ],
+  "result": {
+    "id": "kitchen:board"
+  }
+}

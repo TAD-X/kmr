@@ -16,6 +16,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
 import net.kitchenreborn.Kitchen;
+import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.KitchenCropBlock;
 import net.kitchenreborn.block.WildPlantBlock;
 
@@ -32,6 +33,15 @@ public final class KitchenBlocks {
 	public static final Block WILD_LETTUCE = wild("wild_lettuce");
 	public static final Block WILD_STRAWBERRY = wild("wild_strawberry");
 	public static final Block WILD_PEANUT = wild("wild_peanut");
+
+	public static final Block BOARD = board();
+
+	private static Block board() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("board"));
+		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().setId(key)
+				.mapColor(MapColor.WOOD).strength(2.0F).sound(SoundType.WOOD).noOcclusion();
+		return Registry.register(BuiltInRegistries.BLOCK, key, new BoardBlock(properties));
+	}
 
 	private static Block crop(String name, Supplier<? extends ItemLike> seed) {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id(name));

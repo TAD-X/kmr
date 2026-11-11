@@ -1,0 +1,10 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 1.5,
+  "item": "kitchen:bacon",
+  "nutrition": 2,
+  "render": "model:kitchen:cooked_bacon",
+  "role": "filling"
+}

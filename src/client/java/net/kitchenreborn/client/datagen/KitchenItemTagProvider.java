@@ -11,6 +11,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 
 import net.kitchenreborn.registry.KitchenItems;
+import net.kitchenreborn.registry.KitchenTags;
 
 public class KitchenItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 	public KitchenItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -19,6 +20,10 @@ public class KitchenItemTagProvider extends FabricTagsProvider.ItemTagsProvider 
 
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
+		builder(KitchenTags.KNIVES).add(BuiltInRegistries.ITEM.getResourceKey(KitchenItems.KNIFE).orElseThrow());
+		for (CuttingTable.Cut cut : CuttingTable.CUTS) {
+			builder(KitchenTags.CUTTABLE).add(BuiltInRegistries.ITEM.getResourceKey(cut.input()).orElseThrow());
+		}
 		// The original's chicken leg was ItemFood(4, wolfFavourite = true).
 		builder(ItemTags.WOLF_FOOD).add(BuiltInRegistries.ITEM.getResourceKey(KitchenItems.CHICKEN_LEG).orElseThrow());
 		// Farmer villagers plant the produce (it is its own seed) and pick it up after harvesting.

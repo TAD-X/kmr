@@ -1,0 +1,10 @@
+{
+	"schemaVersion": 1,
+	"id": "kitchen-test",
+	"version": "1.0.0",
+	"name": "Kitchen Mod Reborn game tests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": ["net.kitchenreborn.gametest.BoardGameTest"]
+	}
+}

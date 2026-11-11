@@ -57,6 +57,38 @@ public class KitchenLangProvider extends FabricLanguageProvider {
 		b.add(KitchenItems.SUGARED_STRAWBERRY_SLICES, "Sugared Strawberry Slices");
 		b.add(KitchenItems.APPLE_SLICE, "Apple Slices");
 
+		b.add(KitchenBlocks.BOARD, "Cutting Board");
+		b.add(KitchenItems.SANDWICH, "Sandwich");
+		b.add(KitchenItems.STRAWBERRY_JAM, "Strawberry Jam");
+		b.add(KitchenItems.APPLE_JAM, "Apple Jam");
+		b.add(KitchenItems.PEANUT_JAM, "Peanut Butter");
+
+		// Auto-names (design D13): "<filling> <filling> Sandwich"
+		b.add("item.kitchen.sandwich.named_1", "%s Sandwich");
+		b.add("item.kitchen.sandwich.named_2", "%s %s Sandwich");
+		// Short layer names used in the auto-names
+		b.add("layer.kitchen.raw_bacon", "Raw Bacon");
+		b.add("layer.kitchen.bacon", "Bacon");
+		b.add("layer.kitchen.tomato_slice", "Tomato");
+		b.add("layer.kitchen.lettuce_leaf", "Lettuce");
+		b.add("layer.kitchen.potato_slice", "Potato");
+		b.add("layer.kitchen.carrot_slice", "Carrot");
+		b.add("layer.kitchen.raw_roast_beef", "Raw Beef");
+		b.add("layer.kitchen.roast_beef", "Roast Beef");
+		b.add("layer.kitchen.raw_chicken_fillet", "Raw Chicken");
+		b.add("layer.kitchen.chicken_fillet", "Chicken");
+		b.add("layer.kitchen.cheese_slice", "Cheese");
+		b.add("layer.kitchen.butter", "Butter");
+		b.add("layer.kitchen.strawberry_jam", "Strawberry Jam");
+		b.add("layer.kitchen.apple_jam", "Apple Jam");
+		b.add("layer.kitchen.peanut_jam", "Peanut Butter");
+
+		b.add("tooltip.kitchen.sandwichable", "Sandwichable");
+		b.add("tooltip.kitchen.restores", "Restores %s hunger");
+		b.add("tooltip.kitchen.servings_left", "Servings left: %s");
+		b.add("message.kitchen.finish.too_few_layers", "Not enough layers yet");
+		b.add("message.kitchen.finish.bad_ends", "It needs bread on the top and the bottom");
+
 		b.add(KitchenBlocks.TOMATO_CROP, "Tomato Plant");
 		b.add(KitchenBlocks.LETTUCE_CROP, "Lettuce Crop");
 		b.add(KitchenBlocks.STRAWBERRY_CROP, "Strawberry Crop");

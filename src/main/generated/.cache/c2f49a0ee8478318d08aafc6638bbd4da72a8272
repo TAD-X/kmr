@@ -1,4 +1,5 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/KitchenRecipeProvider
+b065e9f0f0024f7bbfc901e80dbc1eb673e51252 data/kitchen/advancement/recipes/decorations/board.json
 2499d12838ab8463e871679f6093d1db01a57f5d data/kitchen/advancement/recipes/food/apple_slice.json
 12e095062385ef437824b7b3fcd26488f6903758 data/kitchen/advancement/recipes/food/bacon_from_campfire_cooking.json
 c7b78711ec38dc0ccacbfd6dbd10da59df3455f5 data/kitchen/advancement/recipes/food/bacon_from_smelting.json
@@ -51,6 +52,7 @@ a28e380a0acd4f70d02dd31ffe8071815fa94488 data/kitchen/advancement/recipes/tools/
 1a80fbb65696a1c1b9af8ecaecc298abdc16ac2e data/kitchen/recipe/bacon_from_campfire_cooking.json
 217136605c7bd06aa6e55fbb7ee5bea047710221 data/kitchen/recipe/bacon_from_smelting.json
 e50c42ba960330dfd9c951859334b2f95474c740 data/kitchen/recipe/bacon_from_smoking.json
+5b3ece51d443e1e667d71f93a448dcf1c4c7c2bb data/kitchen/recipe/board.json
 651479db3eb2d1bdcb29361c4fa7afc184dcfa80 data/kitchen/recipe/bread_slice.json
 ddfe683569167d4b709537bf5aef58ca3b4220ad data/kitchen/recipe/butter.json
 efea0fb85bfbb9baa3753119e06e55ef3ddcc526 data/kitchen/recipe/carrot_slice.json

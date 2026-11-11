@@ -1,0 +1,9 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.5,
+  "item": "kitchen:carrot_slice",
+  "nutrition": 2,
+  "role": "filling"
+}

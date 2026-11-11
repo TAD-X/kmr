@@ -1,0 +1,9 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.5,
+  "item": "kitchen:chicken_fillet",
+  "nutrition": 4,
+  "role": "filling"
+}

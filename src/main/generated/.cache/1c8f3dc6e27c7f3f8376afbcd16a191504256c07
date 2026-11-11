@@ -1,4 +1,5 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/Block Loot Tables
+1c8a036f4078a3b74c189ed759c7e4f7c73903c6 data/kitchen/loot_table/blocks/board.json
 d8a7a8ed2699b4938103303b3ece8c004d5e0511 data/kitchen/loot_table/blocks/lettuce_crop.json
 417cd68cf82f8039878ece31b1404155704ea9a6 data/kitchen/loot_table/blocks/peanut_crop.json
 7c75817ac917c454c54b56313b30594cba768be0 data/kitchen/loot_table/blocks/strawberry_crop.json

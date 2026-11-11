@@ -31,6 +31,8 @@ public class KitchenBlockLootProvider extends FabricBlockLootSubProvider {
 
 	@Override
 	public void generate() {
+		dropSelf(KitchenBlocks.BOARD);
+
 		// Tomato, lettuce, strawberry: the produce is also the seed, so drops match vanilla carrots/potatoes.
 		cropWithOwnSeed(KitchenBlocks.TOMATO_CROP, KitchenItems.TOMATO);
 		cropWithOwnSeed(KitchenBlocks.LETTUCE_CROP, KitchenItems.LETTUCE);

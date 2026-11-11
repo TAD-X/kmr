@@ -1,0 +1,11 @@
+{
+  "drop_item": false,
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.5,
+  "item": "kitchen:strawberry_jam",
+  "nutrition": 2,
+  "role": "spread",
+  "show_tooltip": false
+}

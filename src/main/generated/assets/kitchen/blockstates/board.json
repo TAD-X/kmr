@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kitchen:block/board_x"
+    },
+    "axis=z": {
+      "model": "kitchen:block/board_z"
+    }
+  }
+}

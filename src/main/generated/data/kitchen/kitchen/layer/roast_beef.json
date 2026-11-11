@@ -1,0 +1,9 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.5,
+  "item": "kitchen:roast_beef",
+  "nutrition": 4,
+  "role": "filling"
+}

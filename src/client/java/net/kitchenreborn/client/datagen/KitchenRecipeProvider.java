@@ -13,6 +13,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.RecipeUnlockAdvancementBuilder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -40,6 +41,7 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 			@Override
 			public void buildRecipes() {
 				tools();
+				board();
 				cutting();
 				mortarAndPestle();
 				misc();
@@ -69,6 +71,14 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 						.unlockedBy(getHasName(Items.GLASS), has(Items.GLASS)).save(output);
 			}
 
+			private void board() {
+				// Original: wood slab, wood pressure plate, wood slab.
+				shaped(RecipeCategory.DECORATIONS, KitchenItems.BOARD)
+						.pattern("SPS")
+						.define('S', ItemTags.WOODEN_SLABS).define('P', Items.OAK_PRESSURE_PLATE)
+						.unlockedBy(getHasName(Items.OAK_PRESSURE_PLATE), has(Items.OAK_PRESSURE_PLATE)).save(output);
+			}
+
 			/** One entry produces both the board recipe (kitchen:cutting) and the grid knife recipe. */
 			private void cut(ItemLike input, ItemLike result, int count) {
 				String name = getItemName(result);
@@ -80,18 +90,9 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 			}
 
 			private void cutting() {
-				cut(Items.PORKCHOP, KitchenItems.RAW_BACON, 3);
-				cut(KitchenItems.TOMATO, KitchenItems.TOMATO_SLICE, 4);
-				cut(KitchenItems.LETTUCE, KitchenItems.LETTUCE_LEAF, 2);
-				cut(Items.CARROT, KitchenItems.CARROT_SLICE, 2);
-				cut(Items.POTATO, KitchenItems.POTATO_SLICE, 3);
-				cut(Items.BREAD, KitchenItems.BREAD_SLICE, 2);
-				cut(Items.BEEF, KitchenItems.RAW_ROAST_BEEF, 2);
-				cut(Items.CHICKEN, KitchenItems.RAW_CHICKEN_FILLET, 3);
-				cut(Items.COOKED_CHICKEN, KitchenItems.CHICKEN_LEG, 2);
-				cut(KitchenItems.CHEESE, KitchenItems.CHEESE_SLICE, 2);
-				cut(KitchenItems.STRAWBERRY, KitchenItems.STRAWBERRY_SLICES, 2);
-				cut(Items.APPLE, KitchenItems.APPLE_SLICE, 2);
+				for (CuttingTable.Cut cut : CuttingTable.CUTS) {
+					cut(cut.input(), cut.result(), cut.count());
+				}
 				// Two-input knife recipe (strawberry + sugar): grid only, not a single-ingredient board cut.
 				shapeless(RecipeCategory.FOOD, KitchenItems.SUGARED_STRAWBERRY_SLICES, 2)
 						.requires(KitchenItems.STRAWBERRY).requires(Items.SUGAR).requires(KitchenItems.KNIFE)

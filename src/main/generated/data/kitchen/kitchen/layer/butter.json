@@ -1,0 +1,14 @@
+{
+  "foods": [
+    "kitchen:sandwich"
+  ],
+  "height": 0.6,
+  "item": "kitchen:butter",
+  "nutrition": 1,
+  "place_on": [
+    "kitchen:bread_slice"
+  ],
+  "render": "model:kitchen:butter",
+  "role": "spread",
+  "spread_clicks": 2
+}
