@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "kitchen",
+	"version": "${version}",
+	"name": "The Kitchen Mod Reborn",
+	"description": "A Fabric port of MrSpring's The Kitchen Mod: cutting boards, layered sandwiches, ovens, frying pans and jam, plus the features the original never shipped.",
+	"authors": [
+		"Kitchen Mod Reborn contributors"
+	],
+	"contributors": [
+		"Mr. Spring (MrSpring) - creator of the original The Kitchen Mod; textures and design reused under the MIT license"
+	],
+	"contact": {
+		"sources": "https://github.com/MrSpring/TheKitchenMod"
+	},
+	"license": ["CC0-1.0", "MIT"],
+	"icon": "assets/kitchen/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["net.kitchenreborn.Kitchen"],
+		"client": ["net.kitchenreborn.client.KitchenClient"],
+		"fabric-datagen": ["net.kitchenreborn.client.datagen.KitchenDataGenerator"]
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
