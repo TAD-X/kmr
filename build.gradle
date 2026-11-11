@@ -38,7 +38,7 @@ fabricApi {
 		createSourceSet = true
 		modId = "kitchen-test"
 		enableGameTests = true
-		enableClientGameTests = false
+		enableClientGameTests = true
 		// The dev server EULA was already accepted by the project owner for this checkout (run/eula.txt).
 		eula = true
 	}

@@ -15,7 +15,7 @@ Fabric mod for Minecraft Java 26.3. Port of MrSpring's Kitchen Mod (1.7.10, MIT)
 - Design decisions D1–D14 in PLAN.md §7: use the bolded default unless the user changed it; ask before deviating.
 
 ## Commands
-- `./gradlew build` · `./gradlew runClient` · `./gradlew runServer` · `./gradlew runDatagen` · `./gradlew runGameTest` (server game tests; `build` runs them too)
+- `./gradlew build` · `./gradlew runClient` · `./gradlew runServer` · `./gradlew runDatagen` · `./gradlew runGameTest` (server game tests; `build` runs them too) · `./gradlew runClientGameTest` (screenshots to build/run/clientGameTest/screenshots)
 
 ## Credits
 Keep `LICENSE-ORIGINAL` (MIT, © 2017 Mr. Spring) and credit MrSpring in README and fabric.mod.json for reused textures/design.
