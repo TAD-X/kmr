@@ -1,6 +1,6 @@
 {
   "bottom_role": "bread",
-  "max_layers": 10,
+  "max_layers": 32,
   "min_layers": 2,
   "output": "kitchen:sandwich",
   "station": "kitchen:board",

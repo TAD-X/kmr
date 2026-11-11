@@ -28,11 +28,13 @@ import net.kitchenreborn.registry.KitchenRegistries;
 public final class KitchenFoodData {
 	public static final Identifier SANDWICH = Kitchen.id("sandwich");
 	private static final List<Identifier> SANDWICH_ONLY = List.of(SANDWICH);
+	/** Design D2 (PLAN.md section 7): the original allowed 10, this port allows 32. */
+	public static final int MAX_SANDWICH_LAYERS = 32;
 	private static final float FLAT = 0.5F;
 
 	public static void foodTypes(BootstrapContext<FoodType> context) {
 		context.register(ResourceKey.create(KitchenRegistries.FOOD_TYPE, SANDWICH),
-				new FoodType(2, 10, LayerRole.BREAD, LayerRole.BREAD, KitchenBlocks.BOARD, KitchenItems.SANDWICH));
+				new FoodType(2, MAX_SANDWICH_LAYERS, LayerRole.BREAD, LayerRole.BREAD, KitchenBlocks.BOARD, KitchenItems.SANDWICH));
 	}
 
 	public static void layers(BootstrapContext<LayerDefinition> context) {

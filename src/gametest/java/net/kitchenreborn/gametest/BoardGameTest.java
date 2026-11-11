@@ -139,14 +139,14 @@ public class BoardGameTest implements CustomTestMethodInvoker {
 	}
 
 	@GameTest
-	public void tenLayersMaximum(GameTestHelper helper) {
+	public void thirtyTwoLayersMaximum(GameTestHelper helper) {
 		Player player = helper.makeMockPlayer(GameType.CREATIVE);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 32; i++) {
 			layers(helper, player, KitchenItems.BREAD_SLICE);
 		}
-		helper.assertValueEqual(LayerStack.AddResult.FULL, check(helper, KitchenItems.BACON), "11th layer");
-		helper.assertTrue(put(helper, player, KitchenItems.BACON) == InteractionResult.PASS, "11th layer is rejected");
-		helper.assertValueEqual(10, board(helper).stack().layers().size(), "layers");
+		helper.assertValueEqual(LayerStack.AddResult.FULL, check(helper, KitchenItems.BACON), "33rd layer");
+		helper.assertTrue(put(helper, player, KitchenItems.BACON) == InteractionResult.PASS, "33rd layer is rejected");
+		helper.assertValueEqual(32, board(helper).stack().layers().size(), "layers");
 		helper.succeed();
 	}
 

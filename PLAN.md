@@ -149,7 +149,7 @@ Each milestone ends with: builds, launches client + dedicated server without err
 ### M3 — Cutting Board & Sandwich (2–3 days) ⭐ core
 - Food core (§4.1) + sandwich food type + layer JSONs for all 17 original sandwichables (heal values in summary doc).
 - Board block (model from original), BE storing layers, interactions:
-  RC add (≤10) · empty RC remove top · sneak-RC finish if bread top & bottom & ≥2 layers.
+  RC add (≤32, D2) · empty RC remove top · sneak-RC finish if bread top & bottom & ≥2 layers.
 - Butter rule: only on bread slice, needs 2 more RCs to spread before stacking (port BoardEventRegistry logic).
 - Jam rule: RC with filled jar adds jam layer, jar loses a serving, jar not placed.
 - Board slicing with knife (§4.4).
@@ -248,7 +248,7 @@ New base ingredients needed across wave 1–2: **egg** (vanilla), **milk** (vani
 | # | Decision | Default |
 |---|---|---|
 | D1 | Sandwich layer heights | **True per-ingredient heights (as original)** |
-| D2 | Max sandwich layers | **10 (original)** |
+| D2 | Max sandwich layers | **32** (changed from the original's 10; one number in `sandwich.json`) |
 | D3 | Knife/M&P take durability in grid? | **No (original)**, but board slicing exists |
 | D4 | Configs as files vs data-driven JSON | **JSON (datapack-overridable)** |
 | D5 | Plate item cap | **32** (original unlimited, laggy) |
