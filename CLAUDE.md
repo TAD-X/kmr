@@ -9,7 +9,7 @@ Fabric mod for Minecraft Java 26.3. Port of MrSpring's Kitchen Mod (1.7.10, MIT)
 - 26.3 changed rendering, block codecs, block-entity save/load, fuel/compost (item components), input (SDL), and made recipes reloadable registries. If an API you remember doesn't compile, look it up (Fabric docs, Fabric API source, NeoForge 26.3 porting primer) instead of guessing repeatedly.
 - Mod ID `kitchen`. Assets under `assets/kitchen/`.
 - Everything static goes through datagen (models, blockstates, item model definitions, recipes, loot, tags, lang). Commit `src/main/generated/`.
-- Gameplay numbers (heal values, timers, layer rules) live in data JSON, not Java constants.
+- Gameplay numbers (heal values, timers, layer rules) live in data JSON, not Java constants. **Exception (accepted):** item food stats (hunger/saturation) live in `KitchenItems.java`, because item components are set at registration. Sandwich *layer* heals are still JSON.
 - Client-only code stays in `src/client/`. Never reference client classes from `src/main/`.
 - Modular foods (sandwich, pizza, lasagna, waffle, pancake stack, sundae) all go through the shared `food/` core — don't special-case a new food in BE code.
 - Design decisions D1–D14 in PLAN.md §7: use the bolded default unless the user changed it; ask before deviating.

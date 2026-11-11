@@ -16,7 +16,9 @@ import net.kitchenreborn.item.KitchenToolItem;
 
 /**
  * All plain items of the mod (M1). Texture and model names equal the item id.
- * Food stats are ported from the original item classes; see {@link #food}.
+ * Food stats are ported from the original item classes where they existed; the rest were chosen by the
+ * project owner (cooked bacon 2, roast beef 4, chicken fillet 2, toast 2, cheese slice 1). These live in Java on
+ * purpose: item food components are set at registration. Sandwich layer heals (M3) are separate JSON data.
  */
 public final class KitchenItems {
 	/** Every registered item in creative-tab order. Datagen iterates this. */
@@ -31,21 +33,21 @@ public final class KitchenItems {
 
 	// Meat
 	public static final Item RAW_BACON = simple("raw_bacon");
-	public static final Item BACON = simple("bacon");
+	public static final Item BACON = food("bacon", 2, 0.6F);
 	public static final Item RAW_ROAST_BEEF = simple("raw_roast_beef");
-	public static final Item ROAST_BEEF = simple("roast_beef");
+	public static final Item ROAST_BEEF = food("roast_beef", 4, 0.6F);
 	public static final Item RAW_CHICKEN_FILLET = simple("raw_chicken_fillet");
-	public static final Item CHICKEN_FILLET = simple("chicken_fillet");
+	public static final Item CHICKEN_FILLET = food("chicken_fillet", 2, 0.6F);
 	public static final Item CHICKEN_LEG = food("chicken_leg", 4, 0.6F);
 	public static final Item BURNT_MEAT = food("burnt_meat", 1, 0.6F);
 
 	// Dairy, baking
 	public static final Item CHEESE = food("cheese", 3, 0.6F);
-	public static final Item CHEESE_SLICE = simple("cheese_slice");
+	public static final Item CHEESE_SLICE = food("cheese_slice", 1, 0.6F);
 	public static final Item BUTTER = simple("butter");
 	public static final Item FLOUR = simple("flour");
 	public static final Item BREAD_SLICE = simple("bread_slice");
-	public static final Item TOAST = simple("toast");
+	public static final Item TOAST = food("toast", 2, 0.6F);
 
 	// Produce (the originals were seed-foods: 2 hunger, 0.3 saturation; planting arrives with crops in M2)
 	public static final Item TOMATO = food("tomato", 2, 0.3F);
