@@ -78,21 +78,29 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 		if (drawn == null || drawn.layers().isEmpty()) {
 			return;
 		}
-		float scale = fitToSlot ? fitScale(drawn.totalHeight()) : 1.0F;
 		poseStack.pushPose();
-		// Special renderers start at the corner of the item cube: move to its middle first.
-		poseStack.translate(0.5F, 0.5F, 0.5F);
-		poseStack.scale(scale, scale, scale);
-		// Centre the stack vertically on the middle of the cube.
-		poseStack.translate(0.0F, -drawn.totalHeight() / 32.0F, 0.0F);
+		if (fitToSlot) {
+			// GUI: special renderers start at the corner of the item cube, so move to its middle, shrink tall
+			// stacks to fit and centre the stack vertically.
+			float scale = fitScale(drawn.totalHeight());
+			poseStack.translate(0.5F, 0.5F, 0.5F);
+			poseStack.scale(scale, scale, scale);
+			poseStack.translate(0.0F, -drawn.totalHeight() / 32.0F, 0.0F);
+		} else {
+			// Everywhere else the stack stands on the bottom of the cube (the hold point is the bottom bun), so tall
+			// stacks grow upwards instead of sinking into the ground or the hand.
+			poseStack.translate(0.5F, 0.0F, 0.5F);
+		}
 		LayerStackDrawer.submit(drawn, poseStack, collector, light);
 		poseStack.popPose();
 	}
 
 	@Override
 	public void getExtents(Consumer<Vector3fc> output) {
-		output.accept(new Vector3f(-0.5F, -0.5F, -0.5F));
-		output.accept(new Vector3f(0.5F, 0.5F, 0.5F));
+		// Item model space has the item cube at 0..1. The GUI centres the stack on the cube; elsewhere it stands on
+		// the bottom (this also decides how high a dropped item hovers above the ground).
+		output.accept(new Vector3f(0.0F, 0.0F, 0.0F));
+		output.accept(new Vector3f(1.0F, 1.0F, 1.0F));
 	}
 
 	/** The item model definition entry: {@code {"type": "kitchen:layered_food", "fit_to_slot": false}}. */

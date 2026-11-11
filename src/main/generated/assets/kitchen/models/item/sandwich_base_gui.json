@@ -1,4 +1,7 @@
 {
   "parent": "minecraft:block/block",
-  "gui_light": "side"
+  "gui_light": "side",
+  "textures": {
+    "particle": "kitchen:item/bread_slice"
+  }
 }

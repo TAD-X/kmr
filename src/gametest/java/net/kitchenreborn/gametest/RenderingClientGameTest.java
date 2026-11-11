@@ -140,6 +140,24 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
 		world.getServer().runCommand("item replace entity @p weapon.mainhand with minecraft:air");
 
+		// Eating: hold use for a while so the item moves to the mouth and eating particles spawn.
+		world.getServer().runCommand("tp @p 20.5 -60 21.8 180 10");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(three()));
+		context.waitTicks(5);
+		context.getInput().holdKey(options -> options.keyUse);
+		context.waitTicks(12);
+		context.takeScreenshot("m4c_eating_3_layers");
+		context.waitTicks(10);
+		context.takeScreenshot("m4c_eating_3_layers_particles");
+		context.getInput().releaseKey(options -> options.keyUse);
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(sixteen()));
+		context.waitTicks(5);
+		context.getInput().holdKey(options -> options.keyUse);
+		context.waitTicks(12);
+		context.takeScreenshot("m4c_eating_16_layers");
+		context.getInput().releaseKey(options -> options.keyUse);
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+
 		// Dropped items on the ground right beside the boards.
 		world.getServer().runCommand("summon minecraft:item 21.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:sandwich\",count:1,"
 				+ "components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:" + layerList(three()) + "}}}}");

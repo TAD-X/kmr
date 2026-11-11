@@ -38,14 +38,15 @@ public class KitchenLayerModelProvider implements DataProvider {
 		JsonObject base = new JsonObject();
 		base.addProperty("parent", "minecraft:block/block");
 		base.addProperty("gui_light", "side");
+		base.add("textures", particle());
 		// Outside the GUI a sandwich is shown at exactly its cutting board size: every display scale is 1. First person
 		// and the item frame tilt the top towards the player so the layers can be seen.
 		JsonObject display = new JsonObject();
-		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 2.5F, 0}, 1.0F));
-		display.add("firstperson_righthand", transform(new float[] {-50, 45, 0}, new float[] {0, 2.0F, -16}, 1.0F));
-		display.add("firstperson_lefthand", transform(new float[] {-50, 225, 0}, new float[] {0, 2.0F, -16}, 1.0F));
-		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 3, 0}, 1.0F));
-		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 0, 0}, 1.0F));
+		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 10.5F, 0}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-50, 45, 0}, new float[] {10, 8.0F, -16}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-50, 225, 0}, new float[] {-10, 8.0F, -16}, 1.0F));
+		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
+		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
 		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
 		base.add("display", display);
 		writes.add(DataProvider.saveStable(cache, base, models.json(Kitchen.id("item/sandwich_base"))));
@@ -53,6 +54,7 @@ public class KitchenLayerModelProvider implements DataProvider {
 		JsonObject gui = new JsonObject();
 		gui.addProperty("parent", "minecraft:block/block");
 		gui.addProperty("gui_light", "side");
+		gui.add("textures", particle());
 		writes.add(DataProvider.saveStable(cache, gui, models.json(Kitchen.id("item/sandwich_base_gui"))));
 		for (LayerModelData.Model model : LayerModelData.MODELS) {
 			writes.add(DataProvider.saveStable(cache, LayerModelData.toJson(model).get(),
@@ -61,6 +63,13 @@ public class KitchenLayerModelProvider implements DataProvider {
 					itemDefinitions.json(LayerModelData.id(model.name()))));
 		}
 		return CompletableFuture.allOf(writes.toArray(CompletableFuture[]::new));
+	}
+
+	/** Eating particles use the item model's particle texture; the special renderer has none of its own. */
+	private static JsonObject particle() {
+		JsonObject textures = new JsonObject();
+		textures.addProperty("particle", "kitchen:item/bread_slice");
+		return textures;
 	}
 
 	private static JsonObject transform(float[] rotation, float[] translation, float scale) {
