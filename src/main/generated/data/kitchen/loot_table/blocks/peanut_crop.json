@@ -40,6 +40,22 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "kitchen:peanut"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "kitchen:peanut_crop",
+        "state": {
+          "age": "7"
+        }
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:apply_bonus",
             "enchantment": "minecraft:fortune",

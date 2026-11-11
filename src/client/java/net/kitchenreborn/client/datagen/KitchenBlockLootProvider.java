@@ -36,12 +36,14 @@ public class KitchenBlockLootProvider extends FabricBlockLootSubProvider {
 		cropWithOwnSeed(KitchenBlocks.LETTUCE_CROP, KitchenItems.LETTUCE);
 		cropWithOwnSeed(KitchenBlocks.STRAWBERRY_CROP, KitchenItems.STRAWBERRY);
 
-		// Peanut (original BlockPeanutCrop): mature drops peanuts in shell (+ bonus shells),
-		// immature drops the peanut seed.
+		// Peanut (original BlockPeanutCrop): mature drops peanuts in shell (+ bonus shells) and, new in this port,
+		// one peanut; immature drops the peanut seed.
 		LootItemCondition.Builder mature = matureCondition(KitchenBlocks.PEANUT_CROP);
 		add(KitchenBlocks.PEANUT_CROP, applyExplosionDecay(KitchenBlocks.PEANUT_CROP, LootTable.lootTable()
 				.withPool(LootPool.lootPool().add(LootItem.lootTableItem(KitchenItems.PEANUTS_IN_SHELL).when(mature)
 						.otherwise(LootItem.lootTableItem(KitchenItems.PEANUT))))
+				// A mature crop also returns one plain peanut so it can be replanted (villagers need it too).
+				.withPool(LootPool.lootPool().when(mature).add(LootItem.lootTableItem(KitchenItems.PEANUT)))
 				.withPool(LootPool.lootPool().when(mature).add(LootItem.lootTableItem(KitchenItems.PEANUTS_IN_SHELL)
 						.apply(ApplyBonusCount.addBonusBinomialDistributionCount(
 								enchantments.getOrThrow(Enchantments.FORTUNE),
