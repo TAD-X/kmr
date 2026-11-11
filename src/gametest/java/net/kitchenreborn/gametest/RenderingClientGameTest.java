@@ -130,6 +130,15 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 		context.waitTicks(10);
 		context.takeScreenshot("m4b_tp_back_3_layers_beside_board");
+		// Bird's eye view of the held sandwich (camera looks straight down from behind and above).
+		world.getServer().runCommand("tp @p 20.5 -60 23.5 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m4b_tp_birdseye_3_layers");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(sixteen()));
+		context.waitTicks(10);
+		context.takeScreenshot("m4b_tp_birdseye_16_layers");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(three()));
+		world.getServer().runCommand("tp @p 20.5 -60 23.5 180 20");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
 		world.getServer().runCommand("tp @p 20.5 -60 21.5 0 20");
 		context.waitTicks(10);
