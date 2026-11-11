@@ -6,6 +6,6 @@
 	"environment": "*",
 	"entrypoints": {
 		"fabric-gametest": ["net.kitchenreborn.gametest.BoardGameTest"],
-		"fabric-client-gametest": ["net.kitchenreborn.gametest.BoardClientGameTest"]
+		"fabric-client-gametest": ["net.kitchenreborn.gametest.RenderingClientGameTest"]
 	}
 }

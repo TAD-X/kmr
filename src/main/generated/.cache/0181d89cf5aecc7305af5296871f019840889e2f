@@ -1,0 +1,16 @@
+// 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/Kitchen Layer Models
+82cf1cf5e5a255d6a81baca79bb00ae00be870a5 assets/kitchen/items/layer/bread_slice_bottom.json
+5911bf2709dc35fc5777dc80c22c6df84647a414 assets/kitchen/items/layer/bread_slice_top.json
+d894fffbfa4dd9fd9eabdf809626e9658990addc assets/kitchen/items/layer/butter_0.json
+9aea41e9043d9d784bbc980eeed684deddfbd429 assets/kitchen/items/layer/butter_1.json
+2d3fdcbaef389a32c44671c997a7d11f1ac1fe13 assets/kitchen/items/layer/butter_2.json
+98d53b420370b6e4bdcf7e8281be2dd737cec94c assets/kitchen/items/layer/cooked_bacon.json
+5fe2093a8f8079e902d0cf43174451becc3477d5 assets/kitchen/items/layer/raw_bacon.json
+57686dd9191c687d6105cf932990874ddca3f4c0 assets/kitchen/models/item/layer/bread_slice_bottom.json
+482e0d649a4c923a453e6e351c3d1e98240a3bc0 assets/kitchen/models/item/layer/bread_slice_top.json
+c0814d38f2a0cf36fbea5455b357a4ce23b84b61 assets/kitchen/models/item/layer/butter_0.json
+077bd35f21704270f3e01c00c92caffa343d4984 assets/kitchen/models/item/layer/butter_1.json
+bb5f4ac83e6e38d5bffac2bf78122b713eac2d30 assets/kitchen/models/item/layer/butter_2.json
+1f78a6d137c56dd477fcb3808cbefa96f3363c6a assets/kitchen/models/item/layer/cooked_bacon.json
+f1c3e8744d2bdbd64ead1c5460ed46cfaa8e4cf5 assets/kitchen/models/item/layer/raw_bacon.json
+67f19f18bcda3ab3aa9b3f7e38387b86f078d5f4 assets/kitchen/models/item/sandwich_base.json

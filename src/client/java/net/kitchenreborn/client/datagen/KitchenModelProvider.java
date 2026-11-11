@@ -13,6 +13,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
@@ -22,7 +23,9 @@ import net.minecraft.world.level.block.CropBlock;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.client.render.LayeredFoodRenderer;
 import net.kitchenreborn.registry.KitchenBlocks;
+import net.kitchenreborn.registry.KitchenComponents;
 import net.kitchenreborn.registry.KitchenItems;
 
 public class KitchenModelProvider extends FabricModelProvider {
@@ -56,6 +59,20 @@ public class KitchenModelProvider extends FabricModelProvider {
 						.select(Direction.Axis.X, BlockModelGenerators.plainVariant(modelX))
 						.select(Direction.Axis.Z, BlockModelGenerators.plainVariant(modelZ))));
 		generators.itemModelOutput.accept(KitchenItems.BOARD, ItemModelUtils.plainModel(modelX));
+	}
+
+	/**
+	 * The sandwich: while it carries a layered_food component it is drawn by the special renderer (every layer at
+	 * its true height, base model kitchen:item/sandwich_base supplies the display transforms); without one, for
+	 * example in an old creative tab, it falls back to the flat original sandwich.png.
+	 */
+	private static void generateSandwich(ItemModelGenerators generators) {
+		ModelTemplates.FLAT_ITEM.create(KitchenItems.SANDWICH, TextureMapping.layer0(KitchenItems.SANDWICH),
+				generators.modelOutput);
+		generators.itemModelOutput.accept(KitchenItems.SANDWICH, ItemModelUtils.conditional(
+				ItemModelUtils.hasComponent(KitchenComponents.LAYERED_FOOD),
+				ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"), new LayeredFoodRenderer.Unbaked()),
+				ItemModelUtils.plainModel(Kitchen.id("item/sandwich"))));
 	}
 
 	private static ModelInstance boardModel(int x1, int z1, int x2, int z2) {
@@ -93,6 +110,10 @@ public class KitchenModelProvider extends FabricModelProvider {
 	@Override
 	public void generateItemModels(ItemModelGenerators generators) {
 		for (Item item : KitchenItems.ALL) {
+			if (item == KitchenItems.SANDWICH) {
+				generateSandwich(generators);
+				continue;
+			}
 			if (item instanceof BlockItem) {
 				continue; // the crop block generator already writes the seed item's model
 			}

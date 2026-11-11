@@ -3,7 +3,7 @@
 
 items/  -> item/
 blocks/ -> block/
-models/ -> entity/   (Techne model skins; used by the Blockbench rebuilds)
+models/ -> entity/   (Techne model skins; the five 3D layer models go to item/layer/)
 
 Skips Thumbs.db and .psd files. Names are lower-cased; item textures are renamed to this port's item ids (RENAMES).
 Usage: python tools/import_textures.py
@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "reference/original/src/main/resources/assets/kitchen/textures"
 DST = ROOT / "src/main/resources/assets/kitchen/textures"
 MAP = {"items": "item", "blocks": "block", "models": "entity"}
+# Textures of the 3D layer models: item models can only use the item atlas, so these live in item/layer/.
+LAYER_MODEL_TEXTURES = {"bread_slice_bottom", "bread_slice_top", "butter", "cooked_bacon", "raw_bacon"}
 SKIP_NAMES = {"thumbs.db"}
 SKIP_EXT = {".psd"}
 # 1.7.10 texture names -> item ids used by this port (item textures are named after the item id).
@@ -47,7 +49,11 @@ def main():
             elif src_dir == "blocks":
                 # datagen's crop models expect <block>_stage<N> (no underscore before N)
                 stem = re.sub(r"_stage_([0-9])$", lambda m: "_stage" + m.group(1), stem)
-            shutil.copy2(f, out / (stem + f.suffix.lower()))
+            target = out
+            if src_dir == "models" and stem in LAYER_MODEL_TEXTURES:
+                target = DST / "item" / "layer"
+                target.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, target / (stem + f.suffix.lower()))
             copied += 1
     print(f"copied {copied}, skipped {skipped} -> {DST}")
 

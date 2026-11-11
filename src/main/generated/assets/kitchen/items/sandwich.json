@@ -1,6 +1,18 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "kitchen:item/sandwich"
+    "type": "minecraft:condition",
+    "component": "kitchen:layered_food",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "kitchen:item/sandwich"
+    },
+    "on_true": {
+      "type": "minecraft:special",
+      "base": "kitchen:item/sandwich_base",
+      "model": {
+        "type": "kitchen:layered_food"
+      }
+    },
+    "property": "minecraft:has_component"
   }
 }
