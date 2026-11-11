@@ -81,52 +81,84 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.takeScreenshot("m4_board_both_bacons_z_axis");
 	}
 
+	/**
+	 * Sandwiches next to boards holding the same layers, so sizes can be compared: outside the GUI a sandwich must be
+	 * as big as it was on the board.
+	 */
 	private void sandwiches(ClientGameTestContext context, TestSingleplayerContext world) {
-		world.getServer().runCommand("tp @p 20 -60 20 180 10");
+		world.getServer().runCommand("tp @p 20 -60 22 180 10");
 		world.getServer().runCommand("item replace entity @p hotbar.0 with " + sandwich(three()));
 		world.getServer().runCommand("item replace entity @p hotbar.1 with " + sandwich(sixteen()));
 
-		// GUI: both sandwiches in the hotbar, inventory open.
+		// GUI: both sandwiches in the hotbar, inventory open (tall stacks may shrink here).
 		context.getInput().pressKey(options -> options.keyInventory);
 		context.waitTicks(10);
 		context.takeScreenshot("m4_gui_inventory");
 		context.getInput().pressKey(options -> options.keyInventory);
 		context.waitTicks(5);
 
-		// Hand, first person, 3 layers then 16.
+		// The reference: the same 3 and 16 layers on boards.
+		world.getServer().runCommand("setblock 20 -60 20 kitchen:board[axis=x]");
+		world.getServer().runCommand("setblock 18 -60 20 kitchen:board[axis=x]");
+		world.getServer().runCommand("data merge block 20 -60 20 {food_type:\"kitchen:sandwich\",layers:" + layerList(three()) + "}");
+		world.getServer().runCommand("data merge block 18 -60 20 {food_type:\"kitchen:sandwich\",layers:" + layerList(sixteen()) + "}");
+
+		// Hand, first person, main hand and off hand: 3 layers then 16, looking at the matching board.
+		world.getServer().runCommand("tp @p 20.5 -60 21.8 180 45");
 		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(three()));
 		context.waitTicks(10);
-		context.takeScreenshot("m4_hand_first_person_3_layers");
+		context.takeScreenshot("m4b_fp_main_3_layers_beside_board");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		world.getServer().runCommand("item replace entity @p weapon.offhand with " + sandwich(three()));
+		context.waitTicks(10);
+		context.takeScreenshot("m4b_fp_offhand_3_layers_beside_board");
+		world.getServer().runCommand("item replace entity @p weapon.offhand with minecraft:air");
+
+		world.getServer().runCommand("tp @p 19 -60 21.8 180 45");
 		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(sixteen()));
 		context.waitTicks(10);
-		context.takeScreenshot("m4_hand_first_person_16_layers");
-
-		// Hand, third person (from the front so the held item faces the camera).
-		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
+		context.takeScreenshot("m4b_fp_main_16_layers_beside_board");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		world.getServer().runCommand("item replace entity @p weapon.offhand with " + sandwich(sixteen()));
 		context.waitTicks(10);
-		context.takeScreenshot("m4_hand_third_person_16_layers");
+		context.takeScreenshot("m4b_fp_offhand_16_layers_beside_board");
+		world.getServer().runCommand("item replace entity @p weapon.offhand with minecraft:air");
+
+		// Third person: the player holds a sandwich next to the board (F5 back, then F5 front).
+		world.getServer().runCommand("tp @p 20.5 -60 23.5 180 20");
 		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(three()));
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 		context.waitTicks(10);
-		context.takeScreenshot("m4_hand_third_person_3_layers");
+		context.takeScreenshot("m4b_tp_back_3_layers_beside_board");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
+		world.getServer().runCommand("tp @p 20.5 -60 21.5 0 20");
+		context.waitTicks(10);
+		context.takeScreenshot("m4b_tp_front_3_layers");
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with " + sandwich(sixteen()));
+		context.waitTicks(10);
+		context.takeScreenshot("m4b_tp_front_16_layers");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+		world.getServer().runCommand("item replace entity @p weapon.mainhand with minecraft:air");
 
-		// Item frames on a stone wall: 3 layers, 16 layers.
-		world.getServer().runCommand("fill 18 -60 12 23 -57 12 minecraft:stone");
-		world.getServer().runCommand("summon minecraft:item_frame 19 -59 13 {Facing:3b,Item:{id:\"kitchen:sandwich\",count:1,"
+		// Dropped items on the ground right beside the boards.
+		world.getServer().runCommand("summon minecraft:item 21.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:sandwich\",count:1,"
 				+ "components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:" + layerList(three()) + "}}}}");
-		world.getServer().runCommand("summon minecraft:item_frame 22 -59 13 {Facing:3b,Item:{id:\"kitchen:sandwich\",count:1,"
+		world.getServer().runCommand("summon minecraft:item 16.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:sandwich\",count:1,"
 				+ "components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:" + layerList(sixteen()) + "}}}}");
-		world.getServer().runCommand("tp @p 20.5 -60 17 180 5");
-		context.waitTicks(20);
-		context.takeScreenshot("m4_item_frames");
+		world.getServer().runCommand("tp @p 19 -60 24 180 25");
+		context.waitTicks(30);
+		context.takeScreenshot("m4b_dropped_beside_boards");
 
-		// Dropped items, held in place so they do not roll away.
-		world.getServer().runCommand("summon minecraft:item 18 -60 18 {PickupDelay:32767s,Item:{id:\"kitchen:sandwich\",count:1,"
+		// Item frames on a wall with a board in front for comparison.
+		world.getServer().runCommand("fill 28 -60 12 33 -57 12 minecraft:stone");
+		world.getServer().runCommand("setblock 30 -60 14 kitchen:board[axis=x]");
+		world.getServer().runCommand("data merge block 30 -60 14 {food_type:\"kitchen:sandwich\",layers:" + layerList(three()) + "}");
+		world.getServer().runCommand("summon minecraft:item_frame 29 -59 13 {Facing:3b,Item:{id:\"kitchen:sandwich\",count:1,"
 				+ "components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:" + layerList(three()) + "}}}}");
-		world.getServer().runCommand("summon minecraft:item 22 -60 18 {PickupDelay:32767s,Item:{id:\"kitchen:sandwich\",count:1,"
+		world.getServer().runCommand("summon minecraft:item_frame 32 -59 13 {Facing:3b,Item:{id:\"kitchen:sandwich\",count:1,"
 				+ "components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:" + layerList(sixteen()) + "}}}}");
-		world.getServer().runCommand("tp @p 20 -60 21.5 180 40");
+		world.getServer().runCommand("tp @p 30.5 -60 18 180 12");
 		context.waitTicks(20);
-		context.takeScreenshot("m4_dropped_items");
+		context.takeScreenshot("m4b_item_frames_beside_board");
 	}
 }

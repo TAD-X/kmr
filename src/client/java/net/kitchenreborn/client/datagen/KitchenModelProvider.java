@@ -11,6 +11,9 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.properties.select.DisplayContext;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
@@ -63,15 +66,21 @@ public class KitchenModelProvider extends FabricModelProvider {
 
 	/**
 	 * The sandwich: while it carries a layered_food component it is drawn by the special renderer (every layer at
-	 * its true height, base model kitchen:item/sandwich_base supplies the display transforms); without one, for
+	 * its true height; base models kitchen:item/sandwich_base (scale 1 everywhere: cutting board size) and
+	 * sandwich_base_gui supply the display transforms); without one, for
 	 * example in an old creative tab, it falls back to the flat original sandwich.png.
 	 */
 	private static void generateSandwich(ItemModelGenerators generators) {
 		ModelTemplates.FLAT_ITEM.create(KitchenItems.SANDWICH, TextureMapping.layer0(KitchenItems.SANDWICH),
 				generators.modelOutput);
+		// GUI: fitted to the slot (tall stacks shrink). Every other context: true cutting board size.
+		ItemModel.Unbaked layered = ItemModelUtils.select(new DisplayContext(),
+				ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"), new LayeredFoodRenderer.Unbaked(false)),
+				ItemModelUtils.when(ItemDisplayContext.GUI,
+						ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base_gui"), new LayeredFoodRenderer.Unbaked(true))));
 		generators.itemModelOutput.accept(KitchenItems.SANDWICH, ItemModelUtils.conditional(
 				ItemModelUtils.hasComponent(KitchenComponents.LAYERED_FOOD),
-				ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"), new LayeredFoodRenderer.Unbaked()),
+				layered,
 				ItemModelUtils.plainModel(Kitchen.id("item/sandwich"))));
 	}
 

@@ -8,7 +8,9 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -22,20 +24,28 @@ import net.kitchenreborn.registry.KitchenComponents;
 
 /**
  * The special item model of finished layered foods (sandwich now, pizza and others later): draws the stored
- * layers at their true heights with the same {@link LayerStackDrawer} the cutting board uses. Used for the
- * item in hand (first and third person), the GUI, item frames and dropped items.
+ * layers at their true heights with the same {@link LayerStackDrawer} the cutting board uses.
  *
- * <p>Tall stacks are shrunk so they stay inside the slot: see {@link #fitScale}.
+ * <p>Outside the GUI the stack is drawn at exactly its cutting board size (1 block of model = 1 block in the
+ * world) and the item model's display transforms are scale 1, so a sandwich in hand, in a frame or on the ground
+ * is as big as it was on the board. Only the GUI ({@code fit_to_slot}) makes it bigger and shrinks tall stacks
+ * so they stay inside the slot: see {@link #fitScale}.
  */
 public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawer.Drawn> {
 	/** Registered name: {@code "type": "kitchen:layered_food"} in an item model definition. */
 	public static final net.minecraft.resources.Identifier ID = Kitchen.id("layered_food");
 
-	/** Normal size of a stack, relative to the unit item model space. */
+	/** GUI size of a stack, relative to the unit item model space. */
 	private static final float BASE_SCALE = 1.5F;
-	/** The tallest a stack may be, in blocks of item model space, before it is shrunk. */
+	/** The tallest a stack may be in the GUI, in blocks of item model space, before it is shrunk. */
 	private static final float MAX_HEIGHT = 1.2F;
 	private static final int CACHE_SIZE = 64;
+
+	private final boolean fitToSlot;
+
+	public LayeredFoodRenderer(boolean fitToSlot) {
+		this.fitToSlot = fitToSlot;
+	}
 
 	/** Recently drawn foods, so a sandwich is only resolved once, not every frame. */
 	private final Map<LayeredFood, LayerStackDrawer.Drawn> cache = new LinkedHashMap<>(16, 0.75F, true) {
@@ -68,7 +78,7 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 		if (drawn == null || drawn.layers().isEmpty()) {
 			return;
 		}
-		float scale = fitScale(drawn.totalHeight());
+		float scale = fitToSlot ? fitScale(drawn.totalHeight()) : 1.0F;
 		poseStack.pushPose();
 		// Special renderers start at the corner of the item cube: move to its middle first.
 		poseStack.translate(0.5F, 0.5F, 0.5F);
@@ -85,13 +95,15 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 		output.accept(new Vector3f(0.5F, 0.5F, 0.5F));
 	}
 
-	/** The item model definition entry: {@code {"type": "kitchen:layered_food"}}. */
-	public record Unbaked() implements SpecialModelRenderer.Unbaked<LayerStackDrawer.Drawn> {
-		public static final MapCodec<Unbaked> MAP_CODEC = MapCodec.unit(new Unbaked());
+	/** The item model definition entry: {@code {"type": "kitchen:layered_food", "fit_to_slot": false}}. */
+	public record Unbaked(boolean fitToSlot) implements SpecialModelRenderer.Unbaked<LayerStackDrawer.Drawn> {
+		public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+				Codec.BOOL.optionalFieldOf("fit_to_slot", false).forGetter(Unbaked::fitToSlot))
+				.apply(i, Unbaked::new));
 
 		@Override
 		public SpecialModelRenderer<LayerStackDrawer.Drawn> bake(SpecialModelRenderer.BakingContext context) {
-			return new LayeredFoodRenderer();
+			return new LayeredFoodRenderer(fitToSlot);
 		}
 
 		@Override

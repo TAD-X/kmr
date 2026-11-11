@@ -38,15 +38,22 @@ public class KitchenLayerModelProvider implements DataProvider {
 		JsonObject base = new JsonObject();
 		base.addProperty("parent", "minecraft:block/block");
 		base.addProperty("gui_light", "side");
-		// minecraft:block/block's transforms are right for the GUI, ground, frame and third person; in first person
-		// a thin sandwich would show only its top, so tilt it towards the player to see the layers.
+		// Outside the GUI a sandwich is shown at exactly its cutting board size: every display scale is 1. First person
+		// and the item frame tilt the top towards the player so the layers can be seen.
 		JsonObject display = new JsonObject();
-		display.add("firstperson_righthand", transform(new float[] {-50, 45, 0}, new float[] {-1.5F, 4.0F, 0}, 0.27F));
-		display.add("firstperson_lefthand", transform(new float[] {-50, 225, 0}, new float[] {1.5F, 4.0F, 0}, 0.27F));
-		// Item frames: tilt the top towards the viewer so the layers are visible, a little larger than a block.
-		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 0, 0}, 0.9F));
+		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 2.5F, 0}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-50, 45, 0}, new float[] {0, 2.0F, -16}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-50, 225, 0}, new float[] {0, 2.0F, -16}, 1.0F));
+		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 3, 0}, 1.0F));
+		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 0, 0}, 1.0F));
+		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
 		base.add("display", display);
 		writes.add(DataProvider.saveStable(cache, base, models.json(Kitchen.id("item/sandwich_base"))));
+		// The GUI keeps the plain block transforms (rotated, 0.625); the renderer fits the stack into the slot.
+		JsonObject gui = new JsonObject();
+		gui.addProperty("parent", "minecraft:block/block");
+		gui.addProperty("gui_light", "side");
+		writes.add(DataProvider.saveStable(cache, gui, models.json(Kitchen.id("item/sandwich_base_gui"))));
 		for (LayerModelData.Model model : LayerModelData.MODELS) {
 			writes.add(DataProvider.saveStable(cache, LayerModelData.toJson(model).get(),
 					models.json(Kitchen.id("item/layer/" + model.name()))));

@@ -7,11 +7,28 @@
       "model": "kitchen:item/sandwich"
     },
     "on_true": {
-      "type": "minecraft:special",
-      "base": "kitchen:item/sandwich_base",
-      "model": {
-        "type": "kitchen:layered_food"
-      }
+      "type": "minecraft:select",
+      "cases": [
+        {
+          "model": {
+            "type": "minecraft:special",
+            "base": "kitchen:item/sandwich_base_gui",
+            "model": {
+              "type": "kitchen:layered_food",
+              "fit_to_slot": true
+            }
+          },
+          "when": "gui"
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:special",
+        "base": "kitchen:item/sandwich_base",
+        "model": {
+          "type": "kitchen:layered_food"
+        }
+      },
+      "property": "minecraft:display_context"
     },
     "property": "minecraft:has_component"
   }
