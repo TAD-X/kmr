@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "kitchen:block/tiles",
+    "side": "kitchen:block/tiles",
+    "top": "kitchen:block/tiles"
+  }
+}

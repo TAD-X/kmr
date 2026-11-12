@@ -2,5 +2,7 @@
 38e212152194578c8dd01de66cbf07474bc005f0 data/minecraft/tags/block/bee_growables.json
 38e212152194578c8dd01de66cbf07474bc005f0 data/minecraft/tags/block/crops.json
 38e212152194578c8dd01de66cbf07474bc005f0 data/minecraft/tags/block/maintains_farmland.json
-4b56edf3dd25ca89061620ed0a723d2c941ae86a data/minecraft/tags/block/mineable/axe.json
-c75635695847a93d17dfab5ab070afc054706cae data/minecraft/tags/block/mineable/pickaxe.json
+071dd5be9c6f41cbc43ee7c06cf1dcd347011367 data/minecraft/tags/block/mineable/axe.json
+9e221021c21cfc20b0b23692e798b0518b77a789 data/minecraft/tags/block/mineable/pickaxe.json
+7ae17bfc195985c6fcd0ccdaac92989d8f321902 data/minecraft/tags/block/slabs.json
+389d81b3684c3ea39891a6e77a449eb42dfdb7bf data/minecraft/tags/block/stairs.json

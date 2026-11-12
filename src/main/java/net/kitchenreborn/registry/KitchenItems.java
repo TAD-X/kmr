@@ -48,6 +48,15 @@ public final class KitchenItems {
 	public static final Item PAN = register("pan",
 			props -> new BlockItem(KitchenBlocks.PAN, props), new Item.Properties().useBlockDescriptionPrefix());
 
+	public static final Item CABINET = register("kitchen_cabinet",
+			props -> new BlockItem(KitchenBlocks.CABINET, props), new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item TILES = register("tiles",
+			props -> new BlockItem(KitchenBlocks.TILES, props), new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item TILE_SLAB = register("tile_slab",
+			props -> new BlockItem(KitchenBlocks.TILE_SLAB, props), new Item.Properties().useBlockDescriptionPrefix());
+	public static final Item TILE_STAIRS = register("tile_stairs",
+			props -> new BlockItem(KitchenBlocks.TILE_STAIRS, props), new Item.Properties().useBlockDescriptionPrefix());
+
 	// Meat
 	public static final Item RAW_BACON = simple("raw_bacon");
 	public static final Item BACON = food("bacon", 2, 0.6F);

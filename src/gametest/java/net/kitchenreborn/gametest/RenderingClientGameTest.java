@@ -51,6 +51,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			emptyPlateAndBoardItems(context, world);
 			ovens(context, world);
 			pans(context, world);
+			decor(context, world);
 		}
 	}
 
@@ -570,10 +571,27 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		server.runCommand("item replace entity @p weapon.mainhand with kitchen:pan");
 		context.waitTicks(10);
 		context.takeScreenshot("m7_pan_item_first_person");
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.offhand with kitchen:pan");
+		context.waitTicks(30);
+		context.takeScreenshot("m8_pan_item_first_person_offhand");
+		server.runCommand("item replace entity @p weapon.offhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.mainhand with kitchen:pan");
+		context.waitTicks(5);
 		server.runCommand("tp @p 230.5 -60 23.5 180 20");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 		context.waitTicks(10);
 		context.takeScreenshot("m7_pan_item_third_person");
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.offhand with kitchen:pan");
+		context.waitTicks(15);
+		context.takeScreenshot("m8_pan_item_third_person_offhand");
+		server.runCommand("tp @p 230.5 -60 23.5 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m8_pan_item_third_person_offhand_birdseye");
+		server.runCommand("tp @p 230.5 -60 23.5 180 20");
+		server.runCommand("item replace entity @p weapon.offhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.mainhand with kitchen:pan");
 		server.runCommand("tp @p 230.5 -60 23.5 180 90");
 		context.waitTicks(10);
 		context.takeScreenshot("m7_pan_item_third_person_birdseye");
@@ -583,5 +601,44 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.takeScreenshot("m7_pan_item_third_person_front");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
 		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+	}
+
+	/** Cabinets (all facings, corner, open), tiles with slab and stairs (M8). */
+	private void decor(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("effect give @p minecraft:resistance 1000 5 true");
+		Direction[] facings = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+		for (int i = 0; i < 4; i++) {
+			server.runCommand("setblock " + (240 + 2 * i) + " -60 20 kitchen:kitchen_cabinet[facing=" + facings[i].getName() + "]");
+			server.runCommand("setblock " + (240 + 2 * i) + " -60 23 kitchen:kitchen_cabinet[facing=" + facings[i].getName() + ",corner=true]");
+			server.runCommand("setblock " + (240 + 2 * i) + " -60 26 kitchen:kitchen_cabinet[facing=" + facings[i].getName() + ",open=true]");
+		}
+		server.runCommand("tp @p 243 -57 15 0 30");
+		context.waitTicks(25);
+		context.takeScreenshot("m8_cabinets_fronts_from_north");
+		server.runCommand("tp @p 243 -57 15 0 30");
+		context.waitTicks(25);
+		context.takeScreenshot("m8_cabinets_fronts_from_north");
+		server.runCommand("tp @p 243 -57 31 180 30");
+		context.waitTicks(25);
+		context.takeScreenshot("m8_cabinets_closed_corner_open");
+		server.runCommand("setblock 250 -60 20 kitchen:tiles");
+		server.runCommand("setblock 251 -60 20 kitchen:tile_slab");
+		server.runCommand("setblock 252 -60 20 kitchen:tile_stairs[facing=south]");
+		server.runCommand("setblock 250 -60 21 kitchen:tiles");
+		server.runCommand("setblock 251 -60 21 kitchen:tiles");
+		server.runCommand("setblock 252 -60 21 kitchen:tiles");
+		server.runCommand("tp @p 251 -58 25 180 30");
+		context.waitTicks(15);
+		context.takeScreenshot("m8_tiles_slab_stairs");
+		server.runCommand("item replace entity @p hotbar.0 with kitchen:kitchen_cabinet");
+		server.runCommand("item replace entity @p hotbar.1 with kitchen:tiles");
+		server.runCommand("item replace entity @p hotbar.2 with kitchen:tile_slab");
+		server.runCommand("item replace entity @p hotbar.3 with kitchen:tile_stairs");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(10);
+		context.takeScreenshot("m8_decor_items_gui");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(5);
 	}
 }

@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.CropBlock;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.block.CabinetBlock;
 import net.kitchenreborn.block.OvenBlock;
 import net.kitchenreborn.block.PanBlock;
 import net.kitchenreborn.block.PlateBlock;
@@ -50,6 +51,7 @@ public class KitchenModelProvider extends FabricModelProvider {
 		generatePlate(generators);
 		generateOven(generators);
 		generatePan(generators);
+		generateDecor(generators);
 		// Original stage mapping: age 0-1 -> stage 0, 2-3 -> 1, 4-6 -> 2, 7 -> 3.
 		for (Block crop : KitchenBlocks.CROPS) {
 			generators.createCropBlock(crop, CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -107,6 +109,42 @@ public class KitchenModelProvider extends FabricModelProvider {
 		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.OVEN).with(dispatch));
 		// parent block/block: the standard 3/4 GUI view and held like a block
 		generators.itemModelOutput.accept(KitchenItems.OVEN, ItemModelUtils.plainModel(full));
+	}
+
+	/**
+	 * Cabinet and tiles. The cabinet is the original Techne model: closed doors, or (open) both doors swung 45
+	 * degrees, with a solid front instead of doors for the corner look. The tiles use the original texture.
+	 */
+	private void generateDecor(BlockModelGenerators generators) {
+		String[] names = {"kitchen_cabinet", "kitchen_cabinet_open", "kitchen_cabinet_corner"};
+		for (String name : names) {
+			generators.modelOutput.accept(Kitchen.id("block/" + name), LayerModelData.cabinetJson(name.endsWith("corner"), name.endsWith("open")));
+		}
+		PropertyDispatch.C3<MultiVariant, Direction, Boolean, Boolean> dispatch =
+				PropertyDispatch.initial(CabinetBlock.FACING, CabinetBlock.CORNER, CabinetBlock.OPEN);
+		for (Direction facing : new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
+			Quadrant turn = switch (facing) {
+				case EAST -> Quadrant.R90;
+				case SOUTH -> Quadrant.R180;
+				case WEST -> Quadrant.R270;
+				default -> Quadrant.R0;
+			};
+			for (boolean corner : new boolean[] {false, true}) {
+				for (boolean open : new boolean[] {false, true}) {
+					String name = corner ? "kitchen_cabinet_corner" : open ? "kitchen_cabinet_open" : "kitchen_cabinet";
+					dispatch = dispatch.select(facing, corner, open,
+							BlockModelGenerators.plainVariant(Kitchen.id("block/" + name)).with(VariantMutator.Y_ROT.withValue(turn)));
+				}
+			}
+		}
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.CABINET).with(dispatch));
+		generators.itemModelOutput.accept(KitchenItems.CABINET, ItemModelUtils.plainModel(Kitchen.id("block/kitchen_cabinet")));
+
+		// Tiles, with slab and stairs, through the vanilla block family helper.
+		generators.new BlockFamilyProvider(TextureMapping.cube(KitchenBlocks.TILES))
+				.fullBlock(KitchenBlocks.TILES, ModelTemplates.CUBE_ALL)
+				.slab(KitchenBlocks.TILE_SLAB)
+				.stairs(KitchenBlocks.TILE_STAIRS);
 	}
 
 	/** The pan: the original model, a quarter turn per facing; the same facing as the oven under it. */

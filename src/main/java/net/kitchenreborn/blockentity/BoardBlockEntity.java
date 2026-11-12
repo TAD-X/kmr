@@ -15,6 +15,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -129,6 +131,8 @@ public class BoardBlockEntity extends BlockEntity {
 		ItemStack result = recipe.get().value().assemble(new SingleRecipeInput(workpiece.create()));
 		workpiece = null;
 		Block.popResource(level, worldPosition, result);
+		// The knife chops: a short sharp wood sound.
+		level.playSound(null, worldPosition, SoundEvents.AXE_STRIP.value(), SoundSource.BLOCKS, 0.8F, 1.4F);
 		changed();
 		return InteractionResult.SUCCESS;
 	}

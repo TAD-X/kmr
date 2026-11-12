@@ -10,6 +10,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -17,6 +19,7 @@ import net.minecraft.world.level.material.PushReaction;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.block.CabinetBlock;
 import net.kitchenreborn.block.KitchenCropBlock;
 import net.kitchenreborn.block.OvenBlock;
 import net.kitchenreborn.block.PanBlock;
@@ -41,6 +44,37 @@ public final class KitchenBlocks {
 	public static final Block PLATE = plate();
 	public static final Block OVEN = oven();
 	public static final Block PAN = pan();
+	public static final Block CABINET = cabinet();
+	public static final Block TILES = tiles();
+	public static final Block TILE_SLAB = slab();
+	public static final Block TILE_STAIRS = stairs();
+
+	private static Block cabinet() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("kitchen_cabinet"));
+		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().setId(key)
+				.mapColor(MapColor.WOOD).strength(2.0F, 5.0F).sound(SoundType.WOOD).noOcclusion();
+		return Registry.register(BuiltInRegistries.BLOCK, key, new CabinetBlock(properties));
+	}
+
+	/** Original: rock, hardness 1.5, resistance 10. */
+	private static BlockBehaviour.Properties tileProperties(String name) {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id(name));
+		return BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.TERRACOTTA_WHITE)
+				.strength(1.5F, 10.0F).requiresCorrectToolForDrops();
+	}
+
+	private static Block tiles() {
+		return Registry.register(BuiltInRegistries.BLOCK, Kitchen.id("tiles"), new Block(tileProperties("tiles")));
+	}
+
+	private static Block slab() {
+		return Registry.register(BuiltInRegistries.BLOCK, Kitchen.id("tile_slab"), new SlabBlock(tileProperties("tile_slab")));
+	}
+
+	private static Block stairs() {
+		return Registry.register(BuiltInRegistries.BLOCK, Kitchen.id("tile_stairs"),
+				new StairBlock(TILES.defaultBlockState(), tileProperties("tile_stairs")));
+	}
 
 	private static Block pan() {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("pan"));

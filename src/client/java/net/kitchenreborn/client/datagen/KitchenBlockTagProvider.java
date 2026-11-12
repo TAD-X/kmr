@@ -20,10 +20,16 @@ public class KitchenBlockTagProvider extends FabricTagsProvider.BlockTagsProvide
 
 	@Override
 	protected void addTags(HolderLookup.Provider registries) {
-		builder(BlockTags.MINEABLE_WITH_AXE).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.BOARD).orElseThrow());
+		builder(BlockTags.MINEABLE_WITH_AXE).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.BOARD).orElseThrow())
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.CABINET).orElseThrow());
 		builder(BlockTags.MINEABLE_WITH_PICKAXE).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.PLATE).orElseThrow())
 				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.OVEN).orElseThrow())
-				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.PAN).orElseThrow());
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.PAN).orElseThrow())
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.TILES).orElseThrow())
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.TILE_SLAB).orElseThrow())
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.TILE_STAIRS).orElseThrow());
+		builder(BlockTags.SLABS).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.TILE_SLAB).orElseThrow());
+		builder(BlockTags.STAIRS).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.TILE_STAIRS).orElseThrow());
 		for (Block crop : KitchenBlocks.CROPS) {
 			ResourceKey<Block> key = BuiltInRegistries.BLOCK.getResourceKey(crop).orElseThrow();
 			builder(BlockTags.CROPS).add(key);

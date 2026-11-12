@@ -2,6 +2,9 @@
   "values": [
     "kitchen:plate",
     "kitchen:oven",
-    "kitchen:pan"
+    "kitchen:pan",
+    "kitchen:tiles",
+    "kitchen:tile_slab",
+    "kitchen:tile_stairs"
   ]
 }

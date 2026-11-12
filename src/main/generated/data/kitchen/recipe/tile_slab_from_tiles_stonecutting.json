@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kitchen:tiles",
+  "result": {
+    "count": 2,
+    "id": "kitchen:tile_slab"
+  }
+}

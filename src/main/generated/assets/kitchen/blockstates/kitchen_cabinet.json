@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "corner=false,facing=east,open=false": {
+      "model": "kitchen:block/kitchen_cabinet",
+      "y": 90
+    },
+    "corner=false,facing=east,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_open",
+      "y": 90
+    },
+    "corner=false,facing=north,open=false": {
+      "model": "kitchen:block/kitchen_cabinet"
+    },
+    "corner=false,facing=north,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_open"
+    },
+    "corner=false,facing=south,open=false": {
+      "model": "kitchen:block/kitchen_cabinet",
+      "y": 180
+    },
+    "corner=false,facing=south,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_open",
+      "y": 180
+    },
+    "corner=false,facing=west,open=false": {
+      "model": "kitchen:block/kitchen_cabinet",
+      "y": 270
+    },
+    "corner=false,facing=west,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_open",
+      "y": 270
+    },
+    "corner=true,facing=east,open=false": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 90
+    },
+    "corner=true,facing=east,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 90
+    },
+    "corner=true,facing=north,open=false": {
+      "model": "kitchen:block/kitchen_cabinet_corner"
+    },
+    "corner=true,facing=north,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_corner"
+    },
+    "corner=true,facing=south,open=false": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 180
+    },
+    "corner=true,facing=south,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 180
+    },
+    "corner=true,facing=west,open=false": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 270
+    },
+    "corner=true,facing=west,open=true": {
+      "model": "kitchen:block/kitchen_cabinet_corner",
+      "y": 270
+    }
+  }
+}

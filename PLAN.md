@@ -186,7 +186,7 @@ Each milestone ends with: builds, launches client + dedicated server without err
 - Kitchen cabinet (original model/texture), checker tiles.
 - Sounds (sizzle, oven door, knife chop) — vanilla sound events are fine.
 - Lang: port `en_US.lang` → `en_us.json`; other 24 languages optional via script.
-- ✅ Original feature set complete. **Tag release v1.0.0.**
+- ✅ Original feature set complete. **Tagged v1.0.0.**
 
 ### M9 — Promised features, wave 1: breakfast (3–5 days)
 See §6.1–6.4. Toaster, waffle iron, waffles, pancakes.

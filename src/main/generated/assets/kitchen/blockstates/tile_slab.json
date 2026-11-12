@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kitchen:block/tile_slab"
+    },
+    "type=double": {
+      "model": "kitchen:block/tiles"
+    },
+    "type=top": {
+      "model": "kitchen:block/tile_slab_top"
+    }
+  }
+}

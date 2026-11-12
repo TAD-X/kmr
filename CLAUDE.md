@@ -23,5 +23,7 @@ Fabric mod for Minecraft Java 26.3. Port of MrSpring's Kitchen Mod (1.7.10, MIT)
 - GitHub Release for the tag with the remapped jar `build/libs/kitchen-X.Y.Z.jar` attached (never the `-sources` jar). Notes live in `docs/release-notes/vX.Y.Z.md`: what's new for players, the exact Minecraft / Fabric Loader / Fabric API versions required (from `gradle.properties`), and "both server and all clients must use the same jar". With the GitHub CLI (on Windows `C:\Program Files\GitHub CLI\gh.exe`, may not be on PATH): `gh release create vX.Y.Z build/libs/kitchen-X.Y.Z.jar --title "vX.Y.Z" --notes-file docs/release-notes/vX.Y.Z.md`.
 - Never track `reference/original/` or `run/` (both git-ignored; check `git ls-files`).
 
+- Translations: `python tools/import_lang.py` imports the original's `.lang` files for keys that exist in `en_us.json` (English comes from datagen). Re-run after adding lang keys.
+
 ## Credits
 Keep `LICENSE-ORIGINAL` (MIT, © 2017 Mr. Spring) and credit MrSpring in README and fabric.mod.json for reused textures/design.

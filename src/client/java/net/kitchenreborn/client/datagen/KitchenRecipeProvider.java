@@ -49,6 +49,7 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 				plate();
 				oven();
 				pan();
+				decor();
 				cutting();
 				mortarAndPestle();
 				misc();
@@ -88,6 +89,26 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 				ovenCook(KitchenItems.RAW_ROAST_BEEF, KitchenItems.ROAST_BEEF);
 				ovenCook(KitchenItems.RAW_CHICKEN_FILLET, KitchenItems.CHICKEN_FILLET);
 				ovenCook(KitchenItems.RAW_BACON, KitchenItems.BACON);
+			}
+
+			private void decor() {
+				// Original: quartz over planks.
+				shaped(RecipeCategory.DECORATIONS, KitchenItems.CABINET)
+						.pattern("QQQ").pattern("PPP").pattern("PPP")
+						.define('Q', Items.QUARTZ).define('P', ItemTags.PLANKS)
+						.unlockedBy(getHasName(Items.QUARTZ), has(Items.QUARTZ)).save(output);
+				// Original: black dye, bone meal and four clay balls make two tiles.
+				shaped(RecipeCategory.BUILDING_BLOCKS, KitchenItems.TILES, 2)
+						.pattern("IB").pattern("CC").pattern("CC")
+						.define('I', Items.DYE.black()).define('B', Items.BONE_MEAL).define('C', Items.CLAY_BALL)
+						.unlockedBy(getHasName(Items.CLAY_BALL), has(Items.CLAY_BALL)).save(output);
+				// New: slabs and stairs.
+				slabBuilder(RecipeCategory.BUILDING_BLOCKS, KitchenItems.TILE_SLAB, Ingredient.of(KitchenItems.TILES))
+						.unlockedBy(getHasName(KitchenItems.TILES), has(KitchenItems.TILES)).save(output);
+				stairBuilder(KitchenItems.TILE_STAIRS, Ingredient.of(KitchenItems.TILES))
+						.unlockedBy(getHasName(KitchenItems.TILES), has(KitchenItems.TILES)).save(output);
+				stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, KitchenItems.TILE_SLAB, KitchenItems.TILES, 2);
+				stonecutterResultFromBase(RecipeCategory.BUILDING_BLOCKS, KitchenItems.TILE_STAIRS, KitchenItems.TILES);
 			}
 
 			private void pan() {

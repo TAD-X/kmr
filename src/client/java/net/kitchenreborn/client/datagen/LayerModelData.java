@@ -318,9 +318,9 @@ public final class LayerModelData {
 			// hold point and the pan body points away from the player. Left hand mirrors the right.
 			JsonObject display = new JsonObject();
 			display.add("firstperson_righthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
-			display.add("firstperson_lefthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
+			display.add("firstperson_lefthand", transform(new float[] {10, -90, 0}, new float[] {-2, 4, -6}, 1.0F));
 			display.add("thirdperson_righthand", transform(new float[] {80, 90, 0}, new float[] {2, 3.6F, 6}, 1.0F));
-			display.add("thirdperson_lefthand", transform(new float[] {80, 90, 0}, new float[] {2, 3.6F, 6}, 1.0F));
+			display.add("thirdperson_lefthand", transform(new float[] {80, -90, 0}, new float[] {-2, -1.3F, 6.8F}, 1.0F));
 			json.add("display", display);
 			return json;
 		};
@@ -349,6 +349,67 @@ public final class LayerModelData {
 			json.add("elements", elements);
 			return json;
 		};
+	}
+
+	/**
+	 * The kitchen cabinet (original ModelKitchenCabinet, 64x64) at scale 1, front on the north side: the body and
+	 * the top, then either the solid front piece (corner) or two doors. Doors swing about their hinges when open
+	 * (a block model rotation is limited to 45 degrees).
+	 */
+	public static ModelInstance cabinetJson(boolean corner, boolean open) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			Model body = new Model("cabinet", "kitchen_cabinet", 64, 64, List.of(
+					box(1, 0, -8F, 11F, -6F, 16, 13, 14),
+					box(0, 28, -8F, 8F, -8F, 16, 3, 16)), 1.0F);
+			for (Box box : body.boxes()) {
+				elements.add(element(box, body));
+			}
+			if (corner) {
+				Model front = new Model("cabinet_corner", "kitchen_cabinet", 64, 64, List.of(
+						box(15, 0, -6F, 11F, -8F, 14, 13, 2)), 1.0F);
+				elements.add(element(front.boxes().get(0), front));
+			} else {
+				// Door pivots (original ModelRenderer pivots): left (-6.5, 12, -6.5), right (6.5, 12, -6.5).
+				Model left = new Model("cabinet_left", "kitchen_cabinet", 64, 64, List.of(
+						box(48, 0, -6.5F - 0.5F, 12F, -6.5F - 0.5F, 6, 11, 1),
+						box(8, 29, -6.5F + 2.5F, 12F + 3F, -6.5F - 1.5F, 2, 2, 1)), 1.0F);
+				Model right = new Model("cabinet_right", "kitchen_cabinet", 64, 64, List.of(
+						box(0, 0, 6.5F - 5.5F, 12F, -6.5F - 0.5F, 6, 11, 1),
+						box(1, 29, 6.5F - 4.5F, 12F + 3F, -6.5F - 1.5F, 2, 2, 1)), 1.0F);
+				for (Box box : left.boxes()) {
+					JsonObject element = element(box, left);
+					if (open) {
+						element.add("rotation", hinge(-6.5F, 12F, -6.5F, 45F));
+					}
+					elements.add(element);
+				}
+				for (Box box : right.boxes()) {
+					JsonObject element = element(box, right);
+					if (open) {
+						element.add("rotation", hinge(6.5F, 12F, -6.5F, -45F));
+					}
+					elements.add(element);
+				}
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("block/kitchen_cabinet_model").toString());
+			textures.addProperty("particle", Kitchen.id("block/kitchen_cabinet_model").toString());
+			JsonObject json = new JsonObject();
+			json.addProperty("parent", "minecraft:block/block");
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
+	}
+
+	/** A vertical-axis rotation about the model-space point (x, y, z): origin (8 - x, 24 - y, 8 + z). */
+	private static JsonObject hinge(float x, float y, float z, float angle) {
+		JsonObject rotation = new JsonObject();
+		rotation.add("origin", array(8 - x, 24 - y, 8 + z));
+		rotation.addProperty("axis", "y");
+		rotation.addProperty("angle", angle);
+		return rotation;
 	}
 
 	public static final List<Model> MODELS = List.of(BREAD_SLICE_BOTTOM, BREAD_SLICE_TOP, RAW_BACON, COOKED_BACON,

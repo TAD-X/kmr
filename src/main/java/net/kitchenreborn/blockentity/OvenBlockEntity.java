@@ -12,6 +12,8 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -121,6 +123,8 @@ public class OvenBlockEntity extends BlockEntity {
 				cookTime = 0;
 			}
 			level.setBlock(worldPosition, getBlockState().setValue(OvenBlock.OPEN, open).setValue(OvenBlock.LIT, false), Block.UPDATE_ALL);
+			level.playSound(null, worldPosition, open ? SoundEvents.IRON_TRAPDOOR_OPEN : SoundEvents.IRON_TRAPDOOR_CLOSE,
+					SoundSource.BLOCKS, 0.7F, 0.9F);
 			changed();
 		}
 		return InteractionResult.SUCCESS;

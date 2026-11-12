@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kitchen:tiles",
+  "result": {
+    "id": "kitchen:tile_stairs"
+  }
+}

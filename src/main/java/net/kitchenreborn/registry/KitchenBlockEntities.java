@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.blockentity.BoardBlockEntity;
+import net.kitchenreborn.blockentity.CabinetBlockEntity;
 import net.kitchenreborn.blockentity.OvenBlockEntity;
 import net.kitchenreborn.blockentity.PanBlockEntity;
 import net.kitchenreborn.blockentity.PlateBlockEntity;
@@ -28,6 +29,10 @@ public final class KitchenBlockEntities {
 	public static final BlockEntityType<PanBlockEntity> PAN = Registry.register(
 			BuiltInRegistries.BLOCK_ENTITY_TYPE, Kitchen.id("pan"),
 			new BlockEntityType<>(PanBlockEntity::new, Set.of(KitchenBlocks.PAN)));
+
+	public static final BlockEntityType<CabinetBlockEntity> CABINET = Registry.register(
+			BuiltInRegistries.BLOCK_ENTITY_TYPE, Kitchen.id("kitchen_cabinet"),
+			new BlockEntityType<>(CabinetBlockEntity::new, Set.of(KitchenBlocks.CABINET)));
 
 	/** Forces class loading so the block entity types register during mod init. */
 	public static void register() {

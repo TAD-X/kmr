@@ -1,0 +1,11 @@
+{
+  "block.kitchen.board": "도마",
+  "block.kitchen.kitchen_cabinet": "주방 캐비넷",
+  "block.kitchen.lettuce_crop": "상추",
+  "block.kitchen.oven": "오븐",
+  "block.kitchen.pan": "프라이팬",
+  "block.kitchen.plate": "접시",
+  "block.kitchen.tiles": "타일",
+  "block.kitchen.tomato_crop": "토마토 식물",
+  "itemGroup.kitchen.kitchen": "주방"
+}

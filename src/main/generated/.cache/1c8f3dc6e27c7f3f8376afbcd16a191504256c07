@@ -1,11 +1,15 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/Block Loot Tables
 1c8a036f4078a3b74c189ed759c7e4f7c73903c6 data/kitchen/loot_table/blocks/board.json
+c7975454b54ac5eb21349a3d3c7daf13f63abc23 data/kitchen/loot_table/blocks/kitchen_cabinet.json
 d8a7a8ed2699b4938103303b3ece8c004d5e0511 data/kitchen/loot_table/blocks/lettuce_crop.json
 4c17e9cf0acefaff7422f8fd293bac19e6939fea data/kitchen/loot_table/blocks/oven.json
 a5a693b0099e08da2dc3b91a7c97cea315296158 data/kitchen/loot_table/blocks/pan.json
 417cd68cf82f8039878ece31b1404155704ea9a6 data/kitchen/loot_table/blocks/peanut_crop.json
 5639f45ecee40cce68761025178dcec4bd9f8a4e data/kitchen/loot_table/blocks/plate.json
 7c75817ac917c454c54b56313b30594cba768be0 data/kitchen/loot_table/blocks/strawberry_crop.json
+aab026a6fb1cc040ddd0f4e571d9feb8e0773337 data/kitchen/loot_table/blocks/tile_slab.json
+9b995e91ed00f95aae37acf3b44030fb5a774750 data/kitchen/loot_table/blocks/tile_stairs.json
+4c100d02e9b4e277a2e9438e4f4e29edbcd39e40 data/kitchen/loot_table/blocks/tiles.json
 a73f79bb43828502a020ae4707eb4c6792440554 data/kitchen/loot_table/blocks/tomato_crop.json
 91fd06b5335ecbea456c0c0c75f9b3cc4b0616e2 data/kitchen/loot_table/blocks/wild_lettuce.json
 2a13e8e08495c6280a9cfdc83a72d28e4e90dfca data/kitchen/loot_table/blocks/wild_peanut.json

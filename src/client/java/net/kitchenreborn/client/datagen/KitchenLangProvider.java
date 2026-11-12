@@ -61,6 +61,11 @@ public class KitchenLangProvider extends FabricLanguageProvider {
 		b.add(KitchenBlocks.PLATE, "Plate");
 		b.add(KitchenBlocks.OVEN, "Oven");
 		b.add(KitchenBlocks.PAN, "Frying Pan");
+		b.add(KitchenBlocks.CABINET, "Kitchen Cabinet");
+		b.add(KitchenBlocks.TILES, "Tiles");
+		b.add(KitchenBlocks.TILE_SLAB, "Tile Slab");
+		b.add(KitchenBlocks.TILE_STAIRS, "Tile Stairs");
+		b.add("container.kitchen.cabinet", "Kitchen Cabinet");
 		b.add("item.kitchen.jam_jar.filled", "%s Jar");
 		b.add(KitchenItems.SANDWICH, "Sandwich");
 		b.add(KitchenItems.STRAWBERRY_JAM, "Strawberry Jam");
