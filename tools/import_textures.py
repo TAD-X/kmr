@@ -18,6 +18,8 @@ DST = ROOT / "src/main/resources/assets/kitchen/textures"
 MAP = {"items": "item", "blocks": "block", "models": "entity"}
 # Textures of the 3D layer models: item models can only use the item atlas, so these live in item/layer/.
 LAYER_MODEL_TEXTURES = {"bread_slice_bottom", "bread_slice_top", "butter", "cooked_bacon", "raw_bacon"}
+# Textures of block models built from Techne boxes (block atlas): original models/<stem>.png -> block/<name>.png.
+BLOCK_MODEL_TEXTURES = {"plate": "plate_model"}
 SKIP_NAMES = {"thumbs.db"}
 SKIP_EXT = {".psd"}
 # 1.7.10 texture names -> item ids used by this port (item textures are named after the item id).
@@ -54,6 +56,8 @@ def main():
                 target = DST / "item" / "layer"
                 target.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, target / (stem + f.suffix.lower()))
+            if src_dir == "models" and stem in BLOCK_MODEL_TEXTURES:
+                shutil.copy2(f, DST / "block" / (BLOCK_MODEL_TEXTURES[stem] + f.suffix.lower()))
             copied += 1
     print(f"copied {copied}, skipped {skipped} -> {DST}")
 

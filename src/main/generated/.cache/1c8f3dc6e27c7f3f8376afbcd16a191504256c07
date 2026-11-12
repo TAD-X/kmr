@@ -2,6 +2,7 @@
 1c8a036f4078a3b74c189ed759c7e4f7c73903c6 data/kitchen/loot_table/blocks/board.json
 d8a7a8ed2699b4938103303b3ece8c004d5e0511 data/kitchen/loot_table/blocks/lettuce_crop.json
 417cd68cf82f8039878ece31b1404155704ea9a6 data/kitchen/loot_table/blocks/peanut_crop.json
+5639f45ecee40cce68761025178dcec4bd9f8a4e data/kitchen/loot_table/blocks/plate.json
 7c75817ac917c454c54b56313b30594cba768be0 data/kitchen/loot_table/blocks/strawberry_crop.json
 a73f79bb43828502a020ae4707eb4c6792440554 data/kitchen/loot_table/blocks/tomato_crop.json
 91fd06b5335ecbea456c0c0c75f9b3cc4b0616e2 data/kitchen/loot_table/blocks/wild_lettuce.json

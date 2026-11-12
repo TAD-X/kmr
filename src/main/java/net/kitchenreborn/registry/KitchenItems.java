@@ -39,6 +39,9 @@ public final class KitchenItems {
 	public static final Item BOARD = register("board",
 			props -> new BlockItem(KitchenBlocks.BOARD, props), new Item.Properties().useBlockDescriptionPrefix());
 
+	public static final Item PLATE = register("plate",
+			props -> new BlockItem(KitchenBlocks.PLATE, props), new Item.Properties().useBlockDescriptionPrefix());
+
 	// Meat
 	public static final Item RAW_BACON = simple("raw_bacon");
 	public static final Item BACON = food("bacon", 2, 0.6F);

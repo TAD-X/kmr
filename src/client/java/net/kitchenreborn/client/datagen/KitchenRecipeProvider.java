@@ -42,6 +42,7 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 			public void buildRecipes() {
 				tools();
 				board();
+				plate();
 				cutting();
 				mortarAndPestle();
 				misc();
@@ -69,6 +70,15 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 						.pattern(" I ").pattern("G G").pattern("GGG")
 						.define('I', Items.IRON_INGOT).define('G', Items.GLASS)
 						.unlockedBy(getHasName(Items.GLASS), has(Items.GLASS)).save(output);
+			}
+
+			private void plate() {
+				// Original: clay, bone meal, clay over clay.
+				shaped(RecipeCategory.DECORATIONS, KitchenItems.PLATE)
+						.pattern("CBC")
+						.pattern(" C ")
+						.define('C', Items.CLAY_BALL).define('B', Items.BONE_MEAL)
+						.unlockedBy(getHasName(Items.CLAY_BALL), has(Items.CLAY_BALL)).save(output);
 			}
 
 			private void board() {

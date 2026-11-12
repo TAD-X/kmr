@@ -58,6 +58,7 @@ public class KitchenLangProvider extends FabricLanguageProvider {
 		b.add(KitchenItems.APPLE_SLICE, "Apple Slices");
 
 		b.add(KitchenBlocks.BOARD, "Cutting Board");
+		b.add(KitchenBlocks.PLATE, "Plate");
 		b.add(KitchenItems.SANDWICH, "Sandwich");
 		b.add(KitchenItems.STRAWBERRY_JAM, "Strawberry Jam");
 		b.add(KitchenItems.APPLE_JAM, "Apple Jam");

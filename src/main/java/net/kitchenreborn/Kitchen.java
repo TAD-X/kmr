@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.registry.KitchenBlockEntities;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenComponents;
@@ -29,6 +30,7 @@ public class Kitchen implements ModInitializer {
 		KitchenItems.register();
 		KitchenBlockEntities.register();
 		BoardBlock.registerSneakFinish();
+		PlateBlock.registerSneakPickup();
 		KitchenWorldgen.register();
 		KitchenRecipes.register();
 		KitchenTabs.register();

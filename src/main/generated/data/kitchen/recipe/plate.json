@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "minecraft:bone_meal",
+    "C": "minecraft:clay_ball"
+  },
+  "pattern": [
+    "CBC",
+    " C "
+  ],
+  "result": {
+    "id": "kitchen:plate"
+  }
+}

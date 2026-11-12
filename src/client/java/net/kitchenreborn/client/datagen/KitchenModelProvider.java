@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ItemModelUtils;
@@ -17,6 +18,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.data.models.model.ModelInstance;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
+import com.mojang.math.Quadrant;
+import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
@@ -26,6 +29,7 @@ import net.minecraft.world.level.block.CropBlock;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenComponents;
@@ -39,6 +43,7 @@ public class KitchenModelProvider extends FabricModelProvider {
 	@Override
 	public void generateBlockStateModels(BlockModelGenerators generators) {
 		generateBoard(generators);
+		generatePlate(generators);
 		// Original stage mapping: age 0-1 -> stage 0, 2-3 -> 1, 4-6 -> 2, 7 -> 3.
 		for (Block crop : KitchenBlocks.CROPS) {
 			generators.createCropBlock(crop, CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -62,6 +67,19 @@ public class KitchenModelProvider extends FabricModelProvider {
 						.select(Direction.Axis.X, BlockModelGenerators.plainVariant(modelX))
 						.select(Direction.Axis.Z, BlockModelGenerators.plainVariant(modelZ))));
 		generators.itemModelOutput.accept(KitchenItems.BOARD, ItemModelUtils.plainModel(modelX));
+	}
+
+	/** The plate: the original Techne model as a block model, turned in quarter steps to follow the 16 rotations. */
+	private void generatePlate(BlockModelGenerators generators) {
+		Identifier model = Kitchen.id("block/plate");
+		generators.modelOutput.accept(model, LayerModelData.toBlockJson(LayerModelData.PLATE, Kitchen.id("block/plate_model").toString()));
+		PropertyDispatch.C1<MultiVariant, Integer> dispatch = PropertyDispatch.initial(PlateBlock.ROTATION);
+		for (int rotation = 0; rotation < 16; rotation++) {
+			Quadrant quarter = Quadrant.values()[((rotation + 2) / 4) % 4];
+			dispatch = dispatch.select(rotation, BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(quarter)));
+		}
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.PLATE).with(dispatch));
+		generators.itemModelOutput.accept(KitchenItems.PLATE, ItemModelUtils.plainModel(model));
 	}
 
 	/**

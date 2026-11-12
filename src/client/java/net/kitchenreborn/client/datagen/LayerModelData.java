@@ -129,6 +129,30 @@ public final class LayerModelData {
 			box(0, 0, -1F, 22F, -4F, 2, 2, 1),
 			box(0, 0, -3F, 23F, 0F, 1, 1, 3)));
 
+	/** The plate (original ModelPlate): a ring of 1 pixel boxes with a raised bottom, 64x32 texture. */
+	static final Model PLATE = new Model("plate", "plate_model", 64, 32, List.of(
+			box(44, 11, -3F, 22F, 4F, 6, 1, 3),
+			box(16, 10, -5F, 22F, 5F, 2, 1, 1),
+			box(24, 13, -7F, 22F, -3F, 3, 1, 6),
+			box(44, 16, -3F, 22F, -7F, 6, 1, 3),
+			box(16, 21, -6F, 22F, -5F, 1, 1, 2),
+			box(16, 13, 3F, 22F, -6F, 2, 1, 1),
+			box(16, 17, 5F, 22F, 3F, 1, 1, 2),
+			box(24, 5, 4F, 22F, -3F, 3, 1, 6),
+			box(9, 17, 5F, 22F, -5F, 1, 1, 2),
+			box(9, 10, 3F, 22F, 5F, 2, 1, 1),
+			box(9, 21, -6F, 22F, 3F, 1, 1, 2),
+			box(9, 13, -5F, 22F, -6F, 2, 1, 1),
+			box(0, 13, -5F, 22F, -5F, 2, 1, 2),
+			box(0, 9, 3F, 22F, -5F, 2, 1, 2),
+			box(0, 21, 3F, 22F, 3F, 2, 1, 2),
+			box(0, 17, -5F, 22F, 3F, 2, 1, 2),
+			box(0, 25, -3F, 22.5F, -3F, 6, 1, 6),
+			box(25, 22, -3F, 22.5F, -4F, 6, 1, 1),
+			box(25, 25, -4F, 22.5F, -3F, 1, 1, 6),
+			box(40, 25, 3F, 22.5F, -3F, 1, 1, 6),
+			box(40, 22, -3F, 22.5F, 3F, 6, 1, 1)));
+
 	public static final List<Model> MODELS = List.of(BREAD_SLICE_BOTTOM, BREAD_SLICE_TOP, RAW_BACON, COOKED_BACON,
 			BUTTER_0, BUTTER_1, BUTTER_2);
 
@@ -145,6 +169,24 @@ public final class LayerModelData {
 		JsonObject json = new JsonObject();
 		json.add("model", inner);
 		return json;
+	}
+
+	/** A block model (parent block/block for the item transforms) built from the boxes of a Techne model. */
+	public static ModelInstance toBlockJson(Model model, String texture) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : model.boxes()) {
+				elements.add(element(box, model));
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", texture);
+			textures.addProperty("particle", texture);
+			JsonObject json = new JsonObject();
+			json.addProperty("parent", "minecraft:block/block");
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
 	}
 
 	public static ModelInstance toJson(Model model) {

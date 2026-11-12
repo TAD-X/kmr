@@ -45,6 +45,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			world.getServer().runCommand("time set noon");
 			boards(context, world);
 			sandwiches(context, world);
+			plates(context, world);
 		}
 	}
 
@@ -187,5 +188,56 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		world.getServer().runCommand("tp @p 30.5 -60 18 180 12");
 		context.waitTicks(20);
 		context.takeScreenshot("m4b_item_frames_beside_board");
+	}
+
+	private static String itemList(String... ids) {
+		return layerList(ids);
+	}
+
+	/** Plates: a sandwich, mixed plain items, a full plate, and the four facings (M5). */
+	private void plates(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("setblock 40 -60 0 kitchen:plate[rotation=0]");
+		server.runCommand("setblock 42 -60 0 kitchen:plate[rotation=0]");
+		server.runCommand("setblock 44 -60 0 kitchen:plate[rotation=0]");
+		server.runCommand("data merge block 40 -60 0 {items:" + itemList("bread_slice", "butter", "bacon", "cheese_slice", "bread_slice") + "}");
+		// A finished sandwich on a plate with an item on top of it.
+		server.runCommand("data merge block 42 -60 0 {items:[{id:\"kitchen:sandwich\",count:1,components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:"
+				+ layerList(three()) + "}}},{id:\"kitchen:tomato_slice\",count:1}]}");
+		server.runCommand("data merge block 44 -60 0 {items:" + itemList("bacon", "cheese_slice", "tomato_slice", "lettuce_leaf", "roast_beef",
+				"carrot_slice", "bread_slice", "raw_bacon", "chicken_fillet", "potato_slice") + "}");
+		server.runCommand("tp @p 42 -60 4 180 35");
+		context.waitTicks(20);
+		context.takeScreenshot("m5_plates_overview");
+		server.runCommand("tp @p 40 -60 2.2 180 55");
+		context.waitTicks(10);
+		context.takeScreenshot("m5_plate_items_closeup");
+		server.runCommand("tp @p 42 -60 2.2 180 55");
+		context.waitTicks(10);
+		context.takeScreenshot("m5_plate_sandwich_closeup");
+		server.runCommand("tp @p 44 -60 2.2 180 55");
+		context.waitTicks(10);
+		context.takeScreenshot("m5_plate_mixed_closeup");
+
+		// Facings: rotation 0, 4, 8, 12 with the same sandwich.
+		for (int i = 0; i < 4; i++) {
+			server.runCommand("setblock " + (50 + 2 * i) + " -60 0 kitchen:plate[rotation=" + (4 * i) + "]");
+			server.runCommand("data merge block " + (50 + 2 * i) + " -60 0 {items:[{id:\"kitchen:sandwich\",count:1,components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:"
+					+ layerList(three()) + "}}}]}");
+		}
+		server.runCommand("tp @p 53 -60 4 180 45");
+		context.waitTicks(20);
+		context.takeScreenshot("m5_plate_facings");
+
+		// A full plate (32 items) and the plate as an item in hand and on the ground.
+		server.runCommand("setblock 46 -60 0 kitchen:plate[rotation=0]");
+		StringBuilder many = new StringBuilder("[");
+		for (int i = 0; i < 32; i++) {
+			many.append(i == 0 ? "" : ",").append("{id:\"kitchen:").append(i % 2 == 0 ? "bacon" : "cheese_slice").append("\",count:1}");
+		}
+		server.runCommand("data merge block 46 -60 0 {items:" + many + "]}");
+		server.runCommand("tp @p 46 -60 3 180 40");
+		context.waitTicks(15);
+		context.takeScreenshot("m5_plate_full_32");
 	}
 }

@@ -1,5 +1,6 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/KitchenRecipeProvider
 b065e9f0f0024f7bbfc901e80dbc1eb673e51252 data/kitchen/advancement/recipes/decorations/board.json
+eaa1ac84b0866d62d54451cc8261b6a1d9b00eb1 data/kitchen/advancement/recipes/decorations/plate.json
 2499d12838ab8463e871679f6093d1db01a57f5d data/kitchen/advancement/recipes/food/apple_slice.json
 12e095062385ef437824b7b3fcd26488f6903758 data/kitchen/advancement/recipes/food/bacon_from_campfire_cooking.json
 c7b78711ec38dc0ccacbfd6dbd10da59df3455f5 data/kitchen/advancement/recipes/food/bacon_from_smelting.json
@@ -83,6 +84,7 @@ b53203c8f511d352a2ffa8f0019dcf8d13b7c728 data/kitchen/recipe/jam_jar.json
 971f9e4461c8ee96432b4278ff392d8499204fce data/kitchen/recipe/mortar_and_pestle.json
 4de2429ccef6a10c299c6eb79cd3fc4d6b76317c data/kitchen/recipe/peanuts_from_shell.json
 f5ce96490ab73551de3d1272c8f54d880bbbdc41 data/kitchen/recipe/pestle.json
+5ed1571b851802ace6551a1e9053a73ca60a40a1 data/kitchen/recipe/plate.json
 69b814c30f9a2b69316baf6cbf11fe0d1c4d1700 data/kitchen/recipe/potato_slice.json
 194b7b44e7502ae2959d30a7c19a09a5901135f9 data/kitchen/recipe/raw_bacon.json
 a7c85a1f6ef302e76b79141818e1b412031e6ee6 data/kitchen/recipe/raw_chicken_fillet.json

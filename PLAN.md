@@ -165,7 +165,7 @@ Each milestone ends with: builds, launches client + dedicated server without err
 ### M5 — Plate (½–1 day)
 - Places facing player; RC adds any item (cap at e.g. 32 for FPS — design choice D5); empty RC removes top; sneak-RC picks up plate keeping contents (container component) with tooltip.
 - Renders items stacked; sandwiches render fully.
-- ✅ Pick up/replace plate with contents intact.
+- ✅ Pick up/replace plate with contents intact. (done in 0.5.0; cap 32 per D5; breaking keeps contents, explosions drop them loose)
 
 ### M6 — Oven (1–2 days)
 - Model + open/closed + active texture. Sneak-RC empty toggles open.

@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.food.JamContents;
 import net.kitchenreborn.food.LayeredFood;
+import net.kitchenreborn.food.PlateContents;
 
 public final class KitchenComponents {
 	public static final DataComponentType<LayeredFood> LAYERED_FOOD = Registry.register(
@@ -18,6 +19,11 @@ public final class KitchenComponents {
 			BuiltInRegistries.DATA_COMPONENT_TYPE, Kitchen.id("jam"),
 			DataComponentType.<JamContents>builder().persistent(JamContents.CODEC)
 					.networkSynchronized(JamContents.STREAM_CODEC).build());
+
+	public static final DataComponentType<PlateContents> PLATE_CONTENTS = Registry.register(
+			BuiltInRegistries.DATA_COMPONENT_TYPE, Kitchen.id("plate_contents"),
+			DataComponentType.<PlateContents>builder().persistent(PlateContents.CODEC)
+					.networkSynchronized(PlateContents.STREAM_CODEC).cacheEncoding().build());
 
 	/** Forces class loading so the component types register during mod init. */
 	public static void register() {

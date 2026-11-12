@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.KitchenCropBlock;
+import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.block.WildPlantBlock;
 
 public final class KitchenBlocks {
@@ -35,6 +36,15 @@ public final class KitchenBlocks {
 	public static final Block WILD_PEANUT = wild("wild_peanut");
 
 	public static final Block BOARD = board();
+	public static final Block PLATE = plate();
+
+	private static Block plate() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("plate"));
+		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().setId(key)
+				.mapColor(MapColor.TERRACOTTA_WHITE).strength(1.0F).sound(SoundType.GLASS).noOcclusion()
+				.pushReaction(PushReaction.POPPED);
+		return Registry.register(BuiltInRegistries.BLOCK, key, new PlateBlock(properties));
+	}
 
 	private static Block board() {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("board"));
