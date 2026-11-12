@@ -319,8 +319,8 @@ public final class LayerModelData {
 			JsonObject display = new JsonObject();
 			display.add("firstperson_righthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
 			display.add("firstperson_lefthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
-			display.add("thirdperson_righthand", transform(new float[] {80, 90, 0}, new float[] {2, 4, -6}, 1.0F));
-			display.add("thirdperson_lefthand", transform(new float[] {80, 90, 0}, new float[] {2, 4, -6}, 1.0F));
+			display.add("thirdperson_righthand", transform(new float[] {80, 90, 0}, new float[] {2, 3.6F, 6}, 1.0F));
+			display.add("thirdperson_lefthand", transform(new float[] {80, 90, 0}, new float[] {2, 3.6F, 6}, 1.0F));
 			json.add("display", display);
 			return json;
 		};

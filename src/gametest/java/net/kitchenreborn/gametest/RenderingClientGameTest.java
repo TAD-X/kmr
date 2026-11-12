@@ -574,6 +574,13 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 		context.waitTicks(10);
 		context.takeScreenshot("m7_pan_item_third_person");
+		server.runCommand("tp @p 230.5 -60 23.5 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m7_pan_item_third_person_birdseye");
+		server.runCommand("tp @p 230.5 -60 21.5 0 10");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
+		context.waitTicks(10);
+		context.takeScreenshot("m7_pan_item_third_person_front");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
 		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
 	}
