@@ -58,8 +58,15 @@ public class OvenBlock extends Block implements EntityBlock {
 
 	@Override
 	public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-		if (level.isClientSide() || type != KitchenBlockEntities.OVEN) {
+		if (type != KitchenBlockEntities.OVEN) {
 			return null;
+		}
+		if (level.isClientSide()) {
+			return (world, pos, blockState, entity) -> {
+				if (entity instanceof OvenBlockEntity oven) {
+					oven.clientTick();
+				}
+			};
 		}
 		return (world, pos, blockState, entity) -> {
 			if (entity instanceof OvenBlockEntity oven && world instanceof net.minecraft.server.level.ServerLevel server) {

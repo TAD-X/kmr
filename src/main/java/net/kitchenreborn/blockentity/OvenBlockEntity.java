@@ -51,6 +51,12 @@ public class OvenBlockEntity extends BlockEntity {
 	private int cookTime;
 	private Stage stage = Stage.RAW;
 
+	// -- Client-side hatch animation (port of the original's OpeningAnimation: 0 to 65 degrees, 10 per tick) --
+	public static final float HATCH_MAX = 65.0F;
+	public static final float HATCH_STEP = 10.0F;
+	private float hatchAngle = -1.0F;
+	private float hatchPrevAngle = -1.0F;
+
 	public OvenBlockEntity(BlockPos pos, BlockState state) {
 		super(KitchenBlockEntities.OVEN, pos, state);
 	}
@@ -77,6 +83,27 @@ public class OvenBlockEntity extends BlockEntity {
 
 	public boolean isOpen() {
 		return getBlockState().getValue(OvenBlock.OPEN);
+	}
+
+	/**
+	 * Client tick: move the hatch toward the open or closed angle, a step per tick. The first tick after the block
+	 * entity appears (a chunk loading, joining a world) snaps to the current state, so only changes animate.
+	 */
+	public void clientTick() {
+		float target = isOpen() ? HATCH_MAX : 0.0F;
+		if (hatchAngle < 0.0F) {
+			hatchAngle = hatchPrevAngle = target;
+			return;
+		}
+		hatchPrevAngle = hatchAngle;
+		hatchAngle = hatchAngle < target ? Math.min(target, hatchAngle + HATCH_STEP) : Math.max(target, hatchAngle - HATCH_STEP);
+	}
+
+	/** The hatch angle in degrees, interpolated between ticks. */
+	public float hatchAngle(float partialTick) {
+		float angle = hatchAngle < 0.0F ? (isOpen() ? HATCH_MAX : 0.0F) : hatchAngle;
+		float prev = hatchPrevAngle < 0.0F ? angle : hatchPrevAngle;
+		return Math.clamp(prev + (angle - prev) * partialTick, 0.0F, HATCH_MAX);
 	}
 
 	// -- Interactions ------------------------------------------------------------------------------------------

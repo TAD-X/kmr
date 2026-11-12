@@ -220,6 +220,44 @@ public final class LayerModelData {
 		};
 	}
 
+	/** The oven body without its hatch (the hatch is drawn by the block entity renderer so it can swing). */
+	public static ModelInstance ovenBaseJson(String texture) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : OVEN_BASE.boxes()) {
+				elements.add(element(box, OVEN_BASE));
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("block/" + texture).toString());
+			textures.addProperty("particle", Kitchen.id("block/oven").toString());
+			JsonObject json = new JsonObject();
+			json.addProperty("parent", "minecraft:block/block");
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
+	}
+
+	/**
+	 * The hatch alone, closed, as an item model (the renderer swings it about {@link #hingeX} and friends). Item
+	 * models can only use item atlas textures, so these are the copies under item/layer/.
+	 */
+	public static ModelInstance ovenHatchJson(String texture) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : OVEN_HATCH.boxes()) {
+				elements.add(element(box, OVEN_HATCH));
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("item/layer/" + texture).toString());
+			textures.addProperty("particle", Kitchen.id("item/layer/" + texture).toString());
+			JsonObject json = new JsonObject();
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
+	}
+
 	public static final List<Model> MODELS = List.of(BREAD_SLICE_BOTTOM, BREAD_SLICE_TOP, RAW_BACON, COOKED_BACON,
 			BUTTER_0, BUTTER_1, BUTTER_2);
 

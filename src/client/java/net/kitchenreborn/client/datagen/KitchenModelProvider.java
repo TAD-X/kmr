@@ -77,12 +77,14 @@ public class KitchenModelProvider extends FabricModelProvider {
 	 * front, which is the north side of the model, so every facing is a quarter turn of it.
 	 */
 	private void generateOven(BlockModelGenerators generators) {
-		Identifier closed = Kitchen.id("block/oven");
-		Identifier open = Kitchen.id("block/oven_open");
-		Identifier lit = Kitchen.id("block/oven_lit");
-		generators.modelOutput.accept(closed, LayerModelData.ovenJson(false, "oven_model"));
-		generators.modelOutput.accept(open, LayerModelData.ovenJson(true, "oven_model"));
-		generators.modelOutput.accept(lit, LayerModelData.ovenJson(false, "oven_model_active"));
+		Identifier full = Kitchen.id("block/oven");
+		Identifier body = Kitchen.id("block/oven_body");
+		Identifier bodyLit = Kitchen.id("block/oven_body_lit");
+		// The item shows the whole closed oven. The placed block is only the body: the hatch is drawn (and swung)
+		// by the block entity renderer.
+		generators.modelOutput.accept(full, LayerModelData.ovenJson(false, "oven_model"));
+		generators.modelOutput.accept(body, LayerModelData.ovenBaseJson("oven_model"));
+		generators.modelOutput.accept(bodyLit, LayerModelData.ovenBaseJson("oven_model_active"));
 		PropertyDispatch.C3<MultiVariant, Direction, Boolean, Boolean> dispatch =
 				PropertyDispatch.initial(OvenBlock.FACING, OvenBlock.OPEN, OvenBlock.LIT);
 		for (Direction facing : new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
@@ -94,15 +96,14 @@ public class KitchenModelProvider extends FabricModelProvider {
 			};
 			for (boolean isOpen : new boolean[] {false, true}) {
 				for (boolean isLit : new boolean[] {false, true}) {
-					Identifier model = isOpen ? open : isLit ? lit : closed;
 					dispatch = dispatch.select(facing, isOpen, isLit,
-							BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(turn)));
+							BlockModelGenerators.plainVariant(isLit ? bodyLit : body).with(VariantMutator.Y_ROT.withValue(turn)));
 				}
 			}
 		}
 		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.OVEN).with(dispatch));
 		// parent block/block: the standard 3/4 GUI view and held like a block
-		generators.itemModelOutput.accept(KitchenItems.OVEN, ItemModelUtils.plainModel(closed));
+		generators.itemModelOutput.accept(KitchenItems.OVEN, ItemModelUtils.plainModel(full));
 	}
 
 	/** The plate: the original Techne model as a block model, turned in quarter steps to follow the 16 rotations. */

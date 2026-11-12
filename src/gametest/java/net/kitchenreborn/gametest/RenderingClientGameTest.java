@@ -421,6 +421,23 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.waitTicks(20);
 		context.takeScreenshot("m6_oven_facings_open");
 
+		// The door animation: toggle the hatch and shoot at each stage of the swing (a step is 10 degrees a tick).
+		server.runCommand("setblock 170 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("tp @p 172.2 -60 22.2 150 25");
+		context.waitTicks(20);
+		context.takeScreenshot("m61_oven_hatch_closed");
+		server.runCommand("setblock 170 -60 20 kitchen:oven[facing=south,open=true]");
+		context.waitTicks(4);
+		context.takeScreenshot("m61_oven_hatch_mid_opening");
+		context.waitTicks(20);
+		context.takeScreenshot("m61_oven_hatch_open");
+		server.runCommand("setblock 170 -60 20 kitchen:oven[facing=south,open=false]");
+		context.waitTicks(4);
+		context.takeScreenshot("m61_oven_hatch_mid_closing");
+		server.runCommand("setblock 170 -60 20 kitchen:oven[facing=south,open=true,lit=true]");
+		context.waitTicks(30);
+		context.takeScreenshot("m61_oven_hatch_open_lit");
+
 		// A cooked and a burnt oven: smoke (and flames) from the front once done.
 		server.runCommand("setblock 150 -60 20 kitchen:oven[facing=south]");
 		server.runCommand("setblock 152 -60 20 kitchen:oven[facing=south]");

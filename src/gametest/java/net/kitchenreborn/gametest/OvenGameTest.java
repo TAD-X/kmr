@@ -352,4 +352,40 @@ public class OvenGameTest implements CustomTestMethodInvoker {
 		helper.assertTrue(oven, "the oven dropped itself");
 		helper.succeed();
 	}
+
+	/** The hatch animation (client logic, run here on the server-side block entity): 10 degrees a tick, no animation on load. */
+	@GameTest
+	public void hatchAnimatesInTenDegreeSteps(GameTestHelper helper) {
+		OvenBlockEntity oven = oven(helper);
+		// First tick after the block entity appears snaps to the current state (closed): no animation.
+		oven.clientTick();
+		helper.assertValueEqual(0.0F, oven.hatchAngle(1.0F), "closed after load");
+		oven.toggle(helper.getLevel(), true);
+		float previous = 0.0F;
+		for (int tick = 1; tick <= 7; tick++) {
+			oven.clientTick();
+			float angle = oven.hatchAngle(1.0F);
+			helper.assertValueEqual(Math.min(65.0F, 10.0F * tick), angle, "angle after " + tick + " ticks");
+			helper.assertValueEqual((previous + angle) / 2.0F, oven.hatchAngle(0.5F), "interpolated halfway at tick " + tick);
+			previous = angle;
+		}
+		oven.clientTick();
+		helper.assertValueEqual(65.0F, oven.hatchAngle(1.0F), "stays fully open");
+		oven.toggle(helper.getLevel(), true);
+		oven.clientTick();
+		helper.assertValueEqual(55.0F, oven.hatchAngle(1.0F), "closing steps down");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void aFreshlyLoadedOpenOvenIsAlreadyOpen(GameTestHelper helper) {
+		oven(helper).toggle(helper.getLevel(), true); // open
+		// A block entity that has never ticked on the client (a freshly loaded chunk) snaps straight to open.
+		BlockPos at = helper.absolutePos(OVEN);
+		OvenBlockEntity fresh = new OvenBlockEntity(at, helper.getBlockState(OVEN));
+		helper.assertValueEqual(65.0F, fresh.hatchAngle(0.0F), "open before its first tick");
+		fresh.clientTick();
+		helper.assertValueEqual(65.0F, fresh.hatchAngle(0.5F), "open after its first tick, not animating");
+		helper.succeed();
+	}
 }

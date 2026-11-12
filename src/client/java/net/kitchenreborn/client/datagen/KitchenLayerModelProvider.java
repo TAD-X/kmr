@@ -66,6 +66,18 @@ public class KitchenLayerModelProvider implements DataProvider {
 		inner.addProperty("model", Kitchen.id("block/plate").toString());
 		body.add("model", inner);
 		writes.add(DataProvider.saveStable(cache, body, itemDefinitions.json(Kitchen.id("plate_body"))));
+		// The oven hatch, normal and lit texture, drawn by the oven's block entity renderer.
+		for (String hatch : new String[] {"oven", "oven_active"}) {
+			String name = hatch.equals("oven") ? "oven_hatch" : "oven_hatch_lit";
+			writes.add(DataProvider.saveStable(cache, LayerModelData.ovenHatchJson(hatch).get(),
+					models.json(Kitchen.id("item/" + name))));
+			JsonObject definition = new JsonObject();
+			JsonObject hatchInner = new JsonObject();
+			hatchInner.addProperty("type", "minecraft:model");
+			hatchInner.addProperty("model", Kitchen.id("item/" + name).toString());
+			definition.add("model", hatchInner);
+			writes.add(DataProvider.saveStable(cache, definition, itemDefinitions.json(Kitchen.id(name))));
+		}
 		for (LayerModelData.Model model : LayerModelData.MODELS) {
 			writes.add(DataProvider.saveStable(cache, LayerModelData.toJson(model).get(),
 					models.json(Kitchen.id("item/layer/" + model.name()))));

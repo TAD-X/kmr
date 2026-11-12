@@ -17,7 +17,7 @@ SRC = ROOT / "reference/original/src/main/resources/assets/kitchen/textures"
 DST = ROOT / "src/main/resources/assets/kitchen/textures"
 MAP = {"items": "item", "blocks": "block", "models": "entity"}
 # Textures of the 3D layer models: item models can only use the item atlas, so these live in item/layer/.
-LAYER_MODEL_TEXTURES = {"bread_slice_bottom", "bread_slice_top", "butter", "cooked_bacon", "raw_bacon"}
+LAYER_MODEL_TEXTURES = {"bread_slice_bottom", "bread_slice_top", "butter", "cooked_bacon", "raw_bacon", "oven", "oven_active"}
 # Textures of block models built from Techne boxes (block atlas): original models/<stem>.png -> block/<name>.png.
 BLOCK_MODEL_TEXTURES = {"plate": "plate_model", "oven": "oven_model", "oven_active": "oven_model_active"}
 SKIP_NAMES = {"thumbs.db"}

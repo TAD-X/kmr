@@ -6,6 +6,8 @@ d894fffbfa4dd9fd9eabdf809626e9658990addc assets/kitchen/items/layer/butter_0.jso
 2d3fdcbaef389a32c44671c997a7d11f1ac1fe13 assets/kitchen/items/layer/butter_2.json
 98d53b420370b6e4bdcf7e8281be2dd737cec94c assets/kitchen/items/layer/cooked_bacon.json
 5fe2093a8f8079e902d0cf43174451becc3477d5 assets/kitchen/items/layer/raw_bacon.json
+efaf86eafa8ba7c914a42257e035b410c4a37109 assets/kitchen/items/oven_hatch.json
+a09df07c3c5d19b1874ec0f6a94739ae86ac2112 assets/kitchen/items/oven_hatch_lit.json
 43ce79a99097e0935d43d93617d05e36a38d58c2 assets/kitchen/items/plate_body.json
 57686dd9191c687d6105cf932990874ddca3f4c0 assets/kitchen/models/item/layer/bread_slice_bottom.json
 482e0d649a4c923a453e6e351c3d1e98240a3bc0 assets/kitchen/models/item/layer/bread_slice_top.json
@@ -14,6 +16,8 @@ c0814d38f2a0cf36fbea5455b357a4ce23b84b61 assets/kitchen/models/item/layer/butter
 bb5f4ac83e6e38d5bffac2bf78122b713eac2d30 assets/kitchen/models/item/layer/butter_2.json
 1f78a6d137c56dd477fcb3808cbefa96f3363c6a assets/kitchen/models/item/layer/cooked_bacon.json
 f1c3e8744d2bdbd64ead1c5460ed46cfaa8e4cf5 assets/kitchen/models/item/layer/raw_bacon.json
+10666c677c3764944b1fd164cf52be9bc8997db1 assets/kitchen/models/item/oven_hatch.json
+68a8c0bccef40e66d1bf2e25827f3aa1af8967d4 assets/kitchen/models/item/oven_hatch_lit.json
 e34128b105e0dad0488cf5d75bd46bb5b0de746f assets/kitchen/models/item/plate_base.json
 dbf5e0fe1ab0e972cecf482b2d68ebc7f1a2c568 assets/kitchen/models/item/plate_base_gui.json
 aa019e0a1e507b1c19365a92a8b445c7a590a9de assets/kitchen/models/item/sandwich_base.json
