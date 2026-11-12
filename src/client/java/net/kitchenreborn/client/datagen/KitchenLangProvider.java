@@ -59,11 +59,6 @@ public class KitchenLangProvider extends FabricLanguageProvider {
 
 		b.add(KitchenBlocks.BOARD, "Cutting Board");
 		b.add(KitchenBlocks.PLATE, "Plate");
-		b.add("message.kitchen.plate.full", "The plate is full");
-		b.add("message.kitchen.plate.nested_plate", "A plate with food on it can't go on a plate");
-		b.add("message.kitchen.plate.holds_contents", "That is holding items and can't go on a plate");
-		b.add("message.kitchen.plate.duplicate", "The plate already has one of those");
-		b.add("message.kitchen.plate.second_sandwich", "A plate holds only one sandwich");
 		b.add(KitchenItems.SANDWICH, "Sandwich");
 		b.add(KitchenItems.STRAWBERRY_JAM, "Strawberry Jam");
 		b.add(KitchenItems.APPLE_JAM, "Apple Jam");

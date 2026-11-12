@@ -2,7 +2,6 @@ package net.kitchenreborn.blockentity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.jspecify.annotations.Nullable;
 
@@ -11,7 +10,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.component.BundleContents;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.nbt.CompoundTag;
@@ -63,12 +62,12 @@ public class PlateBlockEntity extends BlockEntity {
 
 	// -- Interactions ------------------------------------------------------------------------------------------
 
-	/** Why an item cannot go on the plate; the message key is {@code message.kitchen.plate.<name>}. */
+	/** Why an item cannot go on the plate. A refused item makes the plate act full (see {@link #useItem}). */
 	public enum Refusal {
-		FULL, NESTED_PLATE, HOLDS_CONTENTS, DUPLICATE, SECOND_SANDWICH
+		FULL, SHULKER_BOX, HOLDS_CONTENTS, UNSTACKABLE
 	}
 
-	/** Anything that could carry more items inside it: a loaded plate, a filled shulker box or bundle. */
+	/** Anything that could carry more items inside it: a loaded plate, a filled bundle (or shulker box). */
 	public static boolean holdsContents(ItemStack stack) {
 		PlateContents plate = stack.get(KitchenComponents.PLATE_CONTENTS);
 		if (plate != null && !plate.items().isEmpty()) {
@@ -82,44 +81,34 @@ public class PlateBlockEntity extends BlockEntity {
 		return container != null && container.nonEmptyItemCopyStream().findAny().isPresent();
 	}
 
-	/** The rule that stops {@code held} from going on this plate, or null if it may. */
+	/**
+	 * The rule that stops {@code held} from going on this plate, or null if it may. Unstackable items (swords, tools,
+	 * a sandwich, a loaded plate...) act like the sandwich always did: they only go on an empty plate, so a plate
+	 * can never be used to squeeze many unstackable items into one inventory slot.
+	 */
 	public @Nullable Refusal refusal(ItemStack held) {
 		if (items.size() >= MAX_ITEMS) {
 			return Refusal.FULL;
 		}
-		if (held.is(KitchenItems.PLATE) && holdsContents(held)) {
-			return Refusal.NESTED_PLATE; // a loaded plate never goes onto a plate (an empty one may)
+		if (held.is(ItemTags.SHULKER_BOXES)) {
+			return Refusal.SHULKER_BOX; // never on a plate
 		}
 		if (holdsContents(held)) {
-			return Refusal.HOLDS_CONTENTS; // filled shulker boxes and bundles
+			return Refusal.HOLDS_CONTENTS; // loaded plates, filled bundles
 		}
-		if (held.has(KitchenComponents.LAYERED_FOOD) && !items.isEmpty()) {
-			return Refusal.SECOND_SANDWICH;
-		}
-		if (held.getMaxStackSize() == 1) {
-			for (ItemStackTemplate item : items) {
-				if (item.item().value() == held.getItem()) {
-					return Refusal.DUPLICATE; // at most one of each unstackable item
-				}
-			}
+		if (held.getMaxStackSize() == 1 && !items.isEmpty()) {
+			return Refusal.UNSTACKABLE;
 		}
 		return null;
 	}
 
 	/**
-	 * Right click with an item in hand (not sneaking): put one on the plate. A refused item answers FAIL and, when
-	 * {@code commit}, tells the player why on the action bar.
+	 * Right click with an item in hand (not sneaking): put one on the plate. A refused item PASSes, so the plate
+	 * acts as if it were full: the block then lets an empty-handed click take the top item off.
 	 */
 	public InteractionResult useItem(Player player, ItemStack held, boolean commit) {
-		if (held.isEmpty()) {
+		if (held.isEmpty() || refusal(held) != null) {
 			return InteractionResult.PASS;
-		}
-		Refusal refusal = refusal(held);
-		if (refusal != null) {
-			if (commit) {
-				player.sendOverlayMessage(Component.translatable("message.kitchen.plate." + refusal.name().toLowerCase(Locale.ROOT)));
-			}
-			return InteractionResult.FAIL;
 		}
 		if (commit) {
 			items.add(ItemStackTemplate.fromNonEmptyStack(held, 1));
@@ -215,6 +204,8 @@ public class PlateBlockEntity extends BlockEntity {
 		super.collectImplicitComponents(components);
 		if (!items.isEmpty()) {
 			components.set(KitchenComponents.PLATE_CONTENTS, new PlateContents(List.copyOf(items)));
+			// A plate with something on it is an unstackable item (no stacks of identical loaded plates).
+			components.set(DataComponents.MAX_STACK_SIZE, 1);
 		}
 	}
 

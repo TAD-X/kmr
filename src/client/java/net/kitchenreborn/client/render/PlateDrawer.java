@@ -26,6 +26,9 @@ public final class PlateDrawer {
 	public static final float PLATE_TOP = 1.2F;
 	/** Thickness of one plain item: the original's ITEM_PIXEL, half a pixel. */
 	private static final float ITEM_HEIGHT = 0.5F;
+	/** An empty plate lying on the plate adds this much height, and sits this deep in the plate below (pixels). */
+	private static final float NESTED_PLATE_HEIGHT = 1.0F;
+	private static final float NESTED_PLATE_SINK = 0.4F;
 	/** Item definition (kitchen:plate_body) that renders just the plate model, drawn as the bottom layer of the item. */
 	private static final net.minecraft.resources.Identifier BODY_MODEL = Kitchen.id("plate_body");
 
@@ -48,6 +51,16 @@ public final class PlateDrawer {
 		float start = bottom;
 		for (int i = 0; i < items.size(); i++) {
 			ItemStack stack = items.get(i).create();
+			if (stack.is(KitchenItems.PLATE)) {
+				// An empty plate on the plate: the plate model itself, nested into the one below.
+				ItemStack body = new ItemStack(KitchenItems.PLATE);
+				body.set(DataComponents.ITEM_MODEL, BODY_MODEL);
+				ItemStackRenderState render = new ItemStackRenderState();
+				itemModels.updateForTopItem(render, body, ItemDisplayContext.NONE, level, null, seed + i);
+				draws.add(new LayerStackDrawer.Draw(render, NESTED_PLATE_HEIGHT, bottom - NESTED_PLATE_SINK, true));
+				bottom += NESTED_PLATE_HEIGHT;
+				continue;
+			}
 			LayeredFood food = stack.get(KitchenComponents.LAYERED_FOOD);
 			if (food != null) {
 				LayerStackDrawer.Drawn layers = LayerStackDrawer.prepare(itemModels, level, food.layers(), 0, seed + i * 64);

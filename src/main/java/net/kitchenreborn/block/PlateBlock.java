@@ -77,7 +77,12 @@ public class PlateBlock extends Block implements EntityBlock {
 		}
 		if (level.getBlockEntity(pos) instanceof PlateBlockEntity plate) {
 			InteractionResult result = plate.useItem(player, held, !level.isClientSide());
-			return result == InteractionResult.PASS ? InteractionResult.TRY_WITH_EMPTY_HAND : result;
+			if (result != InteractionResult.PASS) {
+				return result;
+			}
+			// Refused: the plate acts full, so the click takes the top item off. An empty plate just ignores it
+			// (and the item is not placed as a block on top of it).
+			return plate.isEmpty() ? InteractionResult.FAIL : InteractionResult.TRY_WITH_EMPTY_HAND;
 		}
 		return InteractionResult.PASS;
 	}

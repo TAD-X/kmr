@@ -99,7 +99,7 @@ public class PlateGameTest implements CustomTestMethodInvoker {
 			put(helper, player, KitchenItems.BACON);
 		}
 		ItemStack held = new ItemStack(KitchenItems.BACON, 4);
-		helper.assertValueEqual(InteractionResult.FAIL, plate(helper).useItem(player, held, true), "33rd item");
+		helper.assertValueEqual(InteractionResult.PASS, plate(helper).useItem(player, held, true), "33rd item");
 		helper.assertValueEqual(4, held.getCount(), "nothing consumed");
 		helper.assertValueEqual(32, plate(helper).items().size(), "cap");
 		helper.succeed();
@@ -121,13 +121,13 @@ public class PlateGameTest implements CustomTestMethodInvoker {
 		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, sandwich(), true), "sandwich on empty plate");
 		// Anything may go on top of it, but a second sandwich may not.
 		put(helper, player, KitchenItems.CHEESE_SLICE);
-		helper.assertValueEqual(InteractionResult.FAIL, plate(helper).useItem(player, sandwich(), true), "second sandwich");
+		helper.assertValueEqual(InteractionResult.PASS, plate(helper).useItem(player, sandwich(), true), "second sandwich");
 		helper.assertValueEqual(2, plate(helper).items().size(), "items");
 
 		plate(helper).useEmptyHand(player, true);
 		plate(helper).useEmptyHand(player, true);
 		put(helper, player, KitchenItems.BACON);
-		helper.assertValueEqual(InteractionResult.FAIL, plate(helper).useItem(player, sandwich(), true), "sandwich on a used plate");
+		helper.assertValueEqual(InteractionResult.PASS, plate(helper).useItem(player, sandwich(), true), "sandwich on a used plate");
 		helper.succeed();
 	}
 
@@ -229,7 +229,7 @@ public class PlateGameTest implements CustomTestMethodInvoker {
 		helper.succeed();
 	}
 
-	// -- 0.5.2 anti-nesting rules --------------------------------------------------------------------------
+	// -- anti-nesting rules (0.5.3) -------------------------------------------------------------------------
 
 	private static ItemStack loadedPlate() {
 		ItemStack plate = new ItemStack(KitchenItems.PLATE);
@@ -243,78 +243,127 @@ public class PlateGameTest implements CustomTestMethodInvoker {
 		return bundle;
 	}
 
-	private static ItemStack filledShulker() {
-		ItemStack box = new ItemStack(Items.SHULKER_BOX);
-		box.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(List.of(new ItemStack(Items.APPLE))));
-		return box;
-	}
-
 	private static void assertRefused(GameTestHelper helper, Player player, ItemStack stack, String what) {
 		int before = plate(helper).items().size();
-		helper.assertValueEqual(InteractionResult.FAIL, plate(helper).useItem(player, stack, true), what + " is refused");
+		helper.assertValueEqual(InteractionResult.PASS, plate(helper).useItem(player, stack, true), what + " is refused");
 		helper.assertValueEqual(before, plate(helper).items().size(), what + " did not go on the plate");
 		helper.assertValueEqual(1, stack.getCount(), what + " was not used up");
 	}
 
+	private static void assertAccepted(GameTestHelper helper, Player player, ItemStack stack, String what) {
+		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, stack, true), what + " is accepted");
+	}
+
 	@GameTest
-	public void aLoadedPlateCannotGoOnAPlateButAnEmptyOneCan(GameTestHelper helper) {
+	public void onlyOneUnstackableItemGoesOnAPlate(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		assertAccepted(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a sword on an empty plate");
+		// Any other unstackable item, even a different kind, is refused: the plate acts full for it.
+		assertRefused(helper, player, new ItemStack(Items.IRON_SWORD), "a second kind of sword");
+		assertRefused(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a second diamond sword");
+		assertRefused(helper, player, new ItemStack(KitchenItems.KNIFE), "a knife");
+		assertRefused(helper, player, new ItemStack(Items.BUNDLE), "an empty bundle");
+		helper.assertValueEqual(PlateBlockEntity.Refusal.UNSTACKABLE, plate(helper).refusal(new ItemStack(Items.IRON_SWORD)), "reason");
+		// Stackable food still goes on top.
+		put(helper, player, KitchenItems.BACON);
+		put(helper, player, KitchenItems.BACON);
+		helper.assertValueEqual(3, plate(helper).items().size(), "items");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void anUnstackableItemNeedsAnEmptyPlate(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		put(helper, player, KitchenItems.BACON);
+		assertRefused(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a sword on a plate with food");
+		plate(helper).useEmptyHand(player, true);
+		assertAccepted(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a sword once the plate is empty");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void shulkerBoxesNeverGoOnAPlate(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		assertRefused(helper, player, new ItemStack(Items.SHULKER_BOX), "an empty shulker box");
+		assertRefused(helper, player, new ItemStack(Items.DYED_SHULKER_BOX.red()), "a coloured shulker box");
+		helper.assertValueEqual(PlateBlockEntity.Refusal.SHULKER_BOX, plate(helper).refusal(new ItemStack(Items.DYED_SHULKER_BOX.blue())), "reason");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void loadedPlatesAndFilledBundlesAreRefused(GameTestHelper helper) {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		assertRefused(helper, player, loadedPlate(), "a loaded plate");
-		helper.assertValueEqual(PlateBlockEntity.Refusal.NESTED_PLATE, plate(helper).refusal(loadedPlate()), "refusal reason");
-
-		ItemStack empty = new ItemStack(KitchenItems.PLATE);
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, empty, true), "an empty plate");
-		helper.assertValueEqual(1, plate(helper).items().size(), "the empty plate is on the plate");
-		// A second empty plate is a second unstackable... plates stack to 64, so it is fine.
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, new ItemStack(KitchenItems.PLATE), true), "another empty plate");
-		helper.succeed();
-	}
-
-	@GameTest
-	public void unstackableItemsGoOnceEach(GameTestHelper helper) {
-		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, new ItemStack(Items.DIAMOND_SWORD), true), "first sword");
-		assertRefused(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a second diamond sword");
-		helper.assertValueEqual(PlateBlockEntity.Refusal.DUPLICATE, plate(helper).refusal(new ItemStack(Items.DIAMOND_SWORD)), "refusal reason");
-		// A different unstackable item is fine, stackable ones repeat freely.
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, new ItemStack(Items.IRON_SWORD), true), "another kind of sword");
-		put(helper, player, KitchenItems.BACON);
-		put(helper, player, KitchenItems.BACON);
-		helper.assertValueEqual(4, plate(helper).items().size(), "items");
-		helper.succeed();
-	}
-
-	@GameTest
-	public void itemsHoldingContentsAreRefused(GameTestHelper helper) {
-		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		assertRefused(helper, player, filledBundle(), "a filled bundle");
-		assertRefused(helper, player, filledShulker(), "a filled shulker box");
-		helper.assertValueEqual(PlateBlockEntity.Refusal.HOLDS_CONTENTS, plate(helper).refusal(filledBundle()), "refusal reason");
-		// Empty ones are allowed.
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, new ItemStack(Items.BUNDLE), true), "an empty bundle");
-		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).useItem(player, new ItemStack(Items.SHULKER_BOX), true), "an empty shulker box");
+		helper.assertValueEqual(PlateBlockEntity.Refusal.HOLDS_CONTENTS, plate(helper).refusal(loadedPlate()), "reason");
+		// An empty bundle is just an unstackable item: fine on an empty plate.
+		assertAccepted(helper, player, new ItemStack(Items.BUNDLE), "an empty bundle");
 		helper.succeed();
 	}
 
 	@GameTest
-	public void platesNeverFitInsideShulkerBoxesOrBundles(GameTestHelper helper) {
-		helper.assertTrue(!KitchenItems.PLATE.canFitInsideContainerItems(), "the plate item opts out of container items");
-		helper.assertTrue(!BundleContents.canItemBeInBundle(loadedPlate()), "a loaded plate is not bundle material");
-		// Vanilla decides per item type, so empty plates are refused there too (see PlateItem).
-		helper.assertTrue(!BundleContents.canItemBeInBundle(new ItemStack(KitchenItems.PLATE)), "an empty plate is not bundle material");
-		helper.assertTrue(BundleContents.canItemBeInBundle(new ItemStack(KitchenItems.BACON)), "other food still fits");
-		helper.succeed();
-	}
-
-	@GameTest
-	public void refusalsTellThePlayerOnTheActionBar(GameTestHelper helper) {
+	public void emptyPlatesStackAndNest(GameTestHelper helper) {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-		for (PlateBlockEntity.Refusal refusal : PlateBlockEntity.Refusal.values()) {
-			String key = "message.kitchen.plate." + refusal.name().toLowerCase(java.util.Locale.ROOT);
-			helper.assertTrue(net.minecraft.locale.Language.getInstance().has(key), "translation exists: " + key);
+		helper.assertValueEqual(64, new ItemStack(KitchenItems.PLATE).getMaxStackSize(), "an empty plate stacks");
+		put(helper, player, KitchenItems.BACON);
+		assertAccepted(helper, player, new ItemStack(KitchenItems.PLATE), "an empty plate on a plate with food");
+		assertAccepted(helper, player, new ItemStack(KitchenItems.PLATE), "another empty plate");
+		helper.assertValueEqual(3, plate(helper).items().size(), "items");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void aPlateWithItemsIsUnstackable(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		put(helper, player, KitchenItems.BACON);
+		helper.assertValueEqual(InteractionResult.SUCCESS, plate(helper).pickUp(helper.getLevel(), player, true), "pick up");
+		ItemStack picked = null;
+		for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+			if (stack.is(KitchenItems.PLATE)) {
+				picked = stack;
+			}
 		}
-		// Prediction (commit = false) refuses without a message or change.
-		helper.assertValueEqual(InteractionResult.FAIL, plate(helper).useItem(player, loadedPlate(), false), "predicted refusal");
+		helper.assertTrue(picked != null, "the player has the plate");
+		helper.assertValueEqual(1, picked.getMaxStackSize(), "an occupied plate does not stack");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void aBrokenPlateWithItemsDropsUnstackable(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		put(helper, player, KitchenItems.BACON);
+		helper.getLevel().destroyBlock(helper.absolutePos(PLATE), true);
+		boolean found = false;
+		for (ItemEntity entity : helper.getEntities(EntityTypes.ITEM, PLATE, 6.0)) {
+			if (entity.getItem().is(KitchenItems.PLATE)) {
+				found = true;
+				helper.assertValueEqual(1, entity.getItem().getMaxStackSize(), "dropped occupied plate");
+			}
+		}
+		helper.assertTrue(found, "a plate dropped");
+		helper.succeed();
+	}
+
+	@GameTest
+	public void platesFitInShulkerBoxesAndBundles(GameTestHelper helper) {
+		helper.assertTrue(KitchenItems.PLATE.canFitInsideContainerItems(), "plates are container material");
+		helper.assertTrue(BundleContents.canItemBeInBundle(new ItemStack(KitchenItems.PLATE)), "an empty plate fits a bundle");
+		helper.assertTrue(BundleContents.canItemBeInBundle(loadedPlate()), "a loaded plate fits a bundle");
+		helper.succeed();
+	}
+
+	/** At the block: a refused item acts like a full plate, so the click takes the top item off. */
+	@GameTest
+	public void aRefusedItemMakesThePlateGiveUpItsTopItem(GameTestHelper helper) {
+		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+		assertAccepted(helper, player, new ItemStack(Items.DIAMOND_SWORD), "a sword");
+		player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+		helper.useBlock(PLATE, player);
+		helper.assertTrue(plate(helper).isEmpty(), "the sword came off the plate");
+		helper.assertTrue(has(player, Items.DIAMOND_SWORD), "the sword went to the player");
+		// Now the plate is empty and the second sword can go on.
+		helper.useBlock(PLATE, player);
+		helper.assertValueEqual(1, plate(helper).items().size(), "the iron sword is on the plate");
 		helper.succeed();
 	}
 }

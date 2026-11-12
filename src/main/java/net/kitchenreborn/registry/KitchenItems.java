@@ -16,7 +16,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntPr
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.item.JamJarItem;
-import net.kitchenreborn.item.PlateItem;
 import net.kitchenreborn.item.KitchenToolItem;
 
 /**
@@ -41,7 +40,7 @@ public final class KitchenItems {
 			props -> new BlockItem(KitchenBlocks.BOARD, props), new Item.Properties().useBlockDescriptionPrefix());
 
 	public static final Item PLATE = register("plate",
-			props -> new PlateItem(KitchenBlocks.PLATE, props), new Item.Properties().useBlockDescriptionPrefix());
+			props -> new BlockItem(KitchenBlocks.PLATE, props), new Item.Properties().useBlockDescriptionPrefix());
 
 	// Meat
 	public static final Item RAW_BACON = simple("raw_bacon");

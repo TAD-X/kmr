@@ -379,5 +379,14 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		server.runCommand("tp @p 100 -60 24 180 25");
 		context.waitTicks(30);
 		context.takeScreenshot("m52_dropped_board_and_empty_plate");
+
+		// Empty plates stacked on a plate (the plate model, nested), with food on top.
+		server.runCommand("setblock 106 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("setblock 108 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("data merge block 106 -60 20 {items:[{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:bacon\",count:1},{id:\"kitchen:cheese_slice\",count:1}]}");
+		server.runCommand("data merge block 108 -60 20 {items:[{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1},{id:\"kitchen:plate\",count:1}]}");
+		server.runCommand("tp @p 107 -60 22.5 180 40");
+		context.waitTicks(20);
+		context.takeScreenshot("m53_nested_empty_plates");
 	}
 }

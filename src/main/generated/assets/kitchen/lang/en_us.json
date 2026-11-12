@@ -64,11 +64,6 @@
   "layer.kitchen.tomato_slice": "Tomato",
   "message.kitchen.finish.bad_ends": "It needs bread on the top and the bottom",
   "message.kitchen.finish.too_few_layers": "Not enough layers yet",
-  "message.kitchen.plate.duplicate": "The plate already has one of those",
-  "message.kitchen.plate.full": "The plate is full",
-  "message.kitchen.plate.holds_contents": "That is holding items and can't go on a plate",
-  "message.kitchen.plate.nested_plate": "A plate with food on it can't go on a plate",
-  "message.kitchen.plate.second_sandwich": "A plate holds only one sandwich",
   "tooltip.kitchen.restores": "Restores %s hunger",
   "tooltip.kitchen.sandwichable": "Sandwichable",
   "tooltip.kitchen.servings_left": "Servings left: %s"
