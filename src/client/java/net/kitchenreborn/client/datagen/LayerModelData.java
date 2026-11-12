@@ -314,10 +314,13 @@ public final class LayerModelData {
 			json.addProperty("parent", "minecraft:block/block");
 			json.add("textures", textures);
 			json.add("elements", elements);
-			// A thin model sits at the bottom of its item cube: lift it into view when held in first person.
+			// Held at true size (scale 1, the same as on the stove), by the handle: the handle tip is moved to the
+			// hold point and the pan body points away from the player. Left hand mirrors the right.
 			JsonObject display = new JsonObject();
-			display.add("firstperson_righthand", transform(new float[] {0, 45, 0}, new float[] {-2, 8, 0}, 0.5F));
-			display.add("firstperson_lefthand", transform(new float[] {0, 225, 0}, new float[] {2, 8, 0}, 0.5F));
+			display.add("firstperson_righthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
+			display.add("firstperson_lefthand", transform(new float[] {10, 90, 0}, new float[] {2, 4, -6}, 1.0F));
+			display.add("thirdperson_righthand", transform(new float[] {80, 90, 0}, new float[] {2, 4, -6}, 1.0F));
+			display.add("thirdperson_lefthand", transform(new float[] {80, 90, 0}, new float[] {2, 4, -6}, 1.0F));
 			json.add("display", display);
 			return json;
 		};
