@@ -20,6 +20,8 @@ import net.minecraft.world.item.component.TooltipProvider;
 
 /** What a plate carries, bottom to top: the item component of a picked-up plate (like a shulker box's contents). */
 public record PlateContents(List<ItemStackTemplate> items) implements TooltipProvider {
+	public static final PlateContents EMPTY = new PlateContents(List.of());
+
 	public static final Codec<PlateContents> CODEC = ItemStackTemplate.CODEC.listOf().xmap(PlateContents::new,
 			PlateContents::items);
 

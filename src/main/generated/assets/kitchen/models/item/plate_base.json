@@ -3,7 +3,7 @@
   "display": {
     "firstperson_lefthand": {
       "rotation": [
-        -40.0,
+        -8.0,
         10.0,
         0.0
       ],
@@ -13,14 +13,14 @@
         1.0
       ],
       "translation": [
+        2.0,
         3.0,
-        8.0,
-        -14.0
+        -2.0
       ]
     },
     "firstperson_righthand": {
       "rotation": [
-        -40.0,
+        -8.0,
         10.0,
         0.0
       ],
@@ -30,9 +30,9 @@
         1.0
       ],
       "translation": [
+        2.0,
         3.0,
-        8.0,
-        -14.0
+        -2.0
       ]
     },
     "fixed": {

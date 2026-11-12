@@ -2,11 +2,18 @@ package net.kitchenreborn.blockentity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -56,13 +63,63 @@ public class PlateBlockEntity extends BlockEntity {
 
 	// -- Interactions ------------------------------------------------------------------------------------------
 
-	/** Right click with an item in hand (not sneaking): put one on the plate. */
-	public InteractionResult useItem(Player player, ItemStack held, boolean commit) {
-		if (held.isEmpty() || items.size() >= MAX_ITEMS) {
-			return InteractionResult.PASS;
+	/** Why an item cannot go on the plate; the message key is {@code message.kitchen.plate.<name>}. */
+	public enum Refusal {
+		FULL, NESTED_PLATE, HOLDS_CONTENTS, DUPLICATE, SECOND_SANDWICH
+	}
+
+	/** Anything that could carry more items inside it: a loaded plate, a filled shulker box or bundle. */
+	public static boolean holdsContents(ItemStack stack) {
+		PlateContents plate = stack.get(KitchenComponents.PLATE_CONTENTS);
+		if (plate != null && !plate.items().isEmpty()) {
+			return true;
+		}
+		BundleContents bundle = stack.get(DataComponents.BUNDLE_CONTENTS);
+		if (bundle != null && !bundle.isEmpty()) {
+			return true;
+		}
+		ItemContainerContents container = stack.get(DataComponents.CONTAINER);
+		return container != null && container.nonEmptyItemCopyStream().findAny().isPresent();
+	}
+
+	/** The rule that stops {@code held} from going on this plate, or null if it may. */
+	public @Nullable Refusal refusal(ItemStack held) {
+		if (items.size() >= MAX_ITEMS) {
+			return Refusal.FULL;
+		}
+		if (held.is(KitchenItems.PLATE) && holdsContents(held)) {
+			return Refusal.NESTED_PLATE; // a loaded plate never goes onto a plate (an empty one may)
+		}
+		if (holdsContents(held)) {
+			return Refusal.HOLDS_CONTENTS; // filled shulker boxes and bundles
 		}
 		if (held.has(KitchenComponents.LAYERED_FOOD) && !items.isEmpty()) {
+			return Refusal.SECOND_SANDWICH;
+		}
+		if (held.getMaxStackSize() == 1) {
+			for (ItemStackTemplate item : items) {
+				if (item.item().value() == held.getItem()) {
+					return Refusal.DUPLICATE; // at most one of each unstackable item
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Right click with an item in hand (not sneaking): put one on the plate. A refused item answers FAIL and, when
+	 * {@code commit}, tells the player why on the action bar.
+	 */
+	public InteractionResult useItem(Player player, ItemStack held, boolean commit) {
+		if (held.isEmpty()) {
 			return InteractionResult.PASS;
+		}
+		Refusal refusal = refusal(held);
+		if (refusal != null) {
+			if (commit) {
+				player.sendOverlayMessage(Component.translatable("message.kitchen.plate." + refusal.name().toLowerCase(Locale.ROOT)));
+			}
+			return InteractionResult.FAIL;
 		}
 		if (commit) {
 			items.add(ItemStackTemplate.fromNonEmptyStack(held, 1));

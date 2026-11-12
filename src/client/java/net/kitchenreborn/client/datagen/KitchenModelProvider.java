@@ -80,13 +80,16 @@ public class KitchenModelProvider extends FabricModelProvider {
 			dispatch = dispatch.select(rotation, BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(quarter)));
 		}
 		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.PLATE).with(dispatch));
-		// Empty: the plain model. With contents: the special renderer (plate + contents; GUI fits to the slot).
-		ItemModel.Unbaked loaded = ItemModelUtils.select(new DisplayContext(),
+		// Every plate, empty or loaded, goes through the special renderer so it is the same size everywhere:
+		// the GUI fits it to the slot, first person pivots it like the sandwich, everything else is true size.
+		ItemModel.Unbaked centered = ItemModelUtils.specialModel(Kitchen.id("item/plate_base"),
+				new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.CENTER));
+		generators.itemModelOutput.accept(KitchenItems.PLATE, ItemModelUtils.select(new DisplayContext(),
 				ItemModelUtils.specialModel(Kitchen.id("item/plate_base"), new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.BASE)),
 				ItemModelUtils.when(ItemDisplayContext.GUI,
-						ItemModelUtils.specialModel(Kitchen.id("item/plate_base_gui"), new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.GUI))));
-		generators.itemModelOutput.accept(KitchenItems.PLATE, ItemModelUtils.conditional(
-				ItemModelUtils.hasComponent(KitchenComponents.PLATE_CONTENTS), loaded, ItemModelUtils.plainModel(model)));
+						ItemModelUtils.specialModel(Kitchen.id("item/plate_base_gui"), new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.GUI))),
+				ItemModelUtils.when(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, centered),
+				ItemModelUtils.when(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, centered)));
 	}
 
 	/**
@@ -113,6 +116,14 @@ public class KitchenModelProvider extends FabricModelProvider {
 				ItemModelUtils.plainModel(Kitchen.id("item/sandwich"))));
 	}
 
+	private static JsonObject displayTransform(float[] rotation, float[] translation, float scale) {
+		JsonObject json = new JsonObject();
+		json.add("rotation", floats(rotation[0], rotation[1], rotation[2]));
+		json.add("translation", floats(translation[0], translation[1], translation[2]));
+		json.add("scale", floats(scale, scale, scale));
+		return json;
+	}
+
 	private static ModelInstance boardModel(int x1, int z1, int x2, int z2) {
 		return () -> {
 			JsonObject face = new JsonObject();
@@ -131,10 +142,24 @@ public class KitchenModelProvider extends FabricModelProvider {
 			textures.addProperty("all", "minecraft:block/oak_planks");
 			textures.addProperty("particle", "minecraft:block/oak_planks");
 			JsonObject model = new JsonObject();
+			model.addProperty("parent", "minecraft:block/block"); // the standard block display transforms (3/4 view in the GUI, held like a block)
 			model.add("textures", textures);
 			model.add("elements", elements);
+			// Held in first person like a block, lifted so the thin slab (at the bottom of its cube) is on screen.
+			JsonObject display = new JsonObject();
+			display.add("firstperson_righthand", displayTransform(new float[] {0, 45, 0}, new float[] {0, 6, 0}, 0.4F));
+			display.add("firstperson_lefthand", displayTransform(new float[] {0, 225, 0}, new float[] {0, 6, 0}, 0.4F));
+			model.add("display", display);
 			return model;
 		};
+	}
+
+	private static JsonArray floats(float... values) {
+		JsonArray array = new JsonArray();
+		for (float value : values) {
+			array.add(value);
+		}
+		return array;
 	}
 
 	private static JsonArray array(int... values) {

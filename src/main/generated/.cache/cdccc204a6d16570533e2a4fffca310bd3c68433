@@ -32,7 +32,7 @@ d1295354e1b80f4ec50c8d5c8177c6d1dab3d09d assets/kitchen/items/mortar_and_pestle.
 719dddd4bb75b4320fe2283cf19ddbe88d069935 assets/kitchen/items/peanut_jam.json
 db2e6b3fe9ed65dcc8fb12e8654827025a54c5b6 assets/kitchen/items/peanuts_in_shell.json
 33c3720f5a119e5e0c4c7b61aa3197f7e1801328 assets/kitchen/items/pestle.json
-35d8c53add9d475234392f4dd9919250e11b7e97 assets/kitchen/items/plate.json
+4adf51a955d302a9a8cba868e56f182ed6e72308 assets/kitchen/items/plate.json
 4c7344374e1412b5270a76a39fed627c380a8859 assets/kitchen/items/potato_slice.json
 e6067ceae0445d89ed916ae9d668c5997e49ed56 assets/kitchen/items/raw_bacon.json
 a23aeac2ae247227a06803367952e8893d89b907 assets/kitchen/items/raw_chicken_fillet.json
@@ -46,8 +46,8 @@ a23aeac2ae247227a06803367952e8893d89b907 assets/kitchen/items/raw_chicken_fillet
 10dee2f4a5fbc6e1c715ea4d29ff20a143263468 assets/kitchen/items/toast.json
 0626006ce325c7d6bb7b027f7d9d88a7f051794b assets/kitchen/items/tomato.json
 8a65b561ae12504af1192e8383cedcd847fb7643 assets/kitchen/items/tomato_slice.json
-902fc973b4a8de5835538b7de90d7ba6c357c0d7 assets/kitchen/models/block/board_x.json
-dd1ab87fa2f14d323bf21848f3db143d7f272789 assets/kitchen/models/block/board_z.json
+815bafbde22de7099d022ba62a2e4e7ebc57f85d assets/kitchen/models/block/board_x.json
+442053e2d53c88fe42b67fd0015bcc2cc804b0ce assets/kitchen/models/block/board_z.json
 59171f0a2d3105402e62af2a90fdc06f378f8dfe assets/kitchen/models/block/lettuce_crop_stage0.json
 7d3635d1e8e3da48a9bfc757c75ca5afa8a43d59 assets/kitchen/models/block/lettuce_crop_stage1.json
 2bd3e23189bc8f7c1c9abce77eb083b9f49e22db assets/kitchen/models/block/lettuce_crop_stage2.json

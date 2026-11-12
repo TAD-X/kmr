@@ -47,6 +47,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			sandwiches(context, world);
 			plates(context, world);
 			heldPlates(context, world);
+			emptyPlateAndBoardItems(context, world);
 		}
 	}
 
@@ -323,5 +324,60 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		server.runCommand("tp @p 78.5 -60 18 180 12");
 		context.waitTicks(20);
 		context.takeScreenshot("m51_item_frames");
+	}
+
+	/**
+	 * 0.5.2: the empty plate item, the plate with a sandwich in first person, and the cutting board item (GUI, first
+	 * and third person), each next to a placed plate / board for size. Screenshots are prefixed "m52_".
+	 */
+	private void emptyPlateAndBoardItems(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("setblock 100 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("setblock 98 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("setblock 102 -60 20 kitchen:board[axis=x]");
+		server.runCommand("data merge block 100 -60 20 {items:" + sandwichOnPlate() + "}");
+		server.runCommand("item replace entity @p hotbar.0 with kitchen:board");
+		server.runCommand("item replace entity @p hotbar.1 with kitchen:plate");
+		server.runCommand("item replace entity @p hotbar.2 with " + plateItem(sandwichOnPlate()));
+		server.runCommand("tp @p 100 -60 24 180 10");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(10);
+		context.takeScreenshot("m52_gui_board_plate_loaded");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(5);
+
+		String[] names = {"board", "empty_plate", "loaded_plate"};
+		String[] items = {"kitchen:board", "kitchen:plate", plateItem(sandwichOnPlate())};
+		server.runCommand("tp @p 100 -60 21.8 180 45");
+		for (int i = 0; i < items.length; i++) {
+			server.runCommand("item replace entity @p weapon.mainhand with " + items[i]);
+			context.waitTicks(10);
+			context.takeScreenshot("m52_fp_main_" + names[i]);
+			server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+			server.runCommand("item replace entity @p weapon.offhand with " + items[i]);
+			context.waitTicks(10);
+			context.takeScreenshot("m52_fp_offhand_" + names[i]);
+			server.runCommand("item replace entity @p weapon.offhand with minecraft:air");
+		}
+		server.runCommand("tp @p 100.5 -60 23.5 180 20");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+		for (int i = 0; i < 2; i++) {
+			server.runCommand("item replace entity @p weapon.mainhand with " + items[i]);
+			context.waitTicks(10);
+			context.takeScreenshot("m52_tp_back_" + names[i]);
+		}
+		server.runCommand("tp @p 100.5 -60 23.5 180 90");
+		for (int i = 0; i < 2; i++) {
+			server.runCommand("item replace entity @p weapon.mainhand with " + items[i]);
+			context.waitTicks(10);
+			context.takeScreenshot("m52_tp_birdseye_" + names[i]);
+		}
+		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		server.runCommand("summon minecraft:item 103.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:board\",count:1}}");
+		server.runCommand("summon minecraft:item 96.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:plate\",count:1}}");
+		server.runCommand("tp @p 100 -60 24 180 25");
+		context.waitTicks(30);
+		context.takeScreenshot("m52_dropped_board_and_empty_plate");
 	}
 }

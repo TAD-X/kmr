@@ -91,8 +91,8 @@ public class KitchenLayerModelProvider implements DataProvider {
 	private static JsonObject plateDisplay() {
 		JsonObject display = new JsonObject();
 		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 4.5F, 8.0F}, 1.0F));
-		display.add("firstperson_righthand", transform(new float[] {-40, 10, 0}, new float[] {3, 8.0F, -14}, 1.0F));
-		display.add("firstperson_lefthand", transform(new float[] {-40, 10, 0}, new float[] {3, 8.0F, -14}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-8, 10, 0}, new float[] {2, 3.0F, -2}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-8, 10, 0}, new float[] {2, 3.0F, -2}, 1.0F));
 		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
 		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
 		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));

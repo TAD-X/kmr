@@ -47,9 +47,10 @@ public class PlateItemRenderer implements SpecialModelRenderer<LayerStackDrawer.
 
 	@Override
 	public LayerStackDrawer.Drawn extractArgument(ItemStack stack) {
-		PlateContents contents = stack.get(KitchenComponents.PLATE_CONTENTS);
+		// An empty plate has no component: it goes through the same path with nothing on it.
+		PlateContents contents = stack.getOrDefault(KitchenComponents.PLATE_CONTENTS, PlateContents.EMPTY);
 		Minecraft minecraft = Minecraft.getInstance();
-		if (contents == null || minecraft.level == null) {
+		if (minecraft.level == null) {
 			return null;
 		}
 		return cache.computeIfAbsent(contents, key -> PlateDrawer.prepare(minecraft.getItemModelResolver(),
@@ -63,11 +64,13 @@ public class PlateItemRenderer implements SpecialModelRenderer<LayerStackDrawer.
 			return;
 		}
 		poseStack.pushPose();
-		if (mode == LayeredFoodRenderer.Mode.GUI) {
-			float scale = LayeredFoodRenderer.fitScale(drawn.totalHeight());
+		if (mode != LayeredFoodRenderer.Mode.BASE) {
+			// GUI: centred and fitted to the slot. First person: true size, pivoting low in the stack like the sandwich.
+			float scale = mode == LayeredFoodRenderer.Mode.GUI ? LayeredFoodRenderer.fitScale(drawn.totalHeight()) : 1.0F;
+			float pivot = mode == LayeredFoodRenderer.Mode.GUI ? 0.5F : LayeredFoodRenderer.FIRST_PERSON_PIVOT;
 			poseStack.translate(0.5F, 0.5F, 0.5F);
 			poseStack.scale(scale, scale, scale);
-			poseStack.translate(0.0F, -drawn.totalHeight() / 32.0F, 0.0F);
+			poseStack.translate(0.0F, -drawn.totalHeight() * pivot / 16.0F, 0.0F);
 		} else {
 			poseStack.translate(0.5F, 0.0F, 0.5F);
 		}
