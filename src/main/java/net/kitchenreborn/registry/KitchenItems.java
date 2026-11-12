@@ -35,7 +35,7 @@ public final class KitchenItems {
 	public static final Item MORTAR = simple("mortar");
 	public static final Item PESTLE = simple("pestle");
 	public static final Item MORTAR_AND_PESTLE = tool("mortar_and_pestle");
-	public static final Item JAM_JAR = register("jam_jar", JamJarItem::new, new Item.Properties()); // filled by the pan in M7
+	public static final Item JAM_JAR = register("jam_jar", JamJarItem::new, new Item.Properties().stacksTo(1)); // filled by the frying pan
 	public static final Item BOARD = register("board",
 			props -> new BlockItem(KitchenBlocks.BOARD, props), new Item.Properties().useBlockDescriptionPrefix());
 
@@ -44,6 +44,9 @@ public final class KitchenItems {
 
 	public static final Item OVEN = register("oven",
 			props -> new BlockItem(KitchenBlocks.OVEN, props), new Item.Properties().useBlockDescriptionPrefix());
+
+	public static final Item PAN = register("pan",
+			props -> new BlockItem(KitchenBlocks.PAN, props), new Item.Properties().useBlockDescriptionPrefix());
 
 	// Meat
 	public static final Item RAW_BACON = simple("raw_bacon");

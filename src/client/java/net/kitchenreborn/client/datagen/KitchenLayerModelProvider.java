@@ -78,6 +78,32 @@ public class KitchenLayerModelProvider implements DataProvider {
 			definition.add("model", hatchInner);
 			writes.add(DataProvider.saveStable(cache, definition, itemDefinitions.json(Kitchen.id(name))));
 		}
+		// The jam in the pan, one model and (tinted) item definition per fill stage.
+		for (LayerModelData.Model stage : LayerModelData.PAN_JAM) {
+			writes.add(DataProvider.saveStable(cache, LayerModelData.panJamJson(stage).get(),
+					models.json(Kitchen.id("item/" + stage.name()))));
+			JsonObject stageDefinition = new JsonObject();
+			JsonObject stageModel = new JsonObject();
+			stageModel.addProperty("type", "minecraft:model");
+			stageModel.addProperty("model", Kitchen.id("item/" + stage.name()).toString());
+			JsonObject tint = new JsonObject();
+			tint.addProperty("type", "kitchen:jam_color");
+			JsonArray tints = new JsonArray();
+			tints.add(tint);
+			stageModel.add("tints", tints);
+			stageDefinition.add("model", stageModel);
+			writes.add(DataProvider.saveStable(cache, stageDefinition, itemDefinitions.json(Kitchen.id(stage.name()))));
+		}
+		// The jam jar: the jar with its filling at the current servings (layer1, tinted by the jam).
+		for (int servings = 1; servings <= 6; servings++) {
+			JsonObject jar = new JsonObject();
+			jar.addProperty("parent", "minecraft:item/generated");
+			JsonObject jarTextures = new JsonObject();
+			jarTextures.addProperty("layer0", Kitchen.id("item/jam_jar").toString());
+			jarTextures.addProperty("layer1", Kitchen.id("item/jam_jar_filling_" + servings).toString());
+			jar.add("textures", jarTextures);
+			writes.add(DataProvider.saveStable(cache, jar, models.json(Kitchen.id("item/jam_jar_filled_" + servings))));
+		}
 		for (LayerModelData.Model model : LayerModelData.MODELS) {
 			writes.add(DataProvider.saveStable(cache, LayerModelData.toJson(model).get(),
 					models.json(Kitchen.id("item/layer/" + model.name()))));

@@ -1,0 +1,8 @@
+{
+  "type": "kitchen:pan",
+  "ingredient": "kitchen:raw_bacon",
+  "result": {
+    "id": "kitchen:bacon"
+  },
+  "show_notification": false
+}

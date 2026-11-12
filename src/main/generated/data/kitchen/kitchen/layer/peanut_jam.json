@@ -7,5 +7,6 @@
   "item": "kitchen:peanut_jam",
   "nutrition": 2,
   "role": "spread",
-  "show_tooltip": false
+  "show_tooltip": false,
+  "tint": 9659689
 }

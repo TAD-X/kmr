@@ -9,6 +9,7 @@ import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.food.FoodType;
 import net.kitchenreborn.food.LayerDefinition;
 import net.kitchenreborn.oven.OvenConfig;
+import net.kitchenreborn.pan.PanConfig;
 
 /**
  * Data-driven registries of the modular food core. Both are synced to clients (the board renderer and
@@ -26,7 +27,12 @@ public final class KitchenRegistries {
 	public static final ResourceKey<Registry<OvenConfig>> OVEN_CONFIG =
 			ResourceKey.createRegistryKey(Kitchen.id("oven_config"));
 
+	/** {@code data/<ns>/kitchen/pan_config/<name>.json}: frying pan timing (only the server uses it). */
+	public static final ResourceKey<Registry<PanConfig>> PAN_CONFIG =
+			ResourceKey.createRegistryKey(Kitchen.id("pan_config"));
+
 	public static void register() {
+		DynamicRegistries.register(PAN_CONFIG, PanConfig.CODEC);
 		DynamicRegistries.register(OVEN_CONFIG, OvenConfig.CODEC);
 		DynamicRegistries.registerSynced(LAYER, LayerDefinition.CODEC);
 		DynamicRegistries.registerSynced(FOOD_TYPE, FoodType.CODEC);

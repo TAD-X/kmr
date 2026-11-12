@@ -2,6 +2,7 @@
 9a89e6972e7d55aced4d4946321b10a4337d5ab4 assets/kitchen/blockstates/board.json
 b1134a9cba69add7ac823772c6423b3f8b370dfe assets/kitchen/blockstates/lettuce_crop.json
 2903ec8f9ac9f57920415f34f74c0761e83cff73 assets/kitchen/blockstates/oven.json
+820721be505e2f639284055699b9e154fc1a7b87 assets/kitchen/blockstates/pan.json
 098c572eaf1623b8cd1daf6f14749a6689c6deb7 assets/kitchen/blockstates/peanut_crop.json
 34703832c05a9dae76da050be9eac33815f0d2fc assets/kitchen/blockstates/plate.json
 d96392d07d1e236df5e68c9ecf584cd665929d49 assets/kitchen/blockstates/strawberry_crop.json
@@ -23,13 +24,14 @@ c1d846c3d148703181395a58e961e1aed9046476 assets/kitchen/items/cheese_slice.json
 00868a3677ab0d9c2c877fc6cda533e16e783896 assets/kitchen/items/chicken_fillet.json
 19bcf0cbe8535d0e870bb80826ad5c2170352647 assets/kitchen/items/chicken_leg.json
 24e76f0208d4b59fd0fc70fe81f49a9519f661cf assets/kitchen/items/flour.json
-12461fbffc035ea694c83bd81656b57839d99a4e assets/kitchen/items/jam_jar.json
+d42c26ec42b028fb96d786f5c4dc5dc6b3aadc2f assets/kitchen/items/jam_jar.json
 bc9cd86193bf093cae62d53f9b51c3fb69366c0c assets/kitchen/items/knife.json
 9c47c811b1b77ee92fd8e9b5722e34545cd744fd assets/kitchen/items/lettuce.json
 aa46865205d258146979dfe69923534322eff63b assets/kitchen/items/lettuce_leaf.json
 da3cf005fa450c6979cb88f5bce5554d90a9077b assets/kitchen/items/mortar.json
 d1295354e1b80f4ec50c8d5c8177c6d1dab3d09d assets/kitchen/items/mortar_and_pestle.json
 abaec49d10c846995eb457a1f870553ed378ba84 assets/kitchen/items/oven.json
+7f7aa15c52f92a1da0349ef933abfd4d2d035733 assets/kitchen/items/pan.json
 13139da77f447ff022573f4153d231df46aa7a31 assets/kitchen/items/peanut.json
 719dddd4bb75b4320fe2283cf19ddbe88d069935 assets/kitchen/items/peanut_jam.json
 db2e6b3fe9ed65dcc8fb12e8654827025a54c5b6 assets/kitchen/items/peanuts_in_shell.json
@@ -57,6 +59,7 @@ b7b53f68260905550cf6b9fc3910769ba4a0804a assets/kitchen/models/block/lettuce_cro
 18dd5992d39a89851bd60bb0c48501b8983dbd35 assets/kitchen/models/block/oven.json
 0eb63fa07cc75067d0c0774b2146cb787c72056f assets/kitchen/models/block/oven_body.json
 f887e94b10e3e02d2086d134ee89ff280f221f9c assets/kitchen/models/block/oven_body_lit.json
+ab7b5b4239aa0a6b1a7bdfb120e3a4d4940b1433 assets/kitchen/models/block/pan.json
 8cb8eba8664ed2c84619d1fa5563fb8f976e1d8f assets/kitchen/models/block/peanut_crop_stage0.json
 d9b736dee577b078e1984568b5a498842d23aae6 assets/kitchen/models/block/peanut_crop_stage1.json
 4b063eadf210e9c66041a8e24ee0389b0cb1fc76 assets/kitchen/models/block/peanut_crop_stage2.json

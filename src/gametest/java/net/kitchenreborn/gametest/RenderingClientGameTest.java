@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 
 import net.minecraft.client.CameraType;
+import net.minecraft.core.Direction;
 
 /**
  * Visual checks of the food renderers (milestones M3b and M4): boards with 3D layer models, and sandwiches in
@@ -49,6 +50,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			heldPlates(context, world);
 			emptyPlateAndBoardItems(context, world);
 			ovens(context, world);
+			pans(context, world);
 		}
 	}
 
@@ -470,6 +472,108 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
 		context.waitTicks(10);
 		context.takeScreenshot("m6_oven_item_third_person");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+	}
+
+	private static String jar(String jam, int servings) {
+		return "kitchen:jam_jar[kitchen:jam={jam:\"kitchen:" + jam + "\",servings:" + servings + "}]";
+	}
+
+	/** Pans (M7): empty, raw and fried food, the three jam stages in three colours, all four facings; jars and items. */
+	private void pans(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("effect give @p minecraft:resistance 1000 5 true");
+		// Row of ovens with pans: empty, raw bacon, cooked bacon, and the four jam stages (strawberry, apple, peanut).
+		String[] contents = {
+				"{}",
+				"{input:{id:\"kitchen:raw_bacon\",count:1},result:{id:\"kitchen:bacon\",count:1}}",
+				"{input:{id:\"kitchen:raw_bacon\",count:1},result:{id:\"kitchen:bacon\",count:1},done:true,stage:3}",
+				"{input:{id:\"kitchen:raw_chicken_fillet\",count:1},result:{id:\"kitchen:chicken_fillet\",count:1},done:true,stage:3}"};
+		for (int i = 0; i < contents.length; i++) {
+			int x = 200 + 2 * i;
+			server.runCommand("setblock " + x + " -60 20 kitchen:oven[facing=south]");
+			server.runCommand("setblock " + x + " -59 20 kitchen:pan[facing=south]");
+			if (i > 0) {
+				server.runCommand("data merge block " + x + " -59 20 " + contents[i]);
+			}
+		}
+		server.runCommand("tp @p 203 -59 24 180 20");
+		context.waitTicks(30);
+		context.takeScreenshot("m7_pans_empty_raw_fried");
+		server.runCommand("tp @p 203 -55 20.8 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m7_pans_closeup");
+
+		// Jam: strawberry, apple, peanut at stages 0..3.
+		String[] jams = {"strawberry_jam", "apple_jam", "peanut_jam"};
+		String[] sources = {"sugared_strawberry_slices", "apple_slice", "peanut"};
+		for (int j = 0; j < 3; j++) {
+			for (int stage = 0; stage < 4; stage++) {
+				int x = 210 + 2 * stage;
+				int z = 20 + 3 * j;
+				server.runCommand("setblock " + x + " -60 " + z + " kitchen:oven[facing=south]");
+				server.runCommand("setblock " + x + " -59 " + z + " kitchen:pan[facing=south]");
+				server.runCommand("data merge block " + x + " -59 " + z + " {input:{id:\"kitchen:" + sources[j] + "\",count:1},"
+						+ "result:{id:\"kitchen:jam_jar\",count:1,components:{\"kitchen:jam\":{jam:\"kitchen:" + jams[j] + "\",servings:6}}},stage:" + stage
+						+ ",done:" + (stage == 3) + "}");
+			}
+		}
+		server.runCommand("tp @p 213 -55 20.8 180 90");
+		context.waitTicks(30);
+		context.takeScreenshot("m7_jam_stages_strawberry");
+		server.runCommand("tp @p 213 -55 23.8 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m7_jam_stages_apple");
+		server.runCommand("tp @p 213 -55 26.8 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m7_jam_stages_peanut");
+
+		// The four facings, ovens facing each way with their pans.
+		Direction[] facings = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+		for (int i = 0; i < 4; i++) {
+			int x = 220 + 2 * i;
+			server.runCommand("setblock " + x + " -60 20 kitchen:oven[facing=" + facings[i].getName() + "]");
+			server.runCommand("setblock " + x + " -59 20 kitchen:pan[facing=" + facings[i].getName() + "]");
+			server.runCommand("data merge block " + x + " -59 20 " + contents[2]);
+		}
+		server.runCommand("tp @p 223 -59 24.5 180 40");
+		context.waitTicks(25);
+		context.takeScreenshot("m7_pan_facings");
+
+		// Smoke when done: one pan with finished food, close up.
+		server.runCommand("tp @p 202 -58 22.5 180 40");
+		context.waitTicks(5);
+
+		// The jars (empty, 1..6 servings, three jams) in the hotbar and inventory, the pan item.
+		server.runCommand("item replace entity @p hotbar.0 with kitchen:jam_jar");
+		server.runCommand("item replace entity @p hotbar.1 with " + jar("strawberry_jam", 6));
+		server.runCommand("item replace entity @p hotbar.2 with " + jar("apple_jam", 3));
+		server.runCommand("item replace entity @p hotbar.3 with " + jar("peanut_jam", 1));
+		server.runCommand("item replace entity @p hotbar.4 with kitchen:pan");
+		for (int i = 1; i <= 6; i++) {
+			server.runCommand("item replace entity @p inventory." + (i - 1) + " with " + jar("strawberry_jam", i));
+			server.runCommand("item replace entity @p inventory." + (8 + i) + " with " + jar("apple_jam", i));
+			server.runCommand("item replace entity @p inventory." + (17 + i) + " with " + jar("peanut_jam", i));
+		}
+		server.runCommand("tp @p 230 -60 24 180 10");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(10);
+		context.takeScreenshot("m7_jars_and_pan_item_gui");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(5);
+		server.runCommand("setblock 230 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("tp @p 230 -60 22 180 15");
+		server.runCommand("item replace entity @p weapon.mainhand with " + jar("strawberry_jam", 6));
+		context.waitTicks(10);
+		context.takeScreenshot("m7_jar_first_person");
+		server.runCommand("item replace entity @p weapon.mainhand with kitchen:pan");
+		context.waitTicks(10);
+		context.takeScreenshot("m7_pan_item_first_person");
+		server.runCommand("tp @p 230.5 -60 23.5 180 20");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+		context.waitTicks(10);
+		context.takeScreenshot("m7_pan_item_third_person");
 		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
 		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
 	}

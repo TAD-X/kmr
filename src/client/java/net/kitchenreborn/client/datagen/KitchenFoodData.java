@@ -14,6 +14,7 @@ import net.kitchenreborn.food.LayerDefinition;
 import net.kitchenreborn.food.LayerRender;
 import net.kitchenreborn.food.LayerRole;
 import net.kitchenreborn.oven.OvenConfig;
+import net.kitchenreborn.pan.PanConfig;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenItems;
 import net.kitchenreborn.registry.KitchenRegistries;
@@ -43,6 +44,11 @@ public final class KitchenFoodData {
 		context.register(OvenConfig.DEFAULT, new OvenConfig(400, 600));
 	}
 
+	/** Original: the pan is done after 300 ticks; jam shows a fill stage every third of that. */
+	public static void panConfig(BootstrapContext<PanConfig> context) {
+		context.register(PanConfig.DEFAULT, new PanConfig(300));
+	}
+
 	public static void layers(BootstrapContext<LayerDefinition> context) {
 		// Bread: 3D top/bottom models in M4 (the original drew the last layer as the top slice).
 		layer(context, KitchenItems.BREAD_SLICE, 0, LayerRole.BREAD, 1.5F, model("bread_slice"));
@@ -62,23 +68,24 @@ public final class KitchenFoodData {
 
 		// Butter only goes on a bread slice and needs two knife clicks to spread (original BoardEventRegistry).
 		context.register(key(KitchenItems.BUTTER), new LayerDefinition(KitchenItems.BUTTER, 1, 0.6F, LayerRole.SPREAD,
-				0.6F, model("butter"), SANDWICH_ONLY, 2, List.of(KitchenItems.BREAD_SLICE), true, true));
+				0.6F, model("butter"), SANDWICH_ONLY, 2, List.of(KitchenItems.BREAD_SLICE), true, true, 0xFFFFFF));
 
 		// Jam is applied from a jar and is gone when removed (original: dontDropItem, hideInformation).
-		jam(context, KitchenItems.STRAWBERRY_JAM);
-		jam(context, KitchenItems.APPLE_JAM);
-		jam(context, KitchenItems.PEANUT_JAM);
+		// Jam colours are the original's (Kitchen.java): 16196364, 14415786 and 9659689.
+		jam(context, KitchenItems.STRAWBERRY_JAM, 16196364);
+		jam(context, KitchenItems.APPLE_JAM, 14415786);
+		jam(context, KitchenItems.PEANUT_JAM, 9659689);
 	}
 
 	private static void layer(BootstrapContext<LayerDefinition> context, Item item, int nutrition, LayerRole role,
 			float height, LayerRender render) {
 		context.register(key(item), new LayerDefinition(item, nutrition, 0.6F, role, height, render, SANDWICH_ONLY,
-				0, List.of(), true, true));
+				0, List.of(), true, true, 0xFFFFFF));
 	}
 
-	private static void jam(BootstrapContext<LayerDefinition> context, Item item) {
+	private static void jam(BootstrapContext<LayerDefinition> context, Item item, int tint) {
 		context.register(key(item), new LayerDefinition(item, 2, 0.6F, LayerRole.SPREAD, FLAT, LayerRender.FLAT,
-				SANDWICH_ONLY, 0, List.of(), false, false));
+				SANDWICH_ONLY, 0, List.of(), false, false, tint));
 	}
 
 	private static LayerRender model(String name) {

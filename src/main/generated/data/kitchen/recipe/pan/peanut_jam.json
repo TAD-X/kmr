@@ -1,0 +1,14 @@
+{
+  "type": "kitchen:pan",
+  "ingredient": "kitchen:peanut",
+  "result": {
+    "components": {
+      "kitchen:jam": {
+        "jam": "kitchen:peanut_jam",
+        "servings": 6
+      }
+    },
+    "id": "kitchen:jam_jar"
+  },
+  "show_notification": false
+}

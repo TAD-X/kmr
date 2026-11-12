@@ -19,6 +19,7 @@ import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.KitchenCropBlock;
 import net.kitchenreborn.block.OvenBlock;
+import net.kitchenreborn.block.PanBlock;
 import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.block.WildPlantBlock;
 
@@ -39,6 +40,15 @@ public final class KitchenBlocks {
 	public static final Block BOARD = board();
 	public static final Block PLATE = plate();
 	public static final Block OVEN = oven();
+	public static final Block PAN = pan();
+
+	private static Block pan() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("pan"));
+		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().setId(key)
+				.mapColor(MapColor.METAL).strength(1.5F).sound(SoundType.METAL).noOcclusion()
+				.pushReaction(PushReaction.POPPED);
+		return Registry.register(BuiltInRegistries.BLOCK, key, new PanBlock(properties));
+	}
 
 	private static Block oven() {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("oven"));

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pan": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kitchen:pan"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kitchen:pan/strawberry_jam"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pan"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kitchen:pan/strawberry_jam"
+    ]
+  }
+}

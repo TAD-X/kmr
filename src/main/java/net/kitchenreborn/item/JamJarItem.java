@@ -3,6 +3,7 @@ package net.kitchenreborn.item;
 import java.util.Optional;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -14,6 +15,18 @@ import net.kitchenreborn.registry.KitchenComponents;
 public class JamJarItem extends Item implements LayerSource {
 	public JamJarItem(Properties properties) {
 		super(properties);
+	}
+
+	/** "Strawberry Jam Jar" when filled, "Empty Jar" otherwise (the original's naming). */
+	@Override
+	public Component getName(ItemStack stack) {
+		JamContents jam = stack.get(KitchenComponents.JAM);
+		if (jam == null || jam.servings() <= 0) {
+			return super.getName(stack);
+		}
+		Component name = BuiltInRegistries.ITEM.getOptional(jam.jam()).map(item -> Component.translatable(item.getDescriptionId()))
+				.orElse(Component.literal(jam.jam().toString()));
+		return Component.translatable("item.kitchen.jam_jar.filled", name);
 	}
 
 	@Override

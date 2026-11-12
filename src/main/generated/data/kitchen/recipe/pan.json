@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "III",
+    "II "
+  ],
+  "result": {
+    "id": "kitchen:pan"
+  }
+}

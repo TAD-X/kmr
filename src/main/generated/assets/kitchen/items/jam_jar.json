@@ -1,6 +1,108 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "kitchen:item/jam_jar"
+    "type": "minecraft:range_dispatch",
+    "entries": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_1",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 1.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_2",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 2.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_3",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 3.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_4",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 4.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_5",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 5.0
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kitchen:item/jam_jar_filled_6",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "kitchen:jam_color"
+            }
+          ]
+        },
+        "threshold": 6.0
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "kitchen:item/jam_jar"
+    },
+    "property": "kitchen:jam_servings"
   }
 }

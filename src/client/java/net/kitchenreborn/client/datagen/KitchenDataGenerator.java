@@ -15,6 +15,7 @@ public class KitchenDataGenerator implements DataGeneratorEntrypoint {
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		LayeredFoodRenderer.register(); // the item model definitions use the kitchen:layered_food type
 		net.kitchenreborn.client.render.PlateItemRenderer.register();
+		net.kitchenreborn.client.render.JamItemModels.register();
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(KitchenLangProvider::new);
 		pack.addProvider(KitchenModelProvider::new);
@@ -33,5 +34,6 @@ public class KitchenDataGenerator implements DataGeneratorEntrypoint {
 		registryBuilder.add(KitchenRegistries.FOOD_TYPE, KitchenFoodData::foodTypes);
 		registryBuilder.add(KitchenRegistries.LAYER, KitchenFoodData::layers);
 		registryBuilder.add(KitchenRegistries.OVEN_CONFIG, KitchenFoodData::ovenConfig);
+		registryBuilder.add(KitchenRegistries.PAN_CONFIG, KitchenFoodData::panConfig);
 	}
 }

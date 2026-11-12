@@ -21,10 +21,11 @@ import net.minecraft.world.item.Item;
  * @param placeOn      if non-empty, this layer may only be placed directly on one of these items
  * @param dropItem     whether removing the layer from the station gives the item back (jam: no)
  * @param showTooltip  whether the item shows the "Sandwichable" tooltip
+ * @param tint         colour of the jam in jars and the frying pan (RGB; only used by jam layers)
  */
 public record LayerDefinition(Item item, int nutrition, float saturation, LayerRole role, float height,
 		LayerRender render, List<Identifier> foods, int spreadClicks, List<Item> placeOn, boolean dropItem,
-		boolean showTooltip) {
+		boolean showTooltip, int tint) {
 	public static final Codec<LayerDefinition> CODEC = RecordCodecBuilder.create(i -> i.group(
 			BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(LayerDefinition::item),
 			Codec.INT.fieldOf("nutrition").forGetter(LayerDefinition::nutrition),
@@ -37,7 +38,8 @@ public record LayerDefinition(Item item, int nutrition, float saturation, LayerR
 			BuiltInRegistries.ITEM.byNameCodec().listOf().optionalFieldOf("place_on", List.of())
 					.forGetter(LayerDefinition::placeOn),
 			Codec.BOOL.optionalFieldOf("drop_item", true).forGetter(LayerDefinition::dropItem),
-			Codec.BOOL.optionalFieldOf("show_tooltip", true).forGetter(LayerDefinition::showTooltip))
+			Codec.BOOL.optionalFieldOf("show_tooltip", true).forGetter(LayerDefinition::showTooltip),
+			Codec.INT.optionalFieldOf("tint", 0xFFFFFF).forGetter(LayerDefinition::tint))
 			.apply(i, LayerDefinition::new));
 
 	/** Absolute saturation this layer adds (vanilla formula). */

@@ -25,10 +25,15 @@ public final class LayerModelData {
 	record Box(float u, float v, float x, float y, float z, float w, float h, float d) { }
 
 	/** A model: its id under models/item/layer/, texture (textures/item/layer/) and texture size. */
-	record Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes, float scale) {
+	record Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes, float scale,
+			float dx, float dz, boolean tinted) {
 		/** The layer models were drawn at the sandwich renderer's 0.75 scale. */
 		Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes) {
-			this(name, texture, textureWidth, textureHeight, boxes, 0.75F);
+			this(name, texture, textureWidth, textureHeight, boxes, 0.75F, 0.0F, 0.0F, false);
+		}
+
+		Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes, float scale) {
+			this(name, texture, textureWidth, textureHeight, boxes, scale, 0.0F, 0.0F, false);
 		}
 	}
 
@@ -258,6 +263,91 @@ public final class LayerModelData {
 		};
 	}
 
+	/**
+	 * The frying pan (original ModelPan, 64x32) as a block model: at scale 1, and shifted by (4, -2) pixels to its
+	 * place on the front right of an oven facing north (the original translated the model by (4 px, 0, -2 px)).
+	 */
+	static final Model PAN = new Model("pan", "pan_model", 64, 32, List.of(
+			box(0, 0, -3F, 23F, -3F, 6, 1, 6),
+			box(15, 8, 3F, 22F, -3F, 1, 1, 6),
+			box(25, 0, -3F, 22F, 3F, 6, 1, 1),
+			box(0, 8, -4F, 22F, -3F, 1, 1, 6),
+			box(25, 3, -3F, 22F, -4F, 6, 1, 1),
+			box(25, 6, 3.5F, 22.5F, -0.5F, 4, 1, 1)), 1.0F, 4.0F, -2.0F, false);
+
+	/** The jam in the pan at fill stages 0 to 3 (original ModelJam0..3, 32x32), tinted by the jam colour. */
+	static final List<Model> PAN_JAM = List.of(
+			new Model("pan_jam_0", "jam", 32, 32, List.of(
+					box(0, 3, -1F, 22.5F, 0.5F, 1, 1, 1),
+					box(5, 3, -2.5F, 22.5F, -0.5F, 1, 1, 1),
+					box(5, 9, -0.5F, 22.5F, -2F, 1, 1, 1),
+					box(0, 0, -2.5F, 22.5F, 1F, 1, 1, 1),
+					box(5, 0, 1F, 22.5F, 1F, 1, 1, 1),
+					box(5, 6, 1F, 22.5F, -2.5F, 1, 1, 1),
+					box(0, 9, 0.5F, 22.5F, -0.5F, 1, 1, 1),
+					box(0, 6, -2F, 22.5F, -2.5F, 1, 1, 1)), 1.0F, 4.0F, -2.0F, true),
+			new Model("pan_jam_1", "jam", 32, 32, List.of(
+					box(0, 0, -2.5F, 22.5F, 1F, 3, 1, 1),
+					box(5, 0, 1F, 22.5F, 0F, 1, 1, 2),
+					box(0, 9, 0F, 22.5F, 0F, 1, 1, 1),
+					box(0, 6, 1F, 22.5F, -2.5F, 1, 1, 2),
+					box(0, 6, -2F, 22.5F, -2.5F, 2, 1, 2)), 1.0F, 4.0F, -2.0F, true),
+			new Model("pan_jam_2", "jam", 32, 32, List.of(
+					box(0, 0, -3F, 22.5F, 1F, 4, 1, 1),
+					box(5, 0, 1F, 22.5F, 0F, 1, 1, 2),
+					box(0, 9, 0F, 22.5F, 0F, 1, 1, 1),
+					box(0, 6, -2F, 22.5F, -2.5F, 4, 1, 2)), 1.0F, 4.0F, -2.0F, true),
+			new Model("pan_jam_3", "jam", 32, 32, List.of(
+					box(0, 6, -3F, 22.5F, -3F, 6, 1, 6)), 1.0F, 4.0F, -2.0F, true));
+
+	/** The pan as a block model (parent block/block: the standard GUI and hand transforms). */
+	public static ModelInstance panJson() {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : PAN.boxes()) {
+				elements.add(element(box, PAN));
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("block/pan_model").toString());
+			textures.addProperty("particle", Kitchen.id("block/pan_model").toString());
+			JsonObject json = new JsonObject();
+			json.addProperty("parent", "minecraft:block/block");
+			json.add("textures", textures);
+			json.add("elements", elements);
+			// A thin model sits at the bottom of its item cube: lift it into view when held in first person.
+			JsonObject display = new JsonObject();
+			display.add("firstperson_righthand", transform(new float[] {0, 45, 0}, new float[] {-2, 8, 0}, 0.5F));
+			display.add("firstperson_lefthand", transform(new float[] {0, 225, 0}, new float[] {2, 8, 0}, 0.5F));
+			json.add("display", display);
+			return json;
+		};
+	}
+
+	private static JsonObject transform(float[] rotation, float[] translation, float scale) {
+		JsonObject json = new JsonObject();
+		json.add("rotation", array(rotation));
+		json.add("translation", array(translation));
+		json.add("scale", array(scale, scale, scale));
+		return json;
+	}
+
+	/** One jam stage as an item model (item atlas texture item/layer/jam), drawn by the pan renderer. */
+	public static ModelInstance panJamJson(Model model) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : model.boxes()) {
+				elements.add(element(box, model));
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("item/layer/" + model.texture()).toString());
+			textures.addProperty("particle", Kitchen.id("item/layer/" + model.texture()).toString());
+			JsonObject json = new JsonObject();
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
+	}
+
 	public static final List<Model> MODELS = List.of(BREAD_SLICE_BOTTOM, BREAD_SLICE_TOP, RAW_BACON, COOKED_BACON,
 			BUTTER_0, BUTTER_1, BUTTER_2);
 
@@ -313,12 +403,12 @@ public final class LayerModelData {
 	private static JsonObject element(Box b, Model model) {
 		// World extents (pixels, middle of the layer at x = z = 8, base at y = 0).
 		float scale = model.scale();
-		float x1 = 8 - scale * (b.x() + b.w());
-		float x2 = 8 - scale * b.x();
+		float x1 = 8 - scale * (b.x() + b.w()) + model.dx();
+		float x2 = 8 - scale * b.x() + model.dx();
 		float y1 = scale * (24 - (b.y() + b.h()));
 		float y2 = scale * (24 - b.y());
-		float z1 = 8 + scale * b.z();
-		float z2 = 8 + scale * (b.z() + b.d());
+		float z1 = 8 + scale * b.z() + model.dz();
+		float z2 = 8 + scale * (b.z() + b.d()) + model.dz();
 
 		float u = b.u();
 		float v = b.v();
@@ -347,6 +437,9 @@ public final class LayerModelData {
 		float sv = 16.0F / model.textureHeight();
 		face.add("uv", array(u1 * su, v1 * sv, u2 * su, v2 * sv));
 		face.addProperty("texture", "#all");
+		if (model.tinted()) {
+			face.addProperty("tintindex", 0);
+		}
 		return face;
 	}
 

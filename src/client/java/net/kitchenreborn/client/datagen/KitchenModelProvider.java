@@ -30,7 +30,9 @@ import net.minecraft.world.level.block.CropBlock;
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.OvenBlock;
+import net.kitchenreborn.block.PanBlock;
 import net.kitchenreborn.block.PlateBlock;
+import net.kitchenreborn.client.render.JamItemModels;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
 import net.kitchenreborn.client.render.PlateItemRenderer;
 import net.kitchenreborn.registry.KitchenBlocks;
@@ -47,6 +49,7 @@ public class KitchenModelProvider extends FabricModelProvider {
 		generateBoard(generators);
 		generatePlate(generators);
 		generateOven(generators);
+		generatePan(generators);
 		// Original stage mapping: age 0-1 -> stage 0, 2-3 -> 1, 4-6 -> 2, 7 -> 3.
 		for (Block crop : KitchenBlocks.CROPS) {
 			generators.createCropBlock(crop, CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -104,6 +107,24 @@ public class KitchenModelProvider extends FabricModelProvider {
 		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.OVEN).with(dispatch));
 		// parent block/block: the standard 3/4 GUI view and held like a block
 		generators.itemModelOutput.accept(KitchenItems.OVEN, ItemModelUtils.plainModel(full));
+	}
+
+	/** The pan: the original model, a quarter turn per facing; the same facing as the oven under it. */
+	private void generatePan(BlockModelGenerators generators) {
+		Identifier model = Kitchen.id("block/pan");
+		generators.modelOutput.accept(model, LayerModelData.panJson());
+		PropertyDispatch.C1<MultiVariant, Direction> dispatch = PropertyDispatch.initial(PanBlock.FACING);
+		for (Direction facing : new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
+			Quadrant turn = switch (facing) {
+				case EAST -> Quadrant.R90;
+				case SOUTH -> Quadrant.R180;
+				case WEST -> Quadrant.R270;
+				default -> Quadrant.R0;
+			};
+			dispatch = dispatch.select(facing, BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(turn)));
+		}
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.PAN).with(dispatch));
+		generators.itemModelOutput.accept(KitchenItems.PAN, ItemModelUtils.plainModel(model));
 	}
 
 	/** The plate: the original Techne model as a block model, turned in quarter steps to follow the 16 rotations. */
@@ -206,11 +227,30 @@ public class KitchenModelProvider extends FabricModelProvider {
 		return array;
 	}
 
+	/**
+	 * The jam jar: empty it is the plain jar; with jam it shows the filling for the servings left (the original's
+	 * jam_jar_filling_1..6), tinted with the jam's colour.
+	 */
+	private static void generateJar(ItemModelGenerators generators) {
+		ModelTemplates.FLAT_ITEM.create(KitchenItems.JAM_JAR, TextureMapping.layer0(KitchenItems.JAM_JAR), generators.modelOutput);
+		java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
+		for (int servings = 1; servings <= 6; servings++) {
+			entries.add(ItemModelUtils.override(ItemModelUtils.tintedModel(Kitchen.id("item/jam_jar_filled_" + servings),
+					ItemModelUtils.constantTint(0xFFFFFF), new JamItemModels.JamColor()), servings));
+		}
+		generators.itemModelOutput.accept(KitchenItems.JAM_JAR, ItemModelUtils.rangeSelect(new JamItemModels.JamServings(),
+				ItemModelUtils.plainModel(Kitchen.id("item/jam_jar")), entries));
+	}
+
 	@Override
 	public void generateItemModels(ItemModelGenerators generators) {
 		for (Item item : KitchenItems.ALL) {
 			if (item == KitchenItems.SANDWICH) {
 				generateSandwich(generators);
+				continue;
+			}
+			if (item == KitchenItems.JAM_JAR) {
+				generateJar(generators);
 				continue;
 			}
 			if (item instanceof BlockItem) {

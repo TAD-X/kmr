@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kitchen:item/jam_jar",
+    "layer1": "kitchen:item/jam_jar_filling_1"
+  }
+}

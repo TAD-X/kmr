@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kitchen:block/pan",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kitchen:block/pan"
+    },
+    "facing=south": {
+      "model": "kitchen:block/pan",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kitchen:block/pan",
+      "y": 270
+    }
+  }
+}

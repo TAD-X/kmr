@@ -7,5 +7,6 @@
   "item": "kitchen:strawberry_jam",
   "nutrition": 2,
   "role": "spread",
-  "show_tooltip": false
+  "show_tooltip": false,
+  "tint": 16196364
 }

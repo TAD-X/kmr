@@ -1,6 +1,6 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/Kitchen Data Registries
 35842760f3c0919d2291ab73d2d09c44f409a7e5 data/kitchen/kitchen/food_type/sandwich.json
-d0afbbc874cc6e03f09efa392f046607231537f4 data/kitchen/kitchen/layer/apple_jam.json
+47d934bd42fde4ff5c4e36a3acb5ca9c95517c46 data/kitchen/kitchen/layer/apple_jam.json
 077cd9ec818ef6afd31be48617e6d69788f51a05 data/kitchen/kitchen/layer/bacon.json
 1b56d94499ad8098c3c09dd33a196c85a8b84af5 data/kitchen/kitchen/layer/bread_slice.json
 618ed997b7b21e99d21cd6b03f09e29ac6b2892e data/kitchen/kitchen/layer/butter.json
@@ -8,15 +8,16 @@ f76691f349d1fef05731fb9532f6f3c42ac87a96 data/kitchen/kitchen/layer/carrot_slice
 041becc3ea098ab0a7813fa484144f560fd1fe93 data/kitchen/kitchen/layer/cheese_slice.json
 c515a1e20e940c8f325129a36c13f5b86aaad1bb data/kitchen/kitchen/layer/chicken_fillet.json
 6b4f4d0fe385c32f4d9e106eee7232f410bfe0fe data/kitchen/kitchen/layer/lettuce_leaf.json
-21d3ca8f2d8b14c35a6b2a2a2735023543d7c400 data/kitchen/kitchen/layer/peanut_jam.json
+7133ef6ba9d081c2265fa3cc93b2c99771516bb2 data/kitchen/kitchen/layer/peanut_jam.json
 3c8a229321691b546c80140f5710857b480d7312 data/kitchen/kitchen/layer/potato_slice.json
 62d0d8db6b93028f4e68ece0dbede77086295a89 data/kitchen/kitchen/layer/raw_bacon.json
 f2dfe1c3c70e8e171b4c00cb662adba1e8a96df0 data/kitchen/kitchen/layer/raw_chicken_fillet.json
 c91d00709aaae49f5febc1d4b7d5971c76ae955e data/kitchen/kitchen/layer/raw_roast_beef.json
 61dbd0a220a5fd263a4e9c63f819b009773ebd38 data/kitchen/kitchen/layer/roast_beef.json
-8b9dc4abc626c55e6aa321712319f371bdab4683 data/kitchen/kitchen/layer/strawberry_jam.json
+e939affd7e597625baa306f978ea200245f17291 data/kitchen/kitchen/layer/strawberry_jam.json
 2a2f4439b1fece2da91fb8b2a136fa0574764131 data/kitchen/kitchen/layer/toast.json
 060cff87f66566afc36d9873b78ff148ccfc302c data/kitchen/kitchen/layer/tomato_slice.json
 51f3ca1575cbe091af96eb2d639dbec346e82b02 data/kitchen/kitchen/oven_config/default.json
+dbf68614523af635a99f64d1fdce729efaa0f1d3 data/kitchen/kitchen/pan_config/default.json
 f5e3fa97995237bbb30c026ea2f5ae7a2957f877 data/kitchen/worldgen/feature/wild_plants.json
 0608d53952b6b15bb1f8a08dbf378e937bf39763 data/kitchen/worldgen/placed_feature/wild_plants.json

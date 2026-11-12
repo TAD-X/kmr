@@ -1,0 +1,14 @@
+{
+  "type": "kitchen:pan",
+  "ingredient": "kitchen:sugared_strawberry_slices",
+  "result": {
+    "components": {
+      "kitchen:jam": {
+        "jam": "kitchen:strawberry_jam",
+        "servings": 6
+      }
+    },
+    "id": "kitchen:jam_jar"
+  },
+  "show_notification": false
+}

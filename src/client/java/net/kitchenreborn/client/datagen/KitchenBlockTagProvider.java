@@ -22,7 +22,8 @@ public class KitchenBlockTagProvider extends FabricTagsProvider.BlockTagsProvide
 	protected void addTags(HolderLookup.Provider registries) {
 		builder(BlockTags.MINEABLE_WITH_AXE).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.BOARD).orElseThrow());
 		builder(BlockTags.MINEABLE_WITH_PICKAXE).add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.PLATE).orElseThrow())
-				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.OVEN).orElseThrow());
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.OVEN).orElseThrow())
+				.add(BuiltInRegistries.BLOCK.getResourceKey(KitchenBlocks.PAN).orElseThrow());
 		for (Block crop : KitchenBlocks.CROPS) {
 			ResourceKey<Block> key = BuiltInRegistries.BLOCK.getResourceKey(crop).orElseThrow();
 			builder(BlockTags.CROPS).add(key);

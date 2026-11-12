@@ -21,6 +21,10 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.kitchenreborn.registry.KitchenComponents;
+import net.kitchenreborn.food.JamContents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.crafting.SmokingRecipe;
@@ -44,6 +48,7 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 				board();
 				plate();
 				oven();
+				pan();
 				cutting();
 				mortarAndPestle();
 				misc();
@@ -83,6 +88,33 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 				ovenCook(KitchenItems.RAW_ROAST_BEEF, KitchenItems.ROAST_BEEF);
 				ovenCook(KitchenItems.RAW_CHICKEN_FILLET, KitchenItems.CHICKEN_FILLET);
 				ovenCook(KitchenItems.RAW_BACON, KitchenItems.BACON);
+			}
+
+			private void pan() {
+				// Original: five iron ingots, "III / II_".
+				shaped(RecipeCategory.DECORATIONS, KitchenItems.PAN)
+						.pattern("III").pattern("II ")
+						.define('I', Items.IRON_INGOT)
+						.unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT)).save(output);
+				// Frying: raw bacon and chicken fillet. Jam: sugared strawberry slices, apple slices and peanuts
+				// make a jar of jam (6 servings) when collected with an empty jar.
+				panFry(KitchenItems.RAW_BACON, KitchenItems.BACON);
+				panFry(KitchenItems.RAW_CHICKEN_FILLET, KitchenItems.CHICKEN_FILLET);
+				panJam(KitchenItems.SUGARED_STRAWBERRY_SLICES, KitchenItems.STRAWBERRY_JAM, "strawberry_jam");
+				panJam(KitchenItems.APPLE_SLICE, KitchenItems.APPLE_JAM, "apple_jam");
+				panJam(KitchenItems.PEANUT, KitchenItems.PEANUT_JAM, "peanut_jam");
+			}
+
+			private void panFry(ItemLike input, ItemLike result) {
+				PanRecipeBuilder.pan(Ingredient.of(input), new ItemStackTemplate(result.asItem()), getItemName(result))
+						.unlockedBy(getHasName(KitchenItems.PAN), has(KitchenItems.PAN)).save(output);
+			}
+
+			private void panJam(ItemLike input, ItemLike jam, String name) {
+				ItemStackTemplate jar = new ItemStackTemplate(KitchenItems.JAM_JAR, DataComponentPatch.builder()
+						.set(KitchenComponents.JAM, new JamContents(BuiltInRegistries.ITEM.getKey(jam.asItem()), 6)).build());
+				PanRecipeBuilder.pan(Ingredient.of(input), jar, name)
+						.unlockedBy(getHasName(KitchenItems.PAN), has(KitchenItems.PAN)).save(output);
 			}
 
 			private void ovenCook(ItemLike input, ItemLike result) {
