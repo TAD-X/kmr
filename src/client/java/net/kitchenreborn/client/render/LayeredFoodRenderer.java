@@ -39,6 +39,8 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 	private static final float BASE_SCALE = 1.5F;
 	/** The tallest a stack may be in the GUI, in blocks of item model space, before it is shrunk. */
 	private static final float MAX_HEIGHT = 1.2F;
+	/** Where in the stack (0 = bottom, 1 = top) a held sandwich pivots in first person. */
+	private static final float FIRST_PERSON_PIVOT = 0.15F;
 	private static final int CACHE_SIZE = 64;
 
 	/** How the stack sits in the item cube. */
@@ -95,7 +97,10 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 			float scale = mode == Mode.GUI ? fitScale(drawn.totalHeight()) : 1.0F;
 			poseStack.translate(0.5F, 0.5F, 0.5F);
 			poseStack.scale(scale, scale, scale);
-			poseStack.translate(0.0F, -drawn.totalHeight() / 32.0F, 0.0F);
+			// The GUI pivots on the middle of the stack; in first person on a point low in the stack (near the bottom
+			// bun), so the fillings stay in view when it swings up to be eaten.
+			float pivot = mode == Mode.GUI ? 0.5F : FIRST_PERSON_PIVOT;
+			poseStack.translate(0.0F, -drawn.totalHeight() * pivot / 16.0F, 0.0F);
 		} else {
 			// Everywhere else the stack stands on the bottom of the cube (the hold point is the bottom bun), so tall
 			// stacks grow upwards instead of sinking into the ground or the hand.
