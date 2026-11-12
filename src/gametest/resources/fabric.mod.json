@@ -5,7 +5,7 @@
 	"name": "Kitchen Mod Reborn game tests",
 	"environment": "*",
 	"entrypoints": {
-		"fabric-gametest": ["net.kitchenreborn.gametest.BoardGameTest", "net.kitchenreborn.gametest.PlateGameTest"],
+		"fabric-gametest": ["net.kitchenreborn.gametest.BoardGameTest", "net.kitchenreborn.gametest.PlateGameTest", "net.kitchenreborn.gametest.OvenGameTest"],
 		"fabric-client-gametest": ["net.kitchenreborn.gametest.RenderingClientGameTest"]
 	}
 }

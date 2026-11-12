@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.food.FoodType;
 import net.kitchenreborn.food.LayerDefinition;
+import net.kitchenreborn.oven.OvenConfig;
 
 /**
  * Data-driven registries of the modular food core. Both are synced to clients (the board renderer and
@@ -21,7 +22,12 @@ public final class KitchenRegistries {
 	public static final ResourceKey<Registry<FoodType>> FOOD_TYPE =
 			ResourceKey.createRegistryKey(Kitchen.id("food_type"));
 
+	/** {@code data/<ns>/kitchen/oven_config/<name>.json}: oven timings (only the server uses it). */
+	public static final ResourceKey<Registry<OvenConfig>> OVEN_CONFIG =
+			ResourceKey.createRegistryKey(Kitchen.id("oven_config"));
+
 	public static void register() {
+		DynamicRegistries.register(OVEN_CONFIG, OvenConfig.CODEC);
 		DynamicRegistries.registerSynced(LAYER, LayerDefinition.CODEC);
 		DynamicRegistries.registerSynced(FOOD_TYPE, FoodType.CODEC);
 	}

@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.CropBlock;
 
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
+import net.kitchenreborn.block.OvenBlock;
 import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
 import net.kitchenreborn.client.render.PlateItemRenderer;
@@ -45,6 +46,7 @@ public class KitchenModelProvider extends FabricModelProvider {
 	public void generateBlockStateModels(BlockModelGenerators generators) {
 		generateBoard(generators);
 		generatePlate(generators);
+		generateOven(generators);
 		// Original stage mapping: age 0-1 -> stage 0, 2-3 -> 1, 4-6 -> 2, 7 -> 3.
 		for (Block crop : KitchenBlocks.CROPS) {
 			generators.createCropBlock(crop, CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -68,6 +70,39 @@ public class KitchenModelProvider extends FabricModelProvider {
 						.select(Direction.Axis.X, BlockModelGenerators.plainVariant(modelX))
 						.select(Direction.Axis.Z, BlockModelGenerators.plainVariant(modelZ))));
 		generators.itemModelOutput.accept(KitchenItems.BOARD, ItemModelUtils.plainModel(modelX));
+	}
+
+	/**
+	 * The oven: closed, open (hatch swung down) and lit (closed with the "active" texture). The hatch is on the
+	 * front, which is the north side of the model, so every facing is a quarter turn of it.
+	 */
+	private void generateOven(BlockModelGenerators generators) {
+		Identifier closed = Kitchen.id("block/oven");
+		Identifier open = Kitchen.id("block/oven_open");
+		Identifier lit = Kitchen.id("block/oven_lit");
+		generators.modelOutput.accept(closed, LayerModelData.ovenJson(false, "oven_model"));
+		generators.modelOutput.accept(open, LayerModelData.ovenJson(true, "oven_model"));
+		generators.modelOutput.accept(lit, LayerModelData.ovenJson(false, "oven_model_active"));
+		PropertyDispatch.C3<MultiVariant, Direction, Boolean, Boolean> dispatch =
+				PropertyDispatch.initial(OvenBlock.FACING, OvenBlock.OPEN, OvenBlock.LIT);
+		for (Direction facing : new Direction[] {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST}) {
+			Quadrant turn = switch (facing) {
+				case EAST -> Quadrant.R90;
+				case SOUTH -> Quadrant.R180;
+				case WEST -> Quadrant.R270;
+				default -> Quadrant.R0;
+			};
+			for (boolean isOpen : new boolean[] {false, true}) {
+				for (boolean isLit : new boolean[] {false, true}) {
+					Identifier model = isOpen ? open : isLit ? lit : closed;
+					dispatch = dispatch.select(facing, isOpen, isLit,
+							BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(turn)));
+				}
+			}
+		}
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.OVEN).with(dispatch));
+		// parent block/block: the standard 3/4 GUI view and held like a block
+		generators.itemModelOutput.accept(KitchenItems.OVEN, ItemModelUtils.plainModel(closed));
 	}
 
 	/** The plate: the original Techne model as a block model, turned in quarter steps to follow the 16 rotations. */

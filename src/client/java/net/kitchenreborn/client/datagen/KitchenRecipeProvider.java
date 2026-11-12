@@ -43,6 +43,7 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 				tools();
 				board();
 				plate();
+				oven();
 				cutting();
 				mortarAndPestle();
 				misc();
@@ -70,6 +71,23 @@ public class KitchenRecipeProvider extends FabricRecipeProvider {
 						.pattern(" I ").pattern("G G").pattern("GGG")
 						.define('I', Items.IRON_INGOT).define('G', Items.GLASS)
 						.unlockedBy(getHasName(Items.GLASS), has(Items.GLASS)).save(output);
+			}
+
+			private void oven() {
+				// Original: iron, coal and flint & steel.
+				shaped(RecipeCategory.DECORATIONS, KitchenItems.OVEN)
+						.pattern("III").pattern("ICI").pattern("IFI")
+						.define('I', Items.IRON_INGOT).define('C', Items.COAL).define('F', Items.FLINT_AND_STEEL)
+						.unlockedBy(getHasName(Items.FLINT_AND_STEEL), has(Items.FLINT_AND_STEEL)).save(output);
+				// The original's default custom oven recipes; furnace and smoker food recipes work as well.
+				ovenCook(KitchenItems.RAW_ROAST_BEEF, KitchenItems.ROAST_BEEF);
+				ovenCook(KitchenItems.RAW_CHICKEN_FILLET, KitchenItems.CHICKEN_FILLET);
+				ovenCook(KitchenItems.RAW_BACON, KitchenItems.BACON);
+			}
+
+			private void ovenCook(ItemLike input, ItemLike result) {
+				OvenRecipeBuilder.oven(Ingredient.of(input), result, 1, getItemName(result))
+						.unlockedBy(getHasName(KitchenItems.OVEN), has(KitchenItems.OVEN)).save(output);
 			}
 
 			private void plate() {

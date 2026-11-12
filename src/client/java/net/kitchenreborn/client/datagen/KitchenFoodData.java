@@ -13,6 +13,7 @@ import net.kitchenreborn.food.FoodType;
 import net.kitchenreborn.food.LayerDefinition;
 import net.kitchenreborn.food.LayerRender;
 import net.kitchenreborn.food.LayerRole;
+import net.kitchenreborn.oven.OvenConfig;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenItems;
 import net.kitchenreborn.registry.KitchenRegistries;
@@ -35,6 +36,11 @@ public final class KitchenFoodData {
 	public static void foodTypes(BootstrapContext<FoodType> context) {
 		context.register(ResourceKey.create(KitchenRegistries.FOOD_TYPE, SANDWICH),
 				new FoodType(2, MAX_SANDWICH_LAYERS, LayerRole.BREAD, LayerRole.BREAD, KitchenBlocks.BOARD, KitchenItems.SANDWICH));
+	}
+
+	/** Original timings: cooked after 400 ticks (20 s), burnt after 600 (30 s). */
+	public static void ovenConfig(BootstrapContext<OvenConfig> context) {
+		context.register(OvenConfig.DEFAULT, new OvenConfig(400, 600));
 	}
 
 	public static void layers(BootstrapContext<LayerDefinition> context) {

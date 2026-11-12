@@ -32,5 +32,6 @@ public class KitchenDataGenerator implements DataGeneratorEntrypoint {
 		registryBuilder.add(Registries.PLACED_FEATURE, KitchenWorldgen::placed);
 		registryBuilder.add(KitchenRegistries.FOOD_TYPE, KitchenFoodData::foodTypes);
 		registryBuilder.add(KitchenRegistries.LAYER, KitchenFoodData::layers);
+		registryBuilder.add(KitchenRegistries.OVEN_CONFIG, KitchenFoodData::ovenConfig);
 	}
 }

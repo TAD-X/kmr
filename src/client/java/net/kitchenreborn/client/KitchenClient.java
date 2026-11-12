@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 
 import net.kitchenreborn.client.render.BoardRenderer;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
+import net.kitchenreborn.client.render.OvenRenderer;
 import net.kitchenreborn.client.render.PlateItemRenderer;
 import net.kitchenreborn.client.render.PlateRenderer;
 import net.kitchenreborn.food.Foods;
@@ -20,6 +21,7 @@ public class KitchenClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		BlockEntityRenderers.register(KitchenBlockEntities.BOARD, BoardRenderer::new);
 		BlockEntityRenderers.register(KitchenBlockEntities.PLATE, PlateRenderer::new);
+		BlockEntityRenderers.register(KitchenBlockEntities.OVEN, OvenRenderer::new);
 		LayeredFoodRenderer.register();
 		PlateItemRenderer.register();
 

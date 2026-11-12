@@ -48,6 +48,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			plates(context, world);
 			heldPlates(context, world);
 			emptyPlateAndBoardItems(context, world);
+			ovens(context, world);
 		}
 	}
 
@@ -388,5 +389,71 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		server.runCommand("tp @p 107 -60 22.5 180 40");
 		context.waitTicks(20);
 		context.takeScreenshot("m53_nested_empty_plates");
+	}
+
+	private static final String OVEN_ITEMS = "{slots:[{id:\"kitchen:raw_bacon\",count:4},{id:\"kitchen:raw_roast_beef\",count:3},"
+			+ "{id:\"kitchen:raw_chicken_fillet\",count:2},{id:\"minecraft:porkchop\",count:1}]}";
+
+	/** Ovens (M6): closed, open with contents, lit while cooking, cooked and burnt, in all four facings; the item. */
+	private void ovens(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("setblock 130 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("setblock 132 -60 20 kitchen:oven[facing=south,open=true]");
+		server.runCommand("setblock 134 -60 20 kitchen:oven[facing=south,lit=true]");
+		server.runCommand("data merge block 132 -60 20 " + OVEN_ITEMS);
+		server.runCommand("data merge block 134 -60 20 " + OVEN_ITEMS);
+		server.runCommand("tp @p 132 -60 25 180 25");
+		context.waitTicks(25);
+		context.takeScreenshot("m6_ovens_closed_open_lit");
+		server.runCommand("tp @p 132 -58 23 180 55");
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_open_contents_from_above");
+		server.runCommand("tp @p 132 -60 22.5 180 20");
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_open_front");
+
+		// All four facings, closed and open.
+		server.runCommand("setblock 140 -60 20 kitchen:oven[facing=north,open=true]");
+		server.runCommand("setblock 142 -60 20 kitchen:oven[facing=east,open=true]");
+		server.runCommand("setblock 144 -60 20 kitchen:oven[facing=south,open=true]");
+		server.runCommand("setblock 146 -60 20 kitchen:oven[facing=west,open=true]");
+		server.runCommand("tp @p 143 -57 24 180 40");
+		context.waitTicks(20);
+		context.takeScreenshot("m6_oven_facings_open");
+
+		// A cooked and a burnt oven: smoke (and flames) from the front once done.
+		server.runCommand("setblock 150 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("setblock 152 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("data merge block 150 -60 20 {slots:[{id:\"kitchen:bacon\",count:4}],stage:1,has_fuel:true,cooking:true,cook_time:450}");
+		server.runCommand("data merge block 152 -60 20 {slots:[{id:\"kitchen:burnt_meat\",count:4}],stage:2,has_fuel:true,cooking:true,cook_time:650}");
+		server.runCommand("tp @p 151 -60 24 180 25");
+		context.waitTicks(40);
+		context.takeScreenshot("m6_oven_cooked_and_burnt_smoke");
+
+		// The item: GUI, first and third person, dropped.
+		server.runCommand("item replace entity @p hotbar.0 with kitchen:oven");
+		server.runCommand("tp @p 160 -60 24 180 10");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_item_gui");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(5);
+		server.runCommand("setblock 160 -60 20 kitchen:oven[facing=south]");
+		server.runCommand("tp @p 160 -60 22 180 15");
+		server.runCommand("item replace entity @p weapon.mainhand with kitchen:oven");
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_item_first_person");
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.offhand with kitchen:oven");
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_item_offhand");
+		server.runCommand("item replace entity @p weapon.offhand with minecraft:air");
+		server.runCommand("item replace entity @p weapon.mainhand with kitchen:oven");
+		server.runCommand("tp @p 160.5 -60 23.5 180 20");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+		context.waitTicks(10);
+		context.takeScreenshot("m6_oven_item_third_person");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
 	}
 }

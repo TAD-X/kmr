@@ -1,5 +1,6 @@
 // 26.3	-999999999-01-01T00:00:00	The Kitchen Mod Reborn/KitchenRecipeProvider
 b065e9f0f0024f7bbfc901e80dbc1eb673e51252 data/kitchen/advancement/recipes/decorations/board.json
+8553ce6a720f4f849ae3a97164b063e6fac638d2 data/kitchen/advancement/recipes/decorations/oven.json
 eaa1ac84b0866d62d54451cc8261b6a1d9b00eb1 data/kitchen/advancement/recipes/decorations/plate.json
 2499d12838ab8463e871679f6093d1db01a57f5d data/kitchen/advancement/recipes/food/apple_slice.json
 12e095062385ef437824b7b3fcd26488f6903758 data/kitchen/advancement/recipes/food/bacon_from_campfire_cooking.json
@@ -29,6 +30,9 @@ b6e3da54647c4f0d38b5e9868dbd37a99bfe90d5 data/kitchen/advancement/recipes/food/c
 08b0d2db07691b68186d740a7276eecdfdef75ce data/kitchen/advancement/recipes/food/flour_from_bread.json
 3f1f1fdd5a676bace47bb93b44783a5445c476fd data/kitchen/advancement/recipes/food/flour_from_wheat.json
 d29b4ccb722d00a61b6119723994809ab88c4a0d data/kitchen/advancement/recipes/food/lettuce_leaf.json
+416237aa49560848bcc5ca3875a11e3c45dca945 data/kitchen/advancement/recipes/food/oven/bacon.json
+c20d567cb36af511292af22b84d87ea4b7165cd7 data/kitchen/advancement/recipes/food/oven/chicken_fillet.json
+e9672bf86eb1166692de298539ab773d00d49968 data/kitchen/advancement/recipes/food/oven/roast_beef.json
 3454111c5f307e31f48e3fdb9c6439f22b98aa9a data/kitchen/advancement/recipes/food/peanuts_from_shell.json
 0ae62fe4f258b77816873bdd6637d43d836fbd69 data/kitchen/advancement/recipes/food/potato_slice.json
 7871b8952a60bd50c4c79f149afdd35de87d839d data/kitchen/advancement/recipes/food/raw_bacon.json
@@ -82,6 +86,10 @@ b53203c8f511d352a2ffa8f0019dcf8d13b7c728 data/kitchen/recipe/jam_jar.json
 9ea43ce4c4ef94a7f03f33821ae7b4818edc0f03 data/kitchen/recipe/lettuce_leaf.json
 658168edbccb4e32a63abe1076fd8a351aa1cda6 data/kitchen/recipe/mortar.json
 971f9e4461c8ee96432b4278ff392d8499204fce data/kitchen/recipe/mortar_and_pestle.json
+d17f16625b11298a5acf9ea4187197c49595e60e data/kitchen/recipe/oven.json
+04e9574015abaa037f16ca5d31ef79166560d076 data/kitchen/recipe/oven/bacon.json
+75d6ba40fd4f953fa05cfa598975895df7e41935 data/kitchen/recipe/oven/chicken_fillet.json
+a8e194a6c55cc3a1b7984c63136653fea0d61672 data/kitchen/recipe/oven/roast_beef.json
 4de2429ccef6a10c299c6eb79cd3fc4d6b76317c data/kitchen/recipe/peanuts_from_shell.json
 f5ce96490ab73551de3d1272c8f54d880bbbdc41 data/kitchen/recipe/pestle.json
 5ed1571b851802ace6551a1e9053a73ca60a40a1 data/kitchen/recipe/plate.json

@@ -1,0 +1,8 @@
+{
+  "type": "kitchen:oven",
+  "ingredient": "kitchen:raw_roast_beef",
+  "result": {
+    "id": "kitchen:roast_beef"
+  },
+  "show_notification": false
+}

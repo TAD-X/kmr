@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.KitchenCropBlock;
+import net.kitchenreborn.block.OvenBlock;
 import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.block.WildPlantBlock;
 
@@ -37,6 +38,15 @@ public final class KitchenBlocks {
 
 	public static final Block BOARD = board();
 	public static final Block PLATE = plate();
+	public static final Block OVEN = oven();
+
+	private static Block oven() {
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("oven"));
+		BlockBehaviour.Properties properties = BlockBehaviour.Properties.of().setId(key)
+				.mapColor(MapColor.METAL).strength(4.0F).sound(SoundType.METAL).noOcclusion()
+				.lightLevel(state -> state.getValue(OvenBlock.LIT) ? 8 : 0);
+		return Registry.register(BuiltInRegistries.BLOCK, key, new OvenBlock(properties));
+	}
 
 	private static Block plate() {
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Kitchen.id("plate"));

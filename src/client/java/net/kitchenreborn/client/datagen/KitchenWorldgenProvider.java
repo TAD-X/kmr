@@ -21,6 +21,7 @@ public class KitchenWorldgenProvider extends FabricDynamicRegistryProvider {
 		entries.addAll(registries.lookupOrThrow(Registries.PLACED_FEATURE));
 		entries.addAll(registries.lookupOrThrow(KitchenRegistries.FOOD_TYPE));
 		entries.addAll(registries.lookupOrThrow(KitchenRegistries.LAYER));
+		entries.addAll(registries.lookupOrThrow(KitchenRegistries.OVEN_CONFIG));
 	}
 
 	@Override

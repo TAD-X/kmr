@@ -25,7 +25,12 @@ public final class LayerModelData {
 	record Box(float u, float v, float x, float y, float z, float w, float h, float d) { }
 
 	/** A model: its id under models/item/layer/, texture (textures/item/layer/) and texture size. */
-	record Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes) { }
+	record Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes, float scale) {
+		/** The layer models were drawn at the sandwich renderer's 0.75 scale. */
+		Model(String name, String texture, int textureWidth, int textureHeight, List<Box> boxes) {
+			this(name, texture, textureWidth, textureHeight, boxes, 0.75F);
+		}
+	}
 
 	private static final float SCALE = 0.75F;
 
@@ -153,6 +158,68 @@ public final class LayerModelData {
 			box(40, 25, 3F, 22.5F, -3F, 1, 1, 6),
 			box(40, 22, -3F, 22.5F, 3F, 6, 1, 1)));
 
+	/**
+	 * The oven (original ModelOven, 64x64), drawn at scale 1 by translateBlockModel: a point (x, y, z) lands at
+	 * {@code (8 - x, 24 - y, 8 + z)} pixels. The front is the low-z side (north).
+	 */
+	static final Model OVEN_BASE = new Model("oven_base", "oven_model", 64, 64, List.of(
+			box(0, 32, -8F, 20F, -5F, 16, 4, 13),
+			box(0, 32, -8F, 9F, -5F, 16, 1, 13),
+			box(32, 10, 6F, 11F, -6F, 2, 8, 14),
+			box(0, 10, -8F, 11F, -6F, 2, 8, 14),
+			box(0, 49, -8F, 19F, -6F, 16, 1, 14),
+			box(0, 0, -6F, 11F, 7F, 12, 8, 1),
+			box(48, 50, 2F, 8F, -4F, 4, 1, 4),
+			box(48, 57, 2F, 8F, 3F, 4, 1, 4),
+			box(48, 50, -6F, 8F, 3F, 4, 1, 4),
+			box(48, 57, -6F, 8F, -4F, 4, 1, 4),
+			box(0, 49, -8F, 10F, -6F, 16, 1, 14)), 1.0F);
+
+	/** The hatch: boxes relative to the hinge at (-6, 17, -6.5), turned about the x axis when open. */
+	private static final float HINGE_X = -6F;
+	private static final float HINGE_Y = 17F;
+	private static final float HINGE_Z = -6.5F;
+	/** How far the hatch swings open (the original opened to 65 degrees). */
+	public static final float HATCH_OPEN_DEGREES = 65F;
+
+	static final Model OVEN_HATCH = new Model("oven_hatch", "oven_model", 64, 64, List.of(
+			box(33, 6, HINGE_X, HINGE_Y, HINGE_Z, 12, 2, 1),
+			box(33, 6, HINGE_X, HINGE_Y - 6F, HINGE_Z, 12, 2, 1),
+			box(33, 0, HINGE_X + 10F, HINGE_Y - 4F, HINGE_Z, 2, 4, 1),
+			box(33, 0, HINGE_X, HINGE_Y - 4F, HINGE_Z, 2, 4, 1),
+			box(23, 13, HINGE_X + 2F, HINGE_Y - 4F, HINGE_Z + 0.5F, 8, 4, 0),
+			box(40, 3, HINGE_X + 4F, HINGE_Y - 5.5F, HINGE_Z - 1F, 4, 1, 1)), 1.0F);
+
+	/** The oven block model: base plus hatch, the hatch swung open or closed; textured with {@code texture}. */
+	public static ModelInstance ovenJson(boolean open, String texture) {
+		return () -> {
+			JsonArray elements = new JsonArray();
+			for (Box box : OVEN_BASE.boxes()) {
+				elements.add(element(box, OVEN_BASE));
+			}
+			for (Box box : OVEN_HATCH.boxes()) {
+				JsonObject element = element(box, OVEN_HATCH);
+				if (open) {
+					JsonObject rotation = new JsonObject();
+					// Hinge in world pixels: (8 - x, 24 - y, 8 + z).
+					rotation.add("origin", array(8 - HINGE_X, 24 - HINGE_Y, 8 + HINGE_Z));
+					rotation.addProperty("axis", "x");
+					rotation.addProperty("angle", -HATCH_OPEN_DEGREES);
+					element.add("rotation", rotation);
+				}
+				elements.add(element);
+			}
+			JsonObject textures = new JsonObject();
+			textures.addProperty("all", Kitchen.id("block/" + texture).toString());
+			textures.addProperty("particle", Kitchen.id("block/oven").toString());
+			JsonObject json = new JsonObject();
+			json.addProperty("parent", "minecraft:block/block");
+			json.add("textures", textures);
+			json.add("elements", elements);
+			return json;
+		};
+	}
+
 	public static final List<Model> MODELS = List.of(BREAD_SLICE_BOTTOM, BREAD_SLICE_TOP, RAW_BACON, COOKED_BACON,
 			BUTTER_0, BUTTER_1, BUTTER_2);
 
@@ -207,12 +274,13 @@ public final class LayerModelData {
 
 	private static JsonObject element(Box b, Model model) {
 		// World extents (pixels, middle of the layer at x = z = 8, base at y = 0).
-		float x1 = 8 - SCALE * (b.x() + b.w());
-		float x2 = 8 - SCALE * b.x();
-		float y1 = SCALE * (24 - (b.y() + b.h()));
-		float y2 = SCALE * (24 - b.y());
-		float z1 = 8 + SCALE * b.z();
-		float z2 = 8 + SCALE * (b.z() + b.d());
+		float scale = model.scale();
+		float x1 = 8 - scale * (b.x() + b.w());
+		float x2 = 8 - scale * b.x();
+		float y1 = scale * (24 - (b.y() + b.h()));
+		float y2 = scale * (24 - b.y());
+		float z1 = 8 + scale * b.z();
+		float z2 = 8 + scale * (b.z() + b.d());
 
 		float u = b.u();
 		float v = b.v();

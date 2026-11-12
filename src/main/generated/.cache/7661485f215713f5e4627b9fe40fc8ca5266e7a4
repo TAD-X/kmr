@@ -17,5 +17,6 @@ c91d00709aaae49f5febc1d4b7d5971c76ae955e data/kitchen/kitchen/layer/raw_roast_be
 8b9dc4abc626c55e6aa321712319f371bdab4683 data/kitchen/kitchen/layer/strawberry_jam.json
 2a2f4439b1fece2da91fb8b2a136fa0574764131 data/kitchen/kitchen/layer/toast.json
 060cff87f66566afc36d9873b78ff148ccfc302c data/kitchen/kitchen/layer/tomato_slice.json
+51f3ca1575cbe091af96eb2d639dbec346e82b02 data/kitchen/kitchen/oven_config/default.json
 f5e3fa97995237bbb30c026ea2f5ae7a2957f877 data/kitchen/worldgen/feature/wild_plants.json
 0608d53952b6b15bb1f8a08dbf378e937bf39763 data/kitchen/worldgen/placed_feature/wild_plants.json

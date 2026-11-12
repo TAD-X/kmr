@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:coal",
+    "F": "minecraft:flint_and_steel",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "III",
+    "ICI",
+    "IFI"
+  ],
+  "result": {
+    "id": "kitchen:oven"
+  }
+}

@@ -173,7 +173,7 @@ Each milestone ends with: builds, launches client + dedicated server without err
 - Fuel: coal/charcoal RC (use `COOKING_FUEL` component check rather than hardcoding coal — design choice).
 - Timer: cooks at 400 ticks, burns at 600 → burnt meat. Smoke particles when done. Empty RC removes a stack.
 - `kitchen:oven` recipe type (defaults: raw roast beef, raw fillet, raw bacon) + auto-include food smelting recipes.
-- ✅ Cook 16 items; over-cook into burnt meat.
+- ✅ Cook 16 items; over-cook into burnt meat. (done in 0.6.0)
 
 ### M7 — Frying Pan & Jam (1–2 days)
 - Pan only works on top of an oven that is *lit/fueled* (original: just "on oven" — design choice D6).

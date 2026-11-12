@@ -1,0 +1,8 @@
+{
+  "type": "kitchen:oven",
+  "ingredient": "kitchen:raw_chicken_fillet",
+  "result": {
+    "id": "kitchen:chicken_fillet"
+  },
+  "show_notification": false
+}
