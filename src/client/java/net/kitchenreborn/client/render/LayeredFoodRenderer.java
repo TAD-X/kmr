@@ -28,7 +28,7 @@ import net.kitchenreborn.registry.KitchenComponents;
  *
  * <p>Outside the GUI the stack is drawn at exactly its cutting board size (1 block of model = 1 block in the
  * world) and the item model's display transforms are scale 1, so a sandwich in hand, in a frame or on the ground
- * is as big as it was on the board. Only the GUI ({@code fit_to_slot}) makes it bigger and shrinks tall stacks
+ * is as big as it was on the board. Only the GUI ({@code mode: gui}) makes it bigger and shrinks tall stacks
  * so they stay inside the slot: see {@link #fitScale}.
  */
 public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawer.Drawn> {
@@ -41,10 +41,20 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 	private static final float MAX_HEIGHT = 1.2F;
 	private static final int CACHE_SIZE = 64;
 
-	private final boolean fitToSlot;
+	/** How the stack sits in the item cube. */
+	public enum Mode {
+		/** Stands on the bottom of the cube: dropped, third person, frames (the hold point is the bottom bun). */
+		BASE,
+		/** Centred on the cube and scaled to fit the slot. */
+		GUI,
+		/** Centred on the cube, true size: first person, where the eating animation swings the item around its centre. */
+		CENTER
+	}
 
-	public LayeredFoodRenderer(boolean fitToSlot) {
-		this.fitToSlot = fitToSlot;
+	private final Mode mode;
+
+	public LayeredFoodRenderer(Mode mode) {
+		this.mode = mode;
 	}
 
 	/** Recently drawn foods, so a sandwich is only resolved once, not every frame. */
@@ -79,10 +89,10 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 			return;
 		}
 		poseStack.pushPose();
-		if (fitToSlot) {
+		if (mode != Mode.BASE) {
 			// GUI: special renderers start at the corner of the item cube, so move to its middle, shrink tall
 			// stacks to fit and centre the stack vertically.
-			float scale = fitScale(drawn.totalHeight());
+			float scale = mode == Mode.GUI ? fitScale(drawn.totalHeight()) : 1.0F;
 			poseStack.translate(0.5F, 0.5F, 0.5F);
 			poseStack.scale(scale, scale, scale);
 			poseStack.translate(0.0F, -drawn.totalHeight() / 32.0F, 0.0F);
@@ -103,15 +113,17 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 		output.accept(new Vector3f(1.0F, 1.0F, 1.0F));
 	}
 
-	/** The item model definition entry: {@code {"type": "kitchen:layered_food", "fit_to_slot": false}}. */
-	public record Unbaked(boolean fitToSlot) implements SpecialModelRenderer.Unbaked<LayerStackDrawer.Drawn> {
+	/** The item model definition entry: {@code {"type": "kitchen:layered_food", "mode": "base"}}. */
+	public record Unbaked(Mode mode) implements SpecialModelRenderer.Unbaked<LayerStackDrawer.Drawn> {
 		public static final MapCodec<Unbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-				Codec.BOOL.optionalFieldOf("fit_to_slot", false).forGetter(Unbaked::fitToSlot))
+				Codec.STRING.xmap(name -> Mode.valueOf(name.toUpperCase(java.util.Locale.ROOT)),
+							m -> m.name().toLowerCase(java.util.Locale.ROOT))
+					.optionalFieldOf("mode", Mode.BASE).forGetter(Unbaked::mode))
 				.apply(i, Unbaked::new));
 
 		@Override
 		public SpecialModelRenderer<LayerStackDrawer.Drawn> bake(SpecialModelRenderer.BakingContext context) {
-			return new LayeredFoodRenderer(fitToSlot);
+			return new LayeredFoodRenderer(mode);
 		}
 
 		@Override

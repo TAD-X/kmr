@@ -74,10 +74,14 @@ public class KitchenModelProvider extends FabricModelProvider {
 		ModelTemplates.FLAT_ITEM.create(KitchenItems.SANDWICH, TextureMapping.layer0(KitchenItems.SANDWICH),
 				generators.modelOutput);
 		// GUI: fitted to the slot (tall stacks shrink). Every other context: true cutting board size.
+		ItemModel.Unbaked centered = ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"),
+				new LayeredFoodRenderer.Unbaked(LayeredFoodRenderer.Mode.CENTER));
 		ItemModel.Unbaked layered = ItemModelUtils.select(new DisplayContext(),
-				ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"), new LayeredFoodRenderer.Unbaked(false)),
+				ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base"), new LayeredFoodRenderer.Unbaked(LayeredFoodRenderer.Mode.BASE)),
 				ItemModelUtils.when(ItemDisplayContext.GUI,
-						ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base_gui"), new LayeredFoodRenderer.Unbaked(true))));
+						ItemModelUtils.specialModel(Kitchen.id("item/sandwich_base_gui"), new LayeredFoodRenderer.Unbaked(LayeredFoodRenderer.Mode.GUI))),
+				ItemModelUtils.when(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, centered),
+				ItemModelUtils.when(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, centered));
 		generators.itemModelOutput.accept(KitchenItems.SANDWICH, ItemModelUtils.conditional(
 				ItemModelUtils.hasComponent(KitchenComponents.LAYERED_FOOD),
 				layered,
