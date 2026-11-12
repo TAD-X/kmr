@@ -40,7 +40,7 @@ public class LayeredFoodRenderer implements SpecialModelRenderer<LayerStackDrawe
 	/** The tallest a stack may be in the GUI, in blocks of item model space, before it is shrunk. */
 	private static final float MAX_HEIGHT = 1.2F;
 	/** Where in the stack (0 = bottom, 1 = top) a held sandwich pivots in first person. */
-	private static final float FIRST_PERSON_PIVOT = 0.15F;
+	private static final float FIRST_PERSON_PIVOT = 0.3F;
 	private static final int CACHE_SIZE = 64;
 
 	/** How the stack sits in the item cube. */
