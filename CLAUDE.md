@@ -17,5 +17,11 @@ Fabric mod for Minecraft Java 26.3. Port of MrSpring's Kitchen Mod (1.7.10, MIT)
 ## Commands
 - `./gradlew build` · `./gradlew runClient` · `./gradlew runServer` · `./gradlew runDatagen` · `./gradlew runGameTest` (server game tests; `build` runs them too) · `./gradlew runClientGameTest` (screenshots to build/run/clientGameTest/screenshots)
 
+## Releases and remote
+- Remote `origin` = https://github.com/TAD-X/kmr.git (branch `main`). Push after every milestone commit.
+- Version scheme `0.<milestone>.<patch>` until M8 = `1.0.0`; set `version=` in `gradle.properties`. After every milestone (and after patch fixes users should get): bump the version, `./gradlew build`, commit, tag `vX.Y.Z`, `git push origin main --tags`.
+- GitHub Release for the tag with the remapped jar `build/libs/kitchen-X.Y.Z.jar` attached (never the `-sources` jar). Notes live in `docs/release-notes/vX.Y.Z.md`: what's new for players, the exact Minecraft / Fabric Loader / Fabric API versions required (from `gradle.properties`), and "both server and all clients must use the same jar". With the GitHub CLI: `gh release create vX.Y.Z build/libs/kitchen-X.Y.Z.jar --title "vX.Y.Z" --notes-file docs/release-notes/vX.Y.Z.md`.
+- Never track `reference/original/` or `run/` (both git-ignored; check `git ls-files`).
+
 ## Credits
 Keep `LICENSE-ORIGINAL` (MIT, © 2017 Mr. Spring) and credit MrSpring in README and fabric.mod.json for reused textures/design.
