@@ -1,6 +1,35 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "kitchen:block/plate"
+    "type": "minecraft:condition",
+    "component": "kitchen:plate_contents",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "kitchen:block/plate"
+    },
+    "on_true": {
+      "type": "minecraft:select",
+      "cases": [
+        {
+          "model": {
+            "type": "minecraft:special",
+            "base": "kitchen:item/plate_base_gui",
+            "model": {
+              "type": "kitchen:plate",
+              "mode": "gui"
+            }
+          },
+          "when": "gui"
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:special",
+        "base": "kitchen:item/plate_base",
+        "model": {
+          "type": "kitchen:plate"
+        }
+      },
+      "property": "minecraft:display_context"
+    },
+    "property": "minecraft:has_component"
   }
 }

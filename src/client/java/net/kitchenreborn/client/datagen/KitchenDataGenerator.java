@@ -14,6 +14,7 @@ public class KitchenDataGenerator implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator generator) {
 		LayeredFoodRenderer.register(); // the item model definitions use the kitchen:layered_food type
+		net.kitchenreborn.client.render.PlateItemRenderer.register();
 		FabricDataGenerator.Pack pack = generator.createPack();
 		pack.addProvider(KitchenLangProvider::new);
 		pack.addProvider(KitchenModelProvider::new);

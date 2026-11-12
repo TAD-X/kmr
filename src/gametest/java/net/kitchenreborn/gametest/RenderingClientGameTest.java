@@ -46,6 +46,7 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 			boards(context, world);
 			sandwiches(context, world);
 			plates(context, world);
+			heldPlates(context, world);
 		}
 	}
 
@@ -239,5 +240,88 @@ public class RenderingClientGameTest implements FabricClientGameTest {
 		server.runCommand("tp @p 46 -60 3 180 40");
 		context.waitTicks(15);
 		context.takeScreenshot("m5_plate_full_32");
+	}
+
+	/** A plate item with the given contents. */
+	private static String plateItem(String contents) {
+		return "kitchen:plate[kitchen:plate_contents=" + contents + "]";
+	}
+
+	private static String sandwichOnPlate() {
+		return "[{id:\"kitchen:sandwich\",count:1,components:{\"kitchen:layered_food\":{type:\"kitchen:sandwich\",layers:"
+				+ layerList(three()) + "}}}]";
+	}
+
+	private static String mixedOnPlate() {
+		return layerList("bacon", "cheese_slice", "tomato_slice", "lettuce_leaf", "roast_beef", "carrot_slice", "bread_slice", "raw_bacon");
+	}
+
+	/** Plate items with a sandwich and with mixed items: GUI, hand (both), third person, dropped; placed plates beside them. */
+	private void heldPlates(ClientGameTestContext context, TestSingleplayerContext world) {
+		var server = world.getServer();
+		server.runCommand("setblock 70 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("setblock 68 -60 20 kitchen:plate[rotation=8]");
+		server.runCommand("data merge block 70 -60 20 {items:" + sandwichOnPlate() + "}");
+		server.runCommand("data merge block 68 -60 20 {items:" + mixedOnPlate() + "}");
+		server.runCommand("item replace entity @p hotbar.0 with " + plateItem(sandwichOnPlate()));
+		server.runCommand("item replace entity @p hotbar.1 with " + plateItem(mixedOnPlate()));
+		server.runCommand("item replace entity @p hotbar.2 with kitchen:plate");
+		server.runCommand("tp @p 69.5 -60 24 180 10");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(10);
+		context.takeScreenshot("m51_plate_gui_inventory");
+		context.getInput().pressKey(options -> options.keyInventory);
+		context.waitTicks(5);
+
+		// First person, both hands, sandwich plate then mixed plate.
+		server.runCommand("tp @p 69 -60 21.8 180 45");
+		for (String contents : new String[] {sandwichOnPlate(), mixedOnPlate()}) {
+			String tag = contents.equals(sandwichOnPlate()) ? "sandwich" : "mixed";
+			server.runCommand("item replace entity @p weapon.mainhand with " + plateItem(contents));
+			context.waitTicks(10);
+			context.takeScreenshot("m51_fp_main_" + tag);
+			server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+			server.runCommand("item replace entity @p weapon.offhand with " + plateItem(contents));
+			context.waitTicks(10);
+			context.takeScreenshot("m51_fp_offhand_" + tag);
+			server.runCommand("item replace entity @p weapon.offhand with minecraft:air");
+		}
+
+		// Third person, from behind, from above and from the front.
+		server.runCommand("item replace entity @p weapon.mainhand with " + plateItem(sandwichOnPlate()));
+		server.runCommand("tp @p 69.5 -60 23.5 180 20");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+		context.waitTicks(10);
+		context.takeScreenshot("m51_tp_back_sandwich");
+		server.runCommand("tp @p 69.5 -60 23.5 180 90");
+		context.waitTicks(10);
+		context.takeScreenshot("m51_tp_birdseye_sandwich");
+		server.runCommand("item replace entity @p weapon.mainhand with " + plateItem(mixedOnPlate()));
+		context.waitTicks(10);
+		context.takeScreenshot("m51_tp_birdseye_mixed");
+		server.runCommand("tp @p 69.5 -60 23.5 180 20");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_FRONT));
+		server.runCommand("tp @p 69.5 -60 21.5 0 20");
+		context.waitTicks(10);
+		context.takeScreenshot("m51_tp_front_mixed");
+		context.runOnClient(client -> client.options.setCameraType(CameraType.FIRST_PERSON));
+		server.runCommand("item replace entity @p weapon.mainhand with minecraft:air");
+
+		// Dropped, and in item frames.
+		server.runCommand("summon minecraft:item 71.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:plate\",count:1,components:{\"kitchen:plate_contents\":"
+				+ sandwichOnPlate() + "}}}");
+		server.runCommand("summon minecraft:item 66.5 -60 20 {PickupDelay:32767s,Item:{id:\"kitchen:plate\",count:1,components:{\"kitchen:plate_contents\":"
+				+ mixedOnPlate() + "}}}");
+		server.runCommand("tp @p 69 -60 24 180 25");
+		context.waitTicks(30);
+		context.takeScreenshot("m51_dropped_beside_plates");
+		server.runCommand("fill 76 -60 12 81 -57 12 minecraft:stone");
+		server.runCommand("summon minecraft:item_frame 77 -59 13 {Facing:3b,Item:{id:\"kitchen:plate\",count:1,components:{\"kitchen:plate_contents\":"
+				+ sandwichOnPlate() + "}}}");
+		server.runCommand("summon minecraft:item_frame 80 -59 13 {Facing:3b,Item:{id:\"kitchen:plate\",count:1,components:{\"kitchen:plate_contents\":"
+				+ mixedOnPlate() + "}}}");
+		server.runCommand("tp @p 78.5 -60 18 180 12");
+		context.waitTicks(20);
+		context.takeScreenshot("m51_item_frames");
 	}
 }

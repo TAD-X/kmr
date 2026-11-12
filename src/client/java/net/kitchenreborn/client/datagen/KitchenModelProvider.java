@@ -31,6 +31,7 @@ import net.kitchenreborn.Kitchen;
 import net.kitchenreborn.block.BoardBlock;
 import net.kitchenreborn.block.PlateBlock;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
+import net.kitchenreborn.client.render.PlateItemRenderer;
 import net.kitchenreborn.registry.KitchenBlocks;
 import net.kitchenreborn.registry.KitchenComponents;
 import net.kitchenreborn.registry.KitchenItems;
@@ -79,7 +80,13 @@ public class KitchenModelProvider extends FabricModelProvider {
 			dispatch = dispatch.select(rotation, BlockModelGenerators.plainVariant(model).with(VariantMutator.Y_ROT.withValue(quarter)));
 		}
 		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(KitchenBlocks.PLATE).with(dispatch));
-		generators.itemModelOutput.accept(KitchenItems.PLATE, ItemModelUtils.plainModel(model));
+		// Empty: the plain model. With contents: the special renderer (plate + contents; GUI fits to the slot).
+		ItemModel.Unbaked loaded = ItemModelUtils.select(new DisplayContext(),
+				ItemModelUtils.specialModel(Kitchen.id("item/plate_base"), new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.BASE)),
+				ItemModelUtils.when(ItemDisplayContext.GUI,
+						ItemModelUtils.specialModel(Kitchen.id("item/plate_base_gui"), new PlateItemRenderer.Unbaked(LayeredFoodRenderer.Mode.GUI))));
+		generators.itemModelOutput.accept(KitchenItems.PLATE, ItemModelUtils.conditional(
+				ItemModelUtils.hasComponent(KitchenComponents.PLATE_CONTENTS), loaded, ItemModelUtils.plainModel(model)));
 	}
 
 	/**

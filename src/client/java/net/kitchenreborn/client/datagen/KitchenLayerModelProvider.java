@@ -41,14 +41,7 @@ public class KitchenLayerModelProvider implements DataProvider {
 		base.add("textures", particle());
 		// Outside the GUI a sandwich is shown at exactly its cutting board size: every display scale is 1. First person
 		// and the item frame tilt the top towards the player so the layers can be seen.
-		JsonObject display = new JsonObject();
-		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 4.5F, 8.0F}, 1.0F));
-		display.add("firstperson_righthand", transform(new float[] {-8, 10, 0}, new float[] {3, 0.0F, 2}, 1.0F));
-		display.add("firstperson_lefthand", transform(new float[] {-8, 10, 0}, new float[] {3, 0.0F, 2}, 1.0F));
-		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
-		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
-		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
-		base.add("display", display);
+		base.add("display", display());
 		writes.add(DataProvider.saveStable(cache, base, models.json(Kitchen.id("item/sandwich_base"))));
 		// The GUI keeps the plain block transforms (rotated, 0.625); the renderer fits the stack into the slot.
 		JsonObject gui = new JsonObject();
@@ -56,6 +49,23 @@ public class KitchenLayerModelProvider implements DataProvider {
 		gui.addProperty("gui_light", "side");
 		gui.add("textures", particle());
 		writes.add(DataProvider.saveStable(cache, gui, models.json(Kitchen.id("item/sandwich_base_gui"))));
+		// The plate item: same transforms as the sandwich (the plate is drawn at its placed size too).
+		JsonObject plateBase = new JsonObject();
+		plateBase.addProperty("parent", "minecraft:block/block");
+		plateBase.addProperty("gui_light", "side");
+		plateBase.add("display", plateDisplay());
+		writes.add(DataProvider.saveStable(cache, plateBase, models.json(Kitchen.id("item/plate_base"))));
+		JsonObject plateGui = new JsonObject();
+		plateGui.addProperty("parent", "minecraft:block/block");
+		plateGui.addProperty("gui_light", "side");
+		writes.add(DataProvider.saveStable(cache, plateGui, models.json(Kitchen.id("item/plate_base_gui"))));
+		// Just the plate model, drawn as the bottom layer of a plate with contents.
+		JsonObject body = new JsonObject();
+		JsonObject inner = new JsonObject();
+		inner.addProperty("type", "minecraft:model");
+		inner.addProperty("model", Kitchen.id("block/plate").toString());
+		body.add("model", inner);
+		writes.add(DataProvider.saveStable(cache, body, itemDefinitions.json(Kitchen.id("plate_body"))));
 		for (LayerModelData.Model model : LayerModelData.MODELS) {
 			writes.add(DataProvider.saveStable(cache, LayerModelData.toJson(model).get(),
 					models.json(Kitchen.id("item/layer/" + model.name()))));
@@ -63,6 +73,30 @@ public class KitchenLayerModelProvider implements DataProvider {
 					itemDefinitions.json(LayerModelData.id(model.name()))));
 		}
 		return CompletableFuture.allOf(writes.toArray(CompletableFuture[]::new));
+	}
+
+	/** Display transforms of the sandwich and the plate (outside the GUI): true cutting board size. */
+	private static JsonObject display() {
+		JsonObject display = new JsonObject();
+		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 4.5F, 8.0F}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-8, 10, 0}, new float[] {3, 0.0F, 2}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-8, 10, 0}, new float[] {3, 0.0F, 2}, 1.0F));
+		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
+		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
+		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
+		return display;
+	}
+
+	/** Display transforms of the plate item outside the GUI. */
+	private static JsonObject plateDisplay() {
+		JsonObject display = new JsonObject();
+		display.add("thirdperson_righthand", transform(new float[] {75, 45, 0}, new float[] {0, 4.5F, 8.0F}, 1.0F));
+		display.add("firstperson_righthand", transform(new float[] {-40, 10, 0}, new float[] {3, 8.0F, -14}, 1.0F));
+		display.add("firstperson_lefthand", transform(new float[] {-40, 10, 0}, new float[] {3, 8.0F, -14}, 1.0F));
+		display.add("ground", transform(new float[] {0, 0, 0}, new float[] {0, 0, 0}, 1.0F));
+		display.add("fixed", transform(new float[] {-40, 0, 0}, new float[] {0, 6, 0}, 1.0F));
+		display.add("on_shelf", transform(new float[] {0, 180, 0}, new float[] {0, 0, 0}, 1.0F));
+		return display;
 	}
 
 	/** Eating particles use the item model's particle texture; the special renderer has none of its own. */

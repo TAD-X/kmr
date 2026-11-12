@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 
 import net.kitchenreborn.client.render.BoardRenderer;
 import net.kitchenreborn.client.render.LayeredFoodRenderer;
+import net.kitchenreborn.client.render.PlateItemRenderer;
 import net.kitchenreborn.client.render.PlateRenderer;
 import net.kitchenreborn.food.Foods;
 import net.kitchenreborn.registry.KitchenBlockEntities;
@@ -20,6 +21,7 @@ public class KitchenClient implements ClientModInitializer {
 		BlockEntityRenderers.register(KitchenBlockEntities.BOARD, BoardRenderer::new);
 		BlockEntityRenderers.register(KitchenBlockEntities.PLATE, PlateRenderer::new);
 		LayeredFoodRenderer.register();
+		PlateItemRenderer.register();
 
 		// Port of SandwichableTooltipEvent: mark every ingredient that can be layered on a board.
 		ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
